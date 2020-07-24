@@ -18,27 +18,31 @@
 //   21 July 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#include <unistd.h>
 #include <virgil/iot/logger/logger.h>
 #include <virgil/iot/macros/macros.h>
 #include <virgil/iot/protocols/snap.h>
-#include <virgil/iot/vs-soft-secmodule/vs-soft-secmodule.h>
 #include <virgil/iot/protocols/snap/info/info-server.h>
 
 #include "helpers/app-helpers.h"
 
-#include "sdk-impl/firmware/firmware-nix-impl.h"
-#include "sdk-impl/netif/netif-udp-broadcast.h"
 #include "sdk-impl/netif/packets-queue.h"
 
 #include "iotkit-impl/init.h"
+#include "iotkit-impl/netif/netif-ble-linux.h"
+
+#include "device-info.h"
+#include "wifi-cred.h"
 
 #if SECURE_PROVISION
+#include <virgil/iot/vs-soft-secmodule/vs-soft-secmodule.h>
 #include <trust_list-config.h>
 #include <update-config.h>
 #include "helpers/app-storage.h"
 #include "helpers/file-cache.h"
 #endif
+
+static void
+_print_title(void);
 
 /******************************************************************************/
 int
@@ -46,27 +50,30 @@ main(int argc, char *argv[]) {
     int res = -1;
 
     // Implementation variables
-    vs_secmodule_impl_t *secmodule_impl = NULL;
     vs_netif_t *netifs_impl[2] = {NULL, NULL};
+    vs_snap_cfg_server_service_t cfg_server_cb = {ks_snap_cfg_wifi_cb, NULL, NULL, NULL};
+
+#if SECURE_PROVISION
+    vs_secmodule_impl_t *secmodule_impl = NULL;
     vs_storage_op_ctx_t tl_storage_impl;
     vs_storage_op_ctx_t slots_storage_impl;
     vs_storage_op_ctx_t fw_storage_impl;
-    vs_snap_cfg_server_service_t cfg_server_cb = {NULL, NULL, NULL, NULL};
+#endif
 
     // Device parameters
+    vs_device_manufacture_id_t manufacture_id;
+    vs_device_type_t device_type;
+    vs_device_serial_t serial;
 
-    // TODO: get from config file
-    vs_device_manufacture_id_t manufacture_id = {0};
-    vs_device_type_t device_type = {0};
-
-    //  TODO: function to get serial
-    vs_device_serial_t serial = {0};
+    ks_devinfo_manufacturer(manufacture_id);
+    ks_devinfo_device_type(device_type);
+    ks_devinfo_device_serial(serial);
 
     // Initialize Logger module
     vs_logger_init(VS_LOGLEV_DEBUG);
 
     // Print title
-    vs_app_print_title("BLE provision service", argv[0], "", "");
+    _print_title();
 
     //
     // ---------- Create implementations ----------
@@ -74,8 +81,7 @@ main(int argc, char *argv[]) {
 
     // Network interface
     vs_packets_queue_init(vs_snap_default_processor);
-    vs_mac_addr_t mac_addr;
-    netifs_impl[0] = vs_hal_netif_udp_bcast(mac_addr);
+    netifs_impl[0] = ks_netif_ble();
 
 #if SECURE_PROVISION
     // TrustList storage
@@ -95,19 +101,19 @@ main(int argc, char *argv[]) {
     //
 
     // Initialize IoTKit
-    STATUS_CHECK(iotkit_init(manufacture_id,
-                             device_type,
-                             serial,
-                             VS_SNAP_DEV_THING,
-                             netifs_impl,
-                             cfg_server_cb,
-                             vs_packets_queue_add
+    STATUS_CHECK(ks_iotkit_init(manufacture_id,
+                                device_type,
+                                serial,
+                                VS_SNAP_DEV_THING,
+                                netifs_impl,
+                                cfg_server_cb,
+                                vs_packets_queue_add
 #if SECURE_PROVISION
-                             ,
-                             secmodule_impl,
-                             &tl_storage_impl
+                                ,
+                                secmodule_impl,
+                                &tl_storage_impl
 #endif
-                             ),
+                                ),
                  "Cannot initialize IoTKit");
 
     //
@@ -132,16 +138,47 @@ terminate:
     VS_LOG_INFO("Terminating application ...");
 
     // De-initialize IoTKit internals
-    iotkit_deinit();
+    ks_iotkit_deinit();
 
 #if SECURE_PROVISION
     // Deinit Soft Security Module
     vs_soft_secmodule_deinit();
 #endif
 
+    // De-initialize SNAP packets queue
     vs_packets_queue_deinit();
 
     return res;
+}
+
+/******************************************************************************/
+static void
+_print_title(void) {
+    vs_device_serial_t serial;
+    char str_manufacturer[VS_DEVICE_MANUFACTURE_ID_SIZE + 1];
+    char str_dev_type[VS_DEVICE_TYPE_SIZE + 1];
+    char str_dev_serial[VS_DEVICE_SERIAL_SIZE * 2 + 1];
+    vs_device_manufacture_id_t *manufacture = (vs_device_manufacture_id_t *)&str_manufacturer;
+    vs_device_type_t *dev_type = (vs_device_type_t *)&str_dev_type;
+    uint32_t in_out_len = VS_DEVICE_SERIAL_SIZE * 2 + 1;
+
+    ks_devinfo_manufacturer(*manufacture);
+    ks_devinfo_device_type(*dev_type);
+    ks_devinfo_device_serial(serial);
+    vs_app_data_to_hex(serial, VS_DEVICE_SERIAL_SIZE, (uint8_t *)str_dev_serial, &in_out_len);
+
+    VS_LOG_INFO("\n\n");
+    VS_LOG_INFO("------------- KEEP IT SIMPLE ---------------");
+#if SECURE_PROVISION
+    VS_LOG_INFO("      Secure WiFi provision service.");
+#else
+    VS_LOG_INFO("          WiFi provision service.");
+#endif
+
+    VS_LOG_INFO("Manufacture ID = \"%s\"", str_manufacturer);
+    VS_LOG_INFO("Device type    = \"%s\"", str_dev_type);
+    VS_LOG_INFO("Device serial  = \"%s\"", str_dev_type);
+    VS_LOG_INFO("--------------------------------------------\n");
 }
 
 /******************************************************************************/

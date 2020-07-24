@@ -15,16 +15,21 @@
 //
 //
 //
-//   23 July 2020
+//   24 July 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_NETIF_BLE_LINUX_IMPL_H
-#define PROVISION_NETIF_BLE_LINUX_IMPL_H
+#ifndef PROVISION_DEVICE_INFO_H
+#define PROVISION_DEVICE_INFO_H
 
+#include <virgil/iot/provision/provision-structs.h>
 
-#include <virgil/iot/protocols/snap/snap-structs.h>
+void
+ks_devinfo_manufacturer(vs_device_manufacture_id_t manufacture_id);
 
-vs_netif_t *
-ks_netif_ble(void);
+void
+ks_devinfo_device_type(vs_device_type_t device_type);
 
-#endif // PROVISION_NETIF_BLE_LINUX_IMPL_H
+void
+ks_devinfo_device_serial(vs_device_serial_t serial);
+
+#endif // PROVISION_DEVICE_INFO_H

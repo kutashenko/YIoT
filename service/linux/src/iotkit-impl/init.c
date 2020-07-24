@@ -30,17 +30,17 @@ _file_ver_info_cb(vs_file_version_t ver);
 
 /******************************************************************************/
 vs_status_e
-iotkit_init(vs_device_manufacture_id_t manufacture_id,
-            vs_device_type_t device_type,
-            vs_device_serial_t serial,
-            uint32_t device_roles,
-            vs_netif_t *netif_impl[],
-            vs_snap_cfg_server_service_t cfg_server_cb,
-            vs_netif_process_cb_t packet_preprocessor_cb
+ks_iotkit_init(vs_device_manufacture_id_t manufacture_id,
+               vs_device_type_t device_type,
+               vs_device_serial_t serial,
+               uint32_t device_roles,
+               vs_netif_t *netif_impl[],
+               vs_snap_cfg_server_service_t cfg_server_cb,
+               vs_netif_process_cb_t packet_preprocessor_cb
 #if SECURE_PROVISION
-            ,
-            vs_secmodule_impl_t *secmodule_impl,
-            vs_storage_op_ctx_t *tl_storage_impl
+               ,
+               vs_secmodule_impl_t *secmodule_impl,
+               vs_storage_op_ctx_t *tl_storage_impl
 #endif
 ) {
     vs_status_e res = VS_CODE_ERR_INIT_SNAP;
@@ -96,7 +96,7 @@ terminate:
 
 /******************************************************************************/
 vs_status_e
-iotkit_deinit(void) {
+ks_iotkit_deinit(void) {
 
     // Deinit Virgil SDK modules
     vs_snap_deinit();

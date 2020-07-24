@@ -15,16 +15,15 @@
 //
 //
 //
-//   23 July 2020
+//   24 July 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_NETIF_BLE_LINUX_IMPL_H
-#define PROVISION_NETIF_BLE_LINUX_IMPL_H
+#ifndef PROVISION_WIFI_CRED_H
+#define PROVISION_WIFI_CRED_H
 
+#include <virgil/iot/protocols/snap/cfg/cfg-structs.h>
 
-#include <virgil/iot/protocols/snap/snap-structs.h>
+vs_status_e
+ks_snap_cfg_wifi_cb(const vs_cfg_wifi_configuration_t *configuration);
 
-vs_netif_t *
-ks_netif_ble(void);
-
-#endif // PROVISION_NETIF_BLE_LINUX_IMPL_H
+#endif // PROVISION_WIFI_CRED_H

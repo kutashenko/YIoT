@@ -15,16 +15,21 @@
 //
 //
 //
-//   23 July 2020
+//   24 July 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_NETIF_BLE_LINUX_IMPL_H
-#define PROVISION_NETIF_BLE_LINUX_IMPL_H
+#include "ble/ble-linux.h"
 
+/******************************************************************************/
+vs_status_e
+ks_ble_start_advertisement(void) {
+    return VS_CODE_ERR_NOT_IMPLEMENTED;
+}
 
-#include <virgil/iot/protocols/snap/snap-structs.h>
+/******************************************************************************/
+vs_status_e
+ks_ble_stop_advertisement(void) {
+    return VS_CODE_ERR_NOT_IMPLEMENTED;
+}
 
-vs_netif_t *
-ks_netif_ble(void);
-
-#endif // PROVISION_NETIF_BLE_LINUX_IMPL_H
+/******************************************************************************/
