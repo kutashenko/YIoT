@@ -83,6 +83,16 @@ target_sources(ble-provision-service
 		)
 
 #
+#	Generate D-Bus glue
+#
+add_custom_command(TARGET ble-provision-service
+		PRE_BUILD
+		COMMAND gdbus-codegen --generate-c-code  ${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue --interface-prefix "org.bluez." bluez.xml
+		COMMAND gdbus-codegen --generate-c-code  ${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue --interface-prefix "org.freedesktop." object_manager.xml
+		WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/ble/data
+		COMMENT "Generate D-Bus glue")
+
+#
 #	Definitions
 #
 
