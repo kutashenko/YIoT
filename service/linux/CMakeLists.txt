@@ -71,6 +71,8 @@ target_sources(ble-provision-service
 		${CMAKE_CURRENT_LIST_DIR}/include/ble/ble-linux.h
 		${CMAKE_CURRENT_LIST_DIR}/include/device-info.h
 		${CMAKE_CURRENT_LIST_DIR}/include/wifi-cred.h
+		${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue.h
+		${CMAKE_CURRENT_LIST_DIR}/src/ble/objmanager-glue.h
 
         # Sources
 		${CMAKE_CURRENT_LIST_DIR}/src/main.c
@@ -80,6 +82,8 @@ target_sources(ble-provision-service
 		${CMAKE_CURRENT_LIST_DIR}/src/iotkit-impl/init.c
 		${CMAKE_CURRENT_LIST_DIR}/src/iotkit-impl/netif/netif-ble-linux.c
 		${CMAKE_CURRENT_LIST_DIR}/src/ble/ble-linux.c
+		${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue.c
+		${CMAKE_CURRENT_LIST_DIR}/src/ble/objmanager-glue.c
 		)
 
 #
@@ -88,18 +92,24 @@ target_sources(ble-provision-service
 add_custom_command(TARGET ble-provision-service
 		PRE_BUILD
 		COMMAND gdbus-codegen --generate-c-code  ${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue --interface-prefix "org.bluez." bluez.xml
-		COMMAND gdbus-codegen --generate-c-code  ${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue --interface-prefix "org.freedesktop." object_manager.xml
+		COMMAND gdbus-codegen --generate-c-code  ${CMAKE_CURRENT_LIST_DIR}/src/ble/objmanager-glue --interface-prefix "org.freedesktop." object_manager.xml
 		WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/ble/data
 		COMMENT "Generate D-Bus glue")
 
 #
 #	Definitions
 #
-
 target_compile_definitions(ble-provision-service
         PRIVATE
 		$<$<BOOL:${SECURE_PROVISION}>:SECURE_PROVISION=1>
         )
+
+#
+#	PackageConfig
+#
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GIO_2 REQUIRED gio-unix-2.0)
+pkg_check_modules(DBUS_GLIB_1 REQUIRED dbus-glib-1)
 
 #
 #   Include directories
@@ -107,13 +117,21 @@ target_compile_definitions(ble-provision-service
 target_include_directories(ble-provision-service
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
-        )
+
+		# PkgConfig
+		${GIO_2_INCLUDE_DIRS}
+		${DBUS_GLIB_1_INCLUDE_DIRS}
+		)
 
 #
 #	Compile options
 #
 target_compile_options(ble-provision-service
 		PRIVATE
+
+		# PkgConfig
+		${GIO_2_CFLAGS_OTHER}
+		${DBUS_GLIB_1_CFLAGS_OTHER}
 		)
 
 #
@@ -122,9 +140,15 @@ target_compile_options(ble-provision-service
 target_link_libraries(ble-provision-service
         PRIVATE
 
+		# IoTKit
 		nix-common
 		vs-module-snap-thing
 
+		# PkgConfig
+		${GIO_2_LIBRARIES}
+		${DBUS_GLIB_1_LIBRARIES}
+
+		# Helpers
 		enable_sanitizers
 #       enable_pedantic_mode
         )

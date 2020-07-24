@@ -20,15 +20,19 @@
 
 #include "ble/ble-linux.h"
 
+#include <virgil/iot/logger/logger.h>
+
 /******************************************************************************/
 vs_status_e
 ks_ble_start_advertisement(void) {
+    VS_LOG_DEBUG(">>> advertisement");
     return VS_CODE_ERR_NOT_IMPLEMENTED;
 }
 
 /******************************************************************************/
 vs_status_e
 ks_ble_stop_advertisement(void) {
+    VS_LOG_DEBUG("<<< advertisement");
     return VS_CODE_ERR_NOT_IMPLEMENTED;
 }
 
