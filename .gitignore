@@ -57,3 +57,8 @@ cmake-build-*
 
 # Cache
 .depends_cache
+
+#
+#   Do not ignore
+#
+!service/linux/include/config
