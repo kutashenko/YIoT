@@ -96,12 +96,7 @@ _ble_deinit(struct vs_netif_t *netif) {
 static vs_status_e
 _ble_mac(const struct vs_netif_t *netif, struct vs_mac_addr_t *mac_addr) {
     (void)netif;
-
-    if (mac_addr) {
-        return VS_CODE_ERR_NOT_IMPLEMENTED;
-    }
-
-    return VS_CODE_ERR_NULLPTR_ARGUMENT;
+    return ks_ble_mac(mac_addr);
 }
 
 /******************************************************************************/

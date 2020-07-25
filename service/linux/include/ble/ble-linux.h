@@ -22,11 +22,15 @@
 #define PROVISION_BLE_LINUX_H
 
 #include <virgil/iot/status_code/status_code.h>
+#include <virgil/iot/protocols/snap/snap-structs.h>
 
 vs_status_e
 ks_ble_start_advertisement(void);
 
 vs_status_e
 ks_ble_stop_advertisement(void);
+
+vs_status_e
+ks_ble_mac(vs_mac_addr_t *mac_addr);
 
 #endif // PROVISION_BLE_LINUX_H
