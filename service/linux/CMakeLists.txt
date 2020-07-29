@@ -20,7 +20,14 @@
 
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
-project(ble-provision-service VERSION 0.1.0 LANGUAGES C)
+project(ble-provision-service VERSION 0.1.0 LANGUAGES C CXX)
+
+#
+#   C++
+#
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 #
 #   Options
@@ -31,29 +38,46 @@ option(SECURE_PROVISION "Enable secure provision" OFF)
 #	Add Virgil IoTKit
 #
 
+# Ext projects path
+set(EXT_PATH "${CMAKE_CURRENT_LIST_DIR}/../../ext")
+
 # Path to IoTKit
-set (IOTKIT_PATH "${CMAKE_CURRENT_LIST_DIR}/../../ext/iotkit")
+set(IOTKIT_PATH "${EXT_PATH}/iotkit")
+
+# Path to sdbus-cpp
+set(SDBUS_CPP_PATH "${EXT_PATH}/sdbus")
+
+# Path to Bluez-DBus
+set(BLUEZ_DBUS_PATH "${EXT_PATH}/bluez-dbus")
 
 # Configure IoTKit
-set (GO_DISABLE ON)
-set (VIRGIL_IOT_CONFIG_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/config)
-set (ENABLE_TESTING OFF)
-set (ENABLE_HEAVY_TESTS OFF)
-set (VIRGIL_IOT_PROTOCOLS ON)
-set (VIRGIL_IOT_CLOUD OFF)
-set (VIRGIL_IOT_PROVISION ON)
-set (VIRGIL_IOT_SECBOX ON)
-set (VIRGIL_IOT_DEFAULT_IMPL ON)
-set (VIRGIL_IOT_UPDATE OFF)
-set (VIRGIL_IOT_HIGH_LEVEL OFF)
-set (VIRGIL_IOT_THREADSAFE ON)
-set (VIRGIL_IOT_DEFAULT_CRYPTO_VS_SOFT_SECMODULE ON)
-set (VIRGIL_IOT_DEFAULT_CLOUD_CURL_HTTP OFF)
-set (VIRGIL_IOT_DEFAULT_CLOUD_MESSAGE_BIN_AWS OFF)
+set(VIRGIL_IOT_CONFIG_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/config)
+option(GO_DISABLE ON)
+option(ENABLE_TESTING OFF)
+option(ENABLE_HEAVY_TESTS OFF)
+option(VIRGIL_IOT_CLOUD OFF)
+option(VIRGIL_IOT_HIGH_LEVEL OFF)
+option(VIRGIL_IOT_THREADSAFE ON)
+option(VIRGIL_IOT_DEFAULT_CLOUD_CURL_HTTP OFF)
+option(VIRGIL_IOT_DEFAULT_CLOUD_MESSAGE_BIN_AWS OFF)
 
-# Add dependencies
+# Add IoTKit
 add_subdirectory(${IOTKIT_PATH}/sdk iotkit)
 add_subdirectory(${IOTKIT_PATH}/demo/nix/common iotkit-demo-common)
+
+# Build and install sdbus-cpp
+virgil_depends(
+        PACKAGE_NAME "sdbus"
+        CONFIG_DIR "${EXT_PATH}/cmake"
+)
+
+# Add BlueZ-DBus
+unset(BUILD_SHARED_LIBS CACHE)
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "${VIRGIL_DEPENDS_PREFIX}/lib/cmake/sdbus-c++" "${VIRGIL_DEPENDS_PREFIX}/lib64/cmake/sdbus-c++")
+add_subdirectory(${BLUEZ_DBUS_PATH} bluez-dbus)
+
+# Do not use shared libs
+set(BUILD_SHARED_LIBS CACHE BOOL OFF FORCE)
 
 #
 #	Linux BLE provisioning application
@@ -65,51 +89,29 @@ add_executable(ble-provision-service)
 #
 target_sources(ble-provision-service
         PRIVATE
-		# Headers
-		${CMAKE_CURRENT_LIST_DIR}/include/iotkit-impl/init.h
-		${CMAKE_CURRENT_LIST_DIR}/include/iotkit-impl/netif/netif-ble-linux.h
-		${CMAKE_CURRENT_LIST_DIR}/include/ble/ble-linux.h
-		${CMAKE_CURRENT_LIST_DIR}/include/device-info.h
-		${CMAKE_CURRENT_LIST_DIR}/include/wifi-cred.h
-		${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue.h
-		${CMAKE_CURRENT_LIST_DIR}/src/ble/objmanager-glue.h
+        # Headers
+        ${CMAKE_CURRENT_LIST_DIR}/include/iotkit-impl/init.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/iotkit-impl/netif/netif-ble-linux.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/device-info.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/wifi-cred.h
 
         # Sources
-		${CMAKE_CURRENT_LIST_DIR}/src/main.c
-		${CMAKE_CURRENT_LIST_DIR}/src/device-info.c
-		${CMAKE_CURRENT_LIST_DIR}/src/wifi-cred.c
-		${CMAKE_CURRENT_LIST_DIR}/src/iotkit-impl/helpers.c
-		${CMAKE_CURRENT_LIST_DIR}/src/iotkit-impl/init.c
-		${CMAKE_CURRENT_LIST_DIR}/src/iotkit-impl/netif/netif-ble-linux.c
-		${CMAKE_CURRENT_LIST_DIR}/src/ble/ble-linux.c
-		${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue.c
-		${CMAKE_CURRENT_LIST_DIR}/src/ble/objmanager-glue.c
-		)
-
-#
-#	Generate D-Bus glue
-#
-add_custom_command(TARGET ble-provision-service
-		PRE_BUILD
-		COMMAND gdbus-codegen --generate-c-code  ${CMAKE_CURRENT_LIST_DIR}/src/ble/bluez-glue --interface-prefix "org.bluez." bluez.xml
-		COMMAND gdbus-codegen --generate-c-code  ${CMAKE_CURRENT_LIST_DIR}/src/ble/objmanager-glue --interface-prefix "org.freedesktop." object_manager.xml
-		WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/ble/data
-		COMMENT "Generate D-Bus glue")
+        ${CMAKE_CURRENT_LIST_DIR}/src/main.c
+        ${CMAKE_CURRENT_LIST_DIR}/src/device-info.c
+        ${CMAKE_CURRENT_LIST_DIR}/src/wifi-cred.c
+        ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-impl/helpers.c
+        ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-impl/init.c
+        ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-impl/netif/netif-ble-linux.cpp
+        )
 
 #
 #	Definitions
 #
 target_compile_definitions(ble-provision-service
         PRIVATE
-		$<$<BOOL:${SECURE_PROVISION}>:SECURE_PROVISION=1>
+        $<$<BOOL:${SECURE_PROVISION}>:SECURE_PROVISION=1>
         )
 
-#
-#	PackageConfig
-#
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GIO_2 REQUIRED gio-unix-2.0)
-pkg_check_modules(DBUS_GLIB_1 REQUIRED dbus-glib-1)
 
 #
 #   Include directories
@@ -117,22 +119,15 @@ pkg_check_modules(DBUS_GLIB_1 REQUIRED dbus-glib-1)
 target_include_directories(ble-provision-service
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
-
-		# PkgConfig
-		${GIO_2_INCLUDE_DIRS}
-		${DBUS_GLIB_1_INCLUDE_DIRS}
-		)
+        )
 
 #
 #	Compile options
 #
 target_compile_options(ble-provision-service
-		PRIVATE
-
-		# PkgConfig
-		${GIO_2_CFLAGS_OTHER}
-		${DBUS_GLIB_1_CFLAGS_OTHER}
-		)
+        PRIVATE
+        -Wno-multichar
+        )
 
 #
 #	Link libraries
@@ -140,23 +135,22 @@ target_compile_options(ble-provision-service
 target_link_libraries(ble-provision-service
         PRIVATE
 
-		# IoTKit
-		nix-common
-		vs-module-snap-thing
+        # IoTKit
+        nix-common
+        vs-module-snap-thing
 
-		# PkgConfig
-		${GIO_2_LIBRARIES}
-		${DBUS_GLIB_1_LIBRARIES}
+        # Bluez DBus
+        bluez-dbus-cpp
 
-		# Helpers
-		enable_sanitizers
-#       enable_pedantic_mode
+        # Helpers
+        enable_sanitizers
+        #       enable_pedantic_mode
         )
 
-if(COMMAND add_clangformat)
-	add_clangformat(ble-provision-service)
-endif()
+if (COMMAND add_clangformat)
+    add_clangformat(ble-provision-service)
+endif ()
 
 install(TARGETS ble-provision-service
-	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	)
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        )

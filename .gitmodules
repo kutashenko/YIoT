@@ -1,3 +1,6 @@
 [submodule "ext/iotkit"]
 	path = ext/iotkit
 	url = https://github.com/kutashenko/virgil-iotkit.git
+[submodule "ext/bluez-dbus"]
+	path = ext/bluez-dbus
+	url = https://github.com/kutashenko/bluez-dbus-cpp.git

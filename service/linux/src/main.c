@@ -22,6 +22,7 @@
 #include <virgil/iot/macros/macros.h>
 #include <virgil/iot/protocols/snap.h>
 #include <virgil/iot/protocols/snap/info/info-server.h>
+#include <virgil/iot/protocols/snap/cfg/cfg-server.h>
 
 #include "helpers/app-helpers.h"
 
