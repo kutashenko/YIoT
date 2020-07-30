@@ -15,28 +15,16 @@
 //
 //
 //
-//   24 July 2020
+//   30 July 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#include "device-info.h"
-#include <string.h>
+#include <KSQApplication.h>
 
-/******************************************************************************/
-void
-ks_devinfo_manufacturer(vs_device_manufacture_id_t manufacture_id) {
-    memset(manufacture_id, 0, sizeof(vs_device_manufacture_id_t));
+int
+main(int argc, char *argv[]) {
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+    QGuiApplication a(argc, argv);
+
+    return KSQApplication().run();
 }
-
-/******************************************************************************/
-void
-ks_devinfo_device_type(vs_device_type_t device_type) {
-    memset(device_type, 0, sizeof(vs_device_type_t));
-}
-
-/******************************************************************************/
-void
-ks_devinfo_device_serial(vs_device_serial_t serial) {
-    memset(serial, 0, sizeof(vs_device_serial_t));
-}
-
-/******************************************************************************/

@@ -15,28 +15,47 @@
 //
 //
 //
-//   24 July 2020
+//   30 July 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#include "device-info.h"
-#include <string.h>
+#include <iostream>
+#include <cstring>
 
 /******************************************************************************/
-void
-ks_devinfo_manufacturer(vs_device_manufacture_id_t manufacture_id) {
-    memset(manufacture_id, 0, sizeof(vs_device_manufacture_id_t));
+extern "C" bool
+vs_logger_output_hal(const char *buffer) {
+    std::cout << buffer << std::flush;
+
+    return true;
 }
 
 /******************************************************************************/
-void
-ks_devinfo_device_type(vs_device_type_t device_type) {
-    memset(device_type, 0, sizeof(vs_device_type_t));
+extern "C" void
+vs_impl_msleep(size_t msec) {
+    (void)msec;
 }
 
 /******************************************************************************/
-void
-ks_devinfo_device_serial(vs_device_serial_t serial) {
-    memset(serial, 0, sizeof(vs_device_serial_t));
+extern "C" bool
+vs_logger_current_time_hal(void) {
+    time_t rawtime;
+    struct tm *timeinfo;
+
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    char buf[50];
+    size_t len;
+    snprintf(buf, sizeof(buf), "%s", asctime(timeinfo));
+    len = strlen(buf);
+
+    if (!len) {
+        return false;
+    }
+
+    buf[len - 1] = 0;
+    int res = printf("[%s]", buf);
+    return res != 0;
 }
 
 /******************************************************************************/

@@ -42,6 +42,9 @@ using namespace VirgilIoTKit;
 
 constexpr const char *BLUEZ_SERVICE = "org.bluez";
 constexpr const char *DEVICE0 = "/org/bluez/hci0";
+constexpr const char *IOTKIT_BLE_SERVICE_UUID = "0000abf0-0000-1000-8000-00805f9b34fb";
+constexpr const char *IOTKIT_BLE_CHAR_TX_UUID = "0000abf2-0000-1000-8000-00805f9b34fb";
+constexpr const char *IOTKIT_BLE_CHAR_RX_UUID = "0000abf1-0000-1000-8000-00805f9b34fb";
 
 static std::thread *_ble_thread = nullptr;
 
@@ -56,7 +59,8 @@ static vs_mac_addr_t _mac;
 static vs_netif_rx_cb_t _netif_ble_rx_cb = 0;
 static vs_netif_process_cb_t _netif_ble_process_cb = 0;
 
-#define RX_BUF_SZ (2048)
+class TxCharacteristic;
+static std::shared_ptr<GenericCharacteristic> _tx_char_holder;
 
 /******************************************************************************/
 static vs_status_e
@@ -79,26 +83,20 @@ static vs_netif_t _netif_ble = {.user_data = NULL,
                                 .packet_buf_filled = 0};
 
 /******************************************************************************/
-class SerialCharacteristic : public GattCharacteristicBuilder<GenericCharacteristic> {
+class RxCharacteristic : public GattCharacteristicBuilder<GenericCharacteristic> {
 public:
-    SerialCharacteristic(std::shared_ptr<GattService1> service, std::string uuid)
+    RxCharacteristic(std::shared_ptr<GattService1> service, std::string uuid)
         : GattCharacteristicBuilder{move(service), move(uuid)} {
-        flags_ = {"read", "write", "indicate"};
+        flags_ = {"read", "write", "indicate", "write-without-response"};
     }
 
-    static SerialCharacteristic &
+    static RxCharacteristic &
     create(std::shared_ptr<GattService1> service, std::string uuid) {
-        auto self = new SerialCharacteristic(move(service), move(uuid));
+        auto self = new RxCharacteristic(move(service), move(uuid));
         return *self;
     }
 
 protected:
-    virtual std::vector<uint8_t>
-    ReadValue(const std::map<std::string, sdbus::Variant> &options) {
-        // TODO handle options
-        return value_;
-    }
-
     virtual void
     WriteValue(const std::vector<uint8_t> &value, const std::map<std::string, sdbus::Variant> &options) {
         // TODO handle options
@@ -125,6 +123,41 @@ protected:
         }
     }
 };
+
+/******************************************************************************/
+class TxCharacteristic : public GattCharacteristicBuilder<GenericCharacteristic> {
+public:
+    TxCharacteristic(std::shared_ptr<GattService1> service, std::string uuid)
+        : GattCharacteristicBuilder{move(service), move(uuid)} {
+        flags_ = {"read", "write", "indicate", "notify"};
+    }
+
+    static TxCharacteristic &
+    create(std::shared_ptr<GattService1> service, std::string uuid) {
+        auto self = new TxCharacteristic(move(service), move(uuid));
+        return *self;
+    }
+
+    void
+    tx(const std::vector<uint8_t> &value) {
+        // this->emitPropertyChangedSignal();
+    }
+
+    void
+    enableNotify(bool enable) {
+        if (enable) {
+            StartNotify();
+        } else {
+            StopNotify();
+        }
+    }
+};
+
+/******************************************************************************/
+static TxCharacteristic*
+_tx_char() {
+    return dynamic_cast<TxCharacteristic*>(_tx_char_holder.get());
+}
 
 /******************************************************************************/
 static void
@@ -183,10 +216,11 @@ _ble_thread_func() {
     ReadOnlyCharacteristic::createFinal(srv1, "2A26", "0.0.1");            // fw rev
     ReadOnlyCharacteristic::createFinal(srv1, "2A27", "rev A");            // hw rev
     ReadOnlyCharacteristic::createFinal(srv1, "2A28", "1.0");              // sw rev
-    ReadOnlyCharacteristic::createFinal(srv1, "2A29", "Kut PE");           // manufacturer
+    ReadOnlyCharacteristic::createFinal(srv1, "2A29", "Kutushenko PE");    // manufacturer
 
-    auto srv2 = std::make_shared<GattService1>(app, "serial", "368a3edf-514e-4f70-ba8f-2d0a5a62bc8c");
-    SerialCharacteristic::create(srv2, "de0a7b0c-358f-4cef-b778-8fe9abf09d53").finalize();
+    auto srv_iotkit = std::make_shared<GattService1>(app, "IoTKit", IOTKIT_BLE_SERVICE_UUID);
+    _tx_char_holder = TxCharacteristic::create(srv_iotkit, IOTKIT_BLE_CHAR_TX_UUID).finalize();
+    RxCharacteristic::create(srv_iotkit, IOTKIT_BLE_CHAR_RX_UUID).finalize();
 
     auto register_app_callback = [](const sdbus::Error *error) {
         if (error == nullptr) {
@@ -222,6 +256,7 @@ _ble_thread_func() {
                       << error->getMessage() << std::endl;
         }
 
+        // Inform about readiness of BLE
         std::unique_lock<std::mutex> lck(_mtx_start);
         _ready = true;
         _cv_start.notify_one();
@@ -229,15 +264,18 @@ _ble_thread_func() {
 
     auto ad = LEAdvertisement1::create(*connection, ADV_PATH)
                       .withLocalName(NAME)
-                      .withServiceUUIDs(std::vector{std::string{"368a3edf-514e-4f70-ba8f-2d0a5a62bc8c"}})
+                      .withServiceUUIDs(std::vector{std::string{IOTKIT_BLE_SERVICE_UUID}})
                       .withIncludes(std::vector{std::string{"tx-power"}})
                       .onReleaseCall([]() { std::cout << "advertisement released" << std::endl; })
                       .registerWith(mgr, register_adv_callback);
+
+    _tx_char()->enableNotify(true);
 
     std::cout << "Loading complete." << std::endl;
 
     connection->enterEventLoopAsync();
 
+    // Wait to finish
     std::unique_lock<std::mutex> lck(_mtx_stop);
     _cv_stop.wait(lck, []() -> bool { return _need_stop; });
 }
@@ -253,6 +291,7 @@ _ble_connect() {
     _need_stop = false;
     _ble_thread = new std::thread(_ble_thread_func);
 
+    // Wait for BLE started
     std::unique_lock<std::mutex> lck(_mtx_start);
     _cv_start.wait(lck, []() -> bool { return _ready; });
     VS_LOG_DEBUG("BLE NETIF is connected");
@@ -263,7 +302,16 @@ _ble_connect() {
 /******************************************************************************/
 static vs_status_e
 _ble_tx(struct vs_netif_t *netif, const uint8_t *data, const uint16_t data_sz) {
-    return VS_CODE_ERR_NOT_IMPLEMENTED;
+    (void)netif;
+    TxCharacteristic *tx = _tx_char();
+    if (!tx) {
+        return VS_CODE_ERR_NOINIT;
+    }
+
+    std::vector<uint8_t> data_vect(data, data + data_sz);
+    _tx_char()->tx(data_vect);
+
+    return VS_CODE_OK;
 }
 
 /******************************************************************************/

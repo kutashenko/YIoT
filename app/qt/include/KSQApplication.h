@@ -15,28 +15,25 @@
 //
 //
 //
-//   24 July 2020
+//   30 July 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#include "device-info.h"
-#include <string.h>
+#ifndef PROVISION_QT_APP_H
+#define PROVISION_QT_APP_H
 
-/******************************************************************************/
-void
-ks_devinfo_manufacturer(vs_device_manufacture_id_t manufacture_id) {
-    memset(manufacture_id, 0, sizeof(vs_device_manufacture_id_t));
-}
+#include <QtCore>
+#include <QGuiApplication>
+#include <virgil/iot/qt/VSQIoTKit.h>
+#include <virgil/iot/qt/netif/VSQUdpBroadcast.h>
 
-/******************************************************************************/
-void
-ks_devinfo_device_type(vs_device_type_t device_type) {
-    memset(device_type, 0, sizeof(vs_device_type_t));
-}
+class KSQApplication : public QObject {
+    Q_OBJECT
+public:
+    KSQApplication() = default;
+    virtual ~KSQApplication() = default;
 
-/******************************************************************************/
-void
-ks_devinfo_device_serial(vs_device_serial_t serial) {
-    memset(serial, 0, sizeof(vs_device_serial_t));
-}
+    int
+    run();
+};
 
-/******************************************************************************/
+#endif // PROVISION_QT_APP_H

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Main.qml</file>
+        <file>qml/BLEManager.qml</file>
+        <file>qml/default.png</file>
+        <file>qml/InitDialog.qml</file>
+    </qresource>
+</RCC>
