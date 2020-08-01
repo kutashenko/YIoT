@@ -22,24 +22,59 @@ cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 project(ble-provision VERSION 0.1.0 LANGUAGES C)
 
-#
+# ---------------------------------------------------------------------------
 #	CMake Helpers
-#
+# ---------------------------------------------------------------------------
 set (IOTKIT_PATH "${CMAKE_CURRENT_LIST_DIR}/ext/iotkit")
 set (CMAKE_MODULE_PATH "${IOTKIT_PATH}/sdk/cmake" ${CMAKE_MODULE_PATH})
 include(helpers)
 
-#
+# ---------------------------------------------------------------------------
+#   Options
+# ---------------------------------------------------------------------------
+option(BUILD_SERVICE_ENABLE "Enable building of BLE service" ON)
+option(BUILD_APP_ENABLE "Enable building of Application" ON)
+option(BUILD_ISO_PACKER_ENABLE "Enable building of ISO Packer" ON)
+
+
+# ---------------------------------------------------------------------------
+#	IoTKit
+# ---------------------------------------------------------------------------
+#   Configure
+
+set(IOTKIT_PATH "${CMAKE_CURRENT_LIST_DIR}/ext/iotkit")
+#TODO: Fix it !
+set(VIRGIL_IOT_CONFIG_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/service/linux/include/config)
+#set(GO_DISABLE CACHE BOOL ON FORCE)
+option(ENABLE_TESTING OFF)
+option(ENABLE_HEAVY_TESTS OFF)
+option(VIRGIL_IOT_CLOUD OFF)
+option(VIRGIL_IOT_HIGH_LEVEL OFF)
+option(VIRGIL_IOT_THREADSAFE ON)
+option(VIRGIL_IOT_DEFAULT_CLOUD_CURL_HTTP OFF)
+option(VIRGIL_IOT_DEFAULT_CLOUD_MESSAGE_BIN_AWS OFF)
+
+#   Add
+add_subdirectory(${IOTKIT_PATH}/sdk)
+add_subdirectory(${IOTKIT_PATH}/demo/nix/common)
+
+# ---------------------------------------------------------------------------
 #	BLE provisioning service
-#
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/service)
+# ---------------------------------------------------------------------------
+if (BUILD_SERVICE_ENABLE)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/service)
+endif()
 
-#
+# ---------------------------------------------------------------------------
 #	ISO packer for BLE provisioning Service
-#
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/iso-packer)
+# ---------------------------------------------------------------------------
+if (BUILD_ISO_PACKER_ENABLE)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/iso-packer)
+endif()
 
-#
+# ---------------------------------------------------------------------------
 #	Linux BLE provisioning Application (Desktop and mobile)
-#
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/app)
+# ---------------------------------------------------------------------------
+if (BUILD_APP_ENABLE)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/app)
+endif()

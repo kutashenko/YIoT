@@ -41,26 +41,8 @@ option(SECURE_PROVISION "Enable secure provision" OFF)
 #   Ext projects path
 set(EXT_PATH "${CMAKE_CURRENT_LIST_DIR}/../../ext")
 
-#   Path to IoTKit
-set(IOTKIT_PATH "${EXT_PATH}/iotkit")
-
 #   Path to Bluez-DBus
 set(BLUEZ_DBUS_PATH "${EXT_PATH}/bluez-dbus")
-
-#   Configure IoTKit
-set(VIRGIL_IOT_CONFIG_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/config)
-#set(GO_DISABLE CACHE BOOL ON FORCE)
-option(ENABLE_TESTING OFF)
-option(ENABLE_HEAVY_TESTS OFF)
-option(VIRGIL_IOT_CLOUD OFF)
-option(VIRGIL_IOT_HIGH_LEVEL OFF)
-option(VIRGIL_IOT_THREADSAFE ON)
-option(VIRGIL_IOT_DEFAULT_CLOUD_CURL_HTTP OFF)
-option(VIRGIL_IOT_DEFAULT_CLOUD_MESSAGE_BIN_AWS OFF)
-
-#   Add IoTKit
-add_subdirectory(${IOTKIT_PATH}/sdk iotkit)
-add_subdirectory(${IOTKIT_PATH}/demo/nix/common iotkit-demo-common)
 
 #   Build and install sdbus-cpp
 virgil_depends(
