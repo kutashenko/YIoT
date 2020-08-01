@@ -22,6 +22,7 @@
 #include <QtQml>
 
 #include <KSQApplication.h>
+#include <KSQWiFiEnumerator.h>
 #include <virgil/iot/qt/netif/VSQNetifBLE.h>
 #include <virgil/iot/qt/netif/VSQNetifBLEEnumerator.h>
 #include <virgil/iot/logger/logger.h>
@@ -31,6 +32,7 @@ int
 KSQApplication::run() {
     QQmlApplicationEngine engine;
     VSQNetifBLEEnumerator bleEnumerator;
+    KSQWiFiEnumerator wifiEnumerator;
 
     // Prepare IoTKit data
     auto netifBLE = QSharedPointer<VSQNetifBLE>::create();
@@ -58,6 +60,9 @@ KSQApplication::run() {
         VS_LOG_CRITICAL("Unable to initialize IoTKIT");
         return -1;
     }
+
+    // Start WiFi enumeration
+    wifiEnumerator.start();
 
     // Initialize QML
     QQmlContext *context = engine.rootContext();
