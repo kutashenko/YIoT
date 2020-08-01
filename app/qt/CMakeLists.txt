@@ -48,11 +48,11 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cmake/iotkit-qt)
 # ---------------------------------------------------------------------------
 #   Application
 # ---------------------------------------------------------------------------
-#if (APPLE)
-#    add_executable(ble-provision-app MACOSX_BUNDLE)
-#else ()
+if (APPLE)
+    add_executable(ble-provision-app MACOSX_BUNDLE)
+else ()
     add_executable(ble-provision-app)
-#endif ()
+endif ()
 
 
 # ---------------------------------------------------------------------------
@@ -144,7 +144,15 @@ install(TARGETS ble-provision-app
 #   Deployment
 # ---------------------------------------------------------------------------
 if (APPLE)
+   #
+   #   Configure plist file
+   #
+   set_target_properties(ble-provision-app PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_LIST_DIR}/platform/macos/macos-info.plist)
    set (MACOSX_DEPLOYMENT_TARGET 10.14)
-#   macdeployqt(ble-provision-app "${CMAKE_CURRENT_LIST_DIR}/src/qml")
+   set (PLIST_DST "${CMAKE_CURRENT_LIST_DIR}/platform/macos/macos-info.plist")
+   set (PLIST_TMPL "${PLIST_DST}.in")
+   configure_file(${PLIST_TMPL} ${PLIST_DST})
+
+   #   macdeployqt(ble-provision-app "${CMAKE_CURRENT_LIST_DIR}/src/qml")
 endif ()
 

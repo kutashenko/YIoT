@@ -58,6 +58,9 @@ cmake-build-*
 # Cache
 .depends_cache
 
+# Generated
+app/qt/platform/macos/macos-info.plist
+
 #
 #   Do not ignore
 #
