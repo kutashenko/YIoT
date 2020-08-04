@@ -15,48 +15,30 @@
 //
 //
 //
-//   01 August 2020
+//   04 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_WIFI_ENUM_H
-#define PROVISION_QT_WIFI_ENUM_H
+#include <macos/KSMacWiFi.h>
+#import <CoreWLAN/CoreWLAN.h>
 
-#include <QtCore>
-#include <virgil/iot/qt/VSQIoTKit.h>
+QStringList wifi_enum() {
+    QStringList res;
+    CWInterface* wifi = [[CWWiFiClient sharedWiFiClient] interface];
+    NSArray *networkScan = [[wifi scanForNetworksWithName:nil error:nil] allObjects];
+    for (CWNetwork *network in networkScan) {
+        #if 1
+        NSLog ( @"SSID: %@ ,\n \
+              BSSID: %@ , \n \
+              rssiValue: %ld , \n \
+              noiseMeasurement: %ld, \n\
+              beaconInterval: %ld , \n \
+              countryCode: %@ \n ,\
+              ibss: %i ,\n\
+              wlanChannel: %@ , \n\
+              ", [network ssid],[network bssid],[network rssiValue],[network noiseMeasurement],(long)[network beaconInterval], [network countryCode] , [network ibss], [[network wlanChannel]description]);
+        #endif
+        res << QString::fromNSString([network ssid]);
+    }
 
-class KSQWiFiEnumerator : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QStringList wifiList MEMBER m_wifiList NOTIFY fireWiFiListUpdated)
-public:
-    KSQWiFiEnumerator();
-    virtual ~KSQWiFiEnumerator();
-
-public slots:
-    void
-    start();
-
-    void
-    stop();
-
-signals:
-    void
-    fireWiFiListUpdated(QStringList list);
-
-private slots:
-    void
-    onFindWiFi();
-
-private:
-    QStringList m_wifiList;
-
-#if defined(Q_OS_MACOS)
-    static const int kScanPeriodMs = 5000;
-    QTimer m_timer;
-#else
-    QNetworkConfigurationManager m_ncm;
-    QStringList
-    _findWiFiGeneral();
-#endif
-};
-
-#endif // PROVISION_QT_WIFI_ENUM_H
+    return res;
+}

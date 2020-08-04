@@ -20,9 +20,18 @@
 
 #include <KSQWiFiEnumerator.h>
 
+#if defined(Q_OS_MACOS)
+#include <macos/KSMacWiFi.h>
+#endif
+
 /******************************************************************************/
 KSQWiFiEnumerator::KSQWiFiEnumerator() {
+#if defined(Q_OS_MACOS)
+    m_timer.setSingleShot(false);
+    m_timer.setInterval(kScanPeriodMs);
+#else
     connect(&m_ncm, &QNetworkConfigurationManager::updateCompleted, this, &KSQWiFiEnumerator::onFindWiFi);
+#endif
 }
 
 /******************************************************************************/
@@ -33,18 +42,26 @@ KSQWiFiEnumerator::~KSQWiFiEnumerator() {
 /******************************************************************************/
 void
 KSQWiFiEnumerator::start() {
+#if defined(Q_OS_MACOS)
+    m_timer.start();
+#else
     m_ncm.updateConfigurations();
+#endif
     onFindWiFi();
 }
 
 /******************************************************************************/
 void
 KSQWiFiEnumerator::stop() {
+#if defined(Q_OS_MACOS)
+    m_timer.stop();
+#endif
 }
 
 /******************************************************************************/
-void
-KSQWiFiEnumerator::onFindWiFi() {
+#if !defined(Q_OS_MACOS)
+QStringList
+_findWiFiGeneral() {
     QStringList wifiList;
     auto netcfgList = m_ncm.allConfigurations();
     for (auto &x : netcfgList) {
@@ -57,6 +74,20 @@ KSQWiFiEnumerator::onFindWiFi() {
             }
         }
     }
+
+    return wifiList;
+}
+#endif
+
+/******************************************************************************/
+void
+KSQWiFiEnumerator::onFindWiFi() {
+    QStringList wifiList;
+#if defined(Q_OS_MACOS)
+    wifiList = wifi_enum();
+#else
+    wifiList = _findWiFiGeneral();
+#endif
 
     wifiList.sort();
     m_wifiList = wifiList;

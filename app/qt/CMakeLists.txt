@@ -65,12 +65,14 @@ target_sources(ble-provision-app
         # Headers
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQApplication.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQWiFiEnumerator.h
+        $<$<BOOL:${APPLE}>:${CMAKE_CURRENT_LIST_DIR}/include/macos/KSMacWiFi.h>
 
         # Sources
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQApplication.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQWiFiEnumerator.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-hal.cpp
+        $<$<BOOL:${APPLE}>:${CMAKE_CURRENT_LIST_DIR}/src/macos/KSMacWiFi.mm>
 
         # Qt Resources
         ${CMAKE_CURRENT_LIST_DIR}/src/resources.qrc
@@ -123,6 +125,15 @@ target_link_libraries(ble-provision-app
         enable_pedantic_mode
         )
 
+if (APPLE)
+    #   macOS
+    target_link_libraries(ble-provision-app
+            PUBLIC
+            "-framework CoreWLAN"
+            "-framework Foundation"
+            )
+
+endif()
 
 #------------------------------------------------------------------------------
 #   Format code
@@ -156,6 +167,6 @@ if (APPLE)
    set (PLIST_TMPL "${PLIST_DST}.in")
    configure_file(${PLIST_TMPL} ${PLIST_DST})
 
-   macdeployqt(ble-provision-app "${CMAKE_CURRENT_LIST_DIR}/src/qml")
+#   macdeployqt(ble-provision-app "${CMAKE_CURRENT_LIST_DIR}/src/qml")
 endif ()
 

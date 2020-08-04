@@ -15,48 +15,15 @@
 //
 //
 //
-//   01 August 2020
+//   04 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_WIFI_ENUM_H
-#define PROVISION_QT_WIFI_ENUM_H
+#ifndef PROVISION_QT_WIFI_MACOS_H
+#define PROVISION_QT_WIFI_MACOS_H
 
 #include <QtCore>
-#include <virgil/iot/qt/VSQIoTKit.h>
 
-class KSQWiFiEnumerator : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QStringList wifiList MEMBER m_wifiList NOTIFY fireWiFiListUpdated)
-public:
-    KSQWiFiEnumerator();
-    virtual ~KSQWiFiEnumerator();
+QStringList
+wifi_enum();
 
-public slots:
-    void
-    start();
-
-    void
-    stop();
-
-signals:
-    void
-    fireWiFiListUpdated(QStringList list);
-
-private slots:
-    void
-    onFindWiFi();
-
-private:
-    QStringList m_wifiList;
-
-#if defined(Q_OS_MACOS)
-    static const int kScanPeriodMs = 5000;
-    QTimer m_timer;
-#else
-    QNetworkConfigurationManager m_ncm;
-    QStringList
-    _findWiFiGeneral();
-#endif
-};
-
-#endif // PROVISION_QT_WIFI_ENUM_H
+#endif // PROVISION_QT_WIFI_MACOS_H
