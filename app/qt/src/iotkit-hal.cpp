@@ -21,6 +21,8 @@
 #include <iostream>
 #include <cstring>
 
+#include <time.h>
+
 /******************************************************************************/
 extern "C" bool
 vs_logger_output_hal(const char *buffer) {

@@ -20,8 +20,14 @@
 
 #include <KSQWiFiEnumerator.h>
 
+#include <thread>
+
 #if defined(Q_OS_MACOS)
 #include <macos/KSMacWiFi.h>
+#endif
+
+#if defined(Q_OS_WIN32)
+#include <win/KSWinWiFi.h>
 #endif
 
 /******************************************************************************/
@@ -61,7 +67,7 @@ KSQWiFiEnumerator::stop() {
 /******************************************************************************/
 #if !defined(Q_OS_MACOS)
 QStringList
-_findWiFiGeneral() {
+KSQWiFiEnumerator::_findWiFiGeneral() {
     QStringList wifiList;
     auto netcfgList = m_ncm.allConfigurations();
     for (auto &x : netcfgList) {
@@ -82,17 +88,23 @@ _findWiFiGeneral() {
 /******************************************************************************/
 void
 KSQWiFiEnumerator::onFindWiFi() {
-    QStringList wifiList;
+    std::thread t([this]() {
+        QStringList wifiList;
 #if defined(Q_OS_MACOS)
-    wifiList = wifi_enum();
+        wifiList = wifi_enum_mac();
+#elif defined(Q_OS_WIN32)
+        wifiList = wifi_enum_win();
 #else
-    wifiList = _findWiFiGeneral();
+        wifiList = _findWiFiGeneral();
 #endif
 
-    wifiList.sort();
-    m_wifiList = wifiList;
-    qDebug() << m_wifiList;
-    emit fireWiFiListUpdated(m_wifiList);
+        wifiList.sort();
+        m_wifiList = wifiList;
+        qDebug() << m_wifiList;
+        emit fireWiFiListUpdated(m_wifiList);
+    });
+
+    t.detach();
 }
 
 /******************************************************************************/

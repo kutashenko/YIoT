@@ -18,12 +18,12 @@
 //   04 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_WIFI_MACOS_H
-#define PROVISION_QT_WIFI_MACOS_H
+#ifndef PROVISION_QT_WIFI_WIN_H
+#define PROVISION_QT_WIFI_WIN_H
 
 #include <QtCore>
 
 QStringList
-wifi_enum_mac();
+wifi_enum_win();
 
-#endif // PROVISION_QT_WIFI_MACOS_H
+#endif // PROVISION_QT_WIFI_WIN_H

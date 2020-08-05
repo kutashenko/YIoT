@@ -21,7 +21,8 @@
 #include <macos/KSMacWiFi.h>
 #import <CoreWLAN/CoreWLAN.h>
 
-QStringList wifi_enum() {
+/******************************************************************************/
+QStringList wifi_enum_mac() {
     QStringList res;
     CWInterface* wifi = [[CWWiFiClient sharedWiFiClient] interface];
     NSArray *networkScan = [[wifi scanForNetworksWithName:nil error:nil] allObjects];
@@ -42,3 +43,5 @@ QStringList wifi_enum() {
 
     return res;
 }
+
+/******************************************************************************/
