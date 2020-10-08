@@ -4,5 +4,7 @@
         <file>qml/BLEManager.qml</file>
         <file>qml/default.png</file>
         <file>qml/InitDialog.qml</file>
+        <file>qml/Provision.qml</file>
+        <file>qml/WiFiManager.qml</file>
     </qresource>
 </RCC>

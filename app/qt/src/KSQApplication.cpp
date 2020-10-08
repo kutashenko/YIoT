@@ -67,6 +67,7 @@ KSQApplication::run() {
     // Initialize QML
     QQmlContext *context = engine.rootContext();
     context->setContextProperty("bleEnum", &bleEnumerator);
+    context->setContextProperty("wifiEnum", &wifiEnumerator);
     context->setContextProperty("SnapCfgClient", &VSQIoTKitFacade::instance().snapCfgClient());
 
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));

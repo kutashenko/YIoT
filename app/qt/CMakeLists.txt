@@ -65,8 +65,8 @@ target_sources(ble-provision-app
         # Headers
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQApplication.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQWiFiEnumerator.h
-        $<$<PLATFORM_ID:Darwin>:${CMAKE_CURRENT_LIST_DIR}/include/macos/KSMacWiFi.h>
-        $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_LIST_DIR}/include/win/KSWinWiFi.h>
+        $<$<PLATFORM_ID:Darwin>:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
+        $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
 
         # Sources
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQApplication.cpp

@@ -1,36 +1,22 @@
-//  Copyright (C) 2015-2020 Virgil Security, Inc.
 //
-//  All rights reserved.
+//                                  _____   _______
+//                                 |_   _| |__   __|
+//                                   | |  ___ | |
+//                                   | | / _ \| |
+//                                  _| || (_) | |
+//                                 |_____\___/|_|
 //
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are
-//  met:
+//    _  ________ ______ _____    _____ _______    _____ _____ __  __ _____  _      ______
+//   | |/ /  ____|  ____|  __ \  |_   _|__   __|  / ____|_   _|  \/  |  __ \| |    |  ____|
+//   | ' /| |__  | |__  | |__) |   | |    | |    | (___   | | | \  / | |__) | |    | |__
+//   |  < |  __| |  __| |  ___/    | |    | |     \___ \  | | | |\/| |  ___/| |    |  __|
+//   | . \| |____| |____| |       _| |_   | |     ____) |_| |_| |  | | |    | |____| |____
+//   |_|\_\______|______|_|      |_____|  |_|    |_____/|_____|_|  |_|_|    |______|______|
 //
-//      (1) Redistributions of source code must retain the above copyright
-//      notice, this list of conditions and the following disclaimer.
 //
-//      (2) Redistributions in binary form must reproduce the above copyright
-//      notice, this list of conditions and the following disclaimer in
-//      the documentation and/or other materials provided with the
-//      distribution.
 //
-//      (3) Neither the name of the copyright holder nor the names of its
-//      contributors may be used to endorse or promote products derived from
-//      this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR
-//  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-//  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-//  DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
-//  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-//  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-//  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-//  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-//  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
-//  IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-//  POSSIBILITY OF SUCH DAMAGE.
-//
-//  Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+//   07 October 2020
+//   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
@@ -38,9 +24,8 @@ import QtQuick.Layouts 1.12
 
 Dialog {
 
-    property string ssid: editSSID.text
-    property string pass: editPass.text
-    property string account: editAccount.text
+//    property string ssid: editSSID.text
+//    property string pass: editPass.text
 
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
@@ -51,7 +36,7 @@ Dialog {
     contentItem: Rectangle {
         color: "darkgrey"
         implicitWidth: 400
-        implicitHeight: 200
+        implicitHeight: 120
 
         Label {
             id: labelWiFi
@@ -59,23 +44,73 @@ Dialog {
             color: "black"
         }
 
-        TextField {
+        ComboBox {
             id: editSSID
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: labelWiFi.bottom
-            anchors.topMargin: 3
+            anchors.topMargin: 5
 
-            color: "black"
-            placeholderText: qsTr("WiFi SSID")
-            echoMode: TextInput.Normal
+            model: wifiEnum
+
+            delegate: Rectangle {
+                id: wifiDelegate
+                width: parent.width
+                height: columnName.height
+
+//                clip: true
+                Image {
+                    id: bticon
+                    source: "qrc:/qml/default.png";
+                    width: bttext.height - anchors.margins
+                    height: bttext.height - anchors.margins
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
+                    anchors.rightMargin: 5
+                }
+
+                Column {
+                    id: columnName
+                    anchors.left: bticon.right
+                    anchors.leftMargin: 5
+                    Text {
+                        id: bttext
+                        text: name
+                        height: 40
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: Qt.application.font.pixelSize
+                    }
+                }
+
+                Column {
+                    id: columnRSSI
+                    anchors.right : parent.right
+                    anchors.rightMargin: 5
+                    Text {
+                        id: btRSSI
+                        text: rssi
+                        height: 40
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: Qt.application.font.pixelSize
+                    }
+                }
+
+                color: editSSID.currentIndex === index ? "white" : "steelblue"
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        editSSID.currentIndex = index
+                    }
+                }
+            }
         }
 
         Label {
             id: labelPass
             text: "WiFi Password"
             anchors.top: editSSID.bottom
-            anchors.topMargin: 10
             color: "black"
         }
 
@@ -88,25 +123,6 @@ Dialog {
 
             color: "black"
             placeholderText: qsTr("WiFi Password")
-        }
-
-        Label {
-            id: labelAccount
-            text: "Account"
-            anchors.top: editPass.bottom
-            anchors.topMargin: 10
-            color: "black"
-        }
-
-        TextField {
-            id: editAccount
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: labelAccount.bottom
-            anchors.topMargin: 3
-
-            color: "black"
-            placeholderText: qsTr("Account")
         }
     }
 }

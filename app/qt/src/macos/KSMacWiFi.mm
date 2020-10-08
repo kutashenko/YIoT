@@ -18,16 +18,20 @@
 //   04 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#include <macos/KSMacWiFi.h>
+#include <KSWiFi.h>
 #import <CoreWLAN/CoreWLAN.h>
 
+#if !defined(KS_DEBUG_WIFI_SCANNER_MAC)
+#define KS_DEBUG_WIFI_SCANNER_MAC 0
+#endif
+
 /******************************************************************************/
-QStringList wifi_enum_mac() {
-    QStringList res;
+KSQWiFiNetworks wifi_enum() {
+    KSQWiFiNetworks res;
     CWInterface* wifi = [[CWWiFiClient sharedWiFiClient] interface];
     NSArray *networkScan = [[wifi scanForNetworksWithName:nil error:nil] allObjects];
     for (CWNetwork *network in networkScan) {
-        #if 1
+        #if KS_DEBUG_WIFI_SCANNER_MAC
         NSLog ( @"SSID: %@ ,\n \
               BSSID: %@ , \n \
               rssiValue: %ld , \n \
@@ -38,7 +42,8 @@ QStringList wifi_enum_mac() {
               wlanChannel: %@ , \n\
               ", [network ssid],[network bssid],[network rssiValue],[network noiseMeasurement],(long)[network beaconInterval], [network countryCode] , [network ibss], [[network wlanChannel]description]);
         #endif
-        res << QString::fromNSString([network ssid]);
+        const auto key = QString::fromNSString([network ssid]);
+        res[key] = KSWiFiInfo([network rssiValue]);
     }
 
     return res;

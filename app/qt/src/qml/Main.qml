@@ -62,5 +62,9 @@ ApplicationWindow {
 
             visible: true
         }
+
+        Provision {
+            id: provision
+        }
     }
 }

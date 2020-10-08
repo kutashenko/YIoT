@@ -1,36 +1,22 @@
-//  Copyright (C) 2015-2020 Virgil Security, Inc.
 //
-//  All rights reserved.
+//                                  _____   _______
+//                                 |_   _| |__   __|
+//                                   | |  ___ | |
+//                                   | | / _ \| |
+//                                  _| || (_) | |
+//                                 |_____\___/|_|
 //
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are
-//  met:
+//    _  ________ ______ _____    _____ _______    _____ _____ __  __ _____  _      ______
+//   | |/ /  ____|  ____|  __ \  |_   _|__   __|  / ____|_   _|  \/  |  __ \| |    |  ____|
+//   | ' /| |__  | |__  | |__) |   | |    | |    | (___   | | | \  / | |__) | |    | |__
+//   |  < |  __| |  __| |  ___/    | |    | |     \___ \  | | | |\/| |  ___/| |    |  __|
+//   | . \| |____| |____| |       _| |_   | |     ____) |_| |_| |  | | |    | |____| |____
+//   |_|\_\______|______|_|      |_____|  |_|    |_____/|_____|_|  |_|_|    |______|______|
 //
-//      (1) Redistributions of source code must retain the above copyright
-//      notice, this list of conditions and the following disclaimer.
 //
-//      (2) Redistributions in binary form must reproduce the above copyright
-//      notice, this list of conditions and the following disclaimer in
-//      the documentation and/or other materials provided with the
-//      distribution.
 //
-//      (3) Neither the name of the copyright holder nor the names of its
-//      contributors may be used to endorse or promote products derived from
-//      this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR
-//  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-//  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-//  DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
-//  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-//  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-//  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-//  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-//  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
-//  IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-//  POSSIBILITY OF SUCH DAMAGE.
-//
-//  Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+//   05 August 2020
+//   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
 import QtQuick 2.5
 import QtQuick.Layouts 1.5
@@ -38,19 +24,6 @@ import QtQuick.Controls 2.12
 
 Item {
     id: mainItem
-
-    Connections {
-        target: bleEnum
-
-        onFireDevicesListUpdated: {
-            mainList.model = bleEnum.devicesList()
-        }
-
-        onFireDiscoveryFinished: {
-            mainList.model = bleEnum.devicesList()
-            startDiscovery();
-        }
-    }
 
     ColumnLayout {
 
@@ -67,6 +40,8 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
+            model: bleEnum
+
             spacing: 2
 
             delegate: Rectangle {
@@ -74,7 +49,7 @@ Item {
 
                 id: btDelegate
                 width: parent.width
-                height: column.height
+                height: columnName.height
 
                 clip: true
                 Image {
@@ -89,12 +64,25 @@ Item {
                 }
 
                 Column {
-                    id: column
+                    id: columnName
                     anchors.left: bticon.right
                     anchors.leftMargin: 5
                     Text {
                         id: bttext
-                        text: modelData
+                        text: name
+                        height: 40
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: Qt.application.font.pixelSize
+                    }
+                }
+
+                Column {
+                    id: columnRSSI
+                    anchors.right : parent.right
+                    anchors.rightMargin: 5
+                    Text {
+                        id: btRSSI
+                        text: rssi
                         height: 40
                         verticalAlignment: Text.AlignVCenter
                         font.pixelSize: Qt.application.font.pixelSize
@@ -139,16 +127,11 @@ Item {
 
 
     Component.onCompleted: {
-        startDiscovery();
+        bleEnum.startDiscovery()
     }
 
     function selectedDevice() {
         return mainList.currentItem.selectedData.modelData
-    }
-
-    function startDiscovery() {
-        bleEnum.startDiscovery()
-        mainList.model = bleEnum.devicesList()
     }
 
     function setParameters() {

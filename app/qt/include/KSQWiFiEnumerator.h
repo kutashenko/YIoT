@@ -22,14 +22,31 @@
 #define PROVISION_QT_WIFI_ENUM_H
 
 #include <QtCore>
+#include <QAbstractTableModel>
+
 #include <virgil/iot/qt/VSQIoTKit.h>
 
-class KSQWiFiEnumerator : public QObject {
+#include <KSWiFi.h>
+
+class KSQWiFiEnumerator : public QAbstractTableModel {
     Q_OBJECT
-    Q_PROPERTY(QStringList wifiList MEMBER m_wifiList NOTIFY fireWiFiListUpdated)
 public:
+    enum Element { Name = Qt::UserRole, RSSI, ElementMax };
+
     KSQWiFiEnumerator();
     virtual ~KSQWiFiEnumerator();
+
+    /**
+     * QAbstractTableModel implementation
+     */
+    int
+    rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int
+    columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant
+    data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QHash<int, QByteArray>
+    roleNames() const override;
 
 public slots:
     void
@@ -47,7 +64,7 @@ private slots:
     onFindWiFi();
 
 private:
-    QStringList m_wifiList;
+    KSQWiFiNetworks m_wifiList;
 
 #if defined(Q_OS_MACOS)
     static const int kScanPeriodMs = 5000;

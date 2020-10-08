@@ -18,12 +18,31 @@
 //   04 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_WIFI_WIN_H
-#define PROVISION_QT_WIFI_WIN_H
+#ifndef PROVISION_QT_WIFI_MACOS_H
+#define PROVISION_QT_WIFI_MACOS_H
 
 #include <QtCore>
 
-QStringList
-wifi_enum_win();
+struct KSWiFiInfo {
+    int rssi;
+    QDateTime lastUpdate;
 
-#endif // PROVISION_QT_WIFI_WIN_H
+    KSWiFiInfo(int _rssi) {
+        rssi = _rssi;
+        lastUpdate = QDateTime::currentDateTime();
+    }
+
+    KSWiFiInfo() {
+        rssi = -100;
+        lastUpdate = QDateTime::currentDateTime().addYears(-1);
+    }
+};
+
+typedef QMap<QString, KSWiFiInfo> KSQWiFiNetworks;
+
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN32)
+KSQWiFiNetworks
+wifi_enum();
+#endif
+
+#endif // PROVISION_QT_WIFI_MACOS_H

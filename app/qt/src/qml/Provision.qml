@@ -15,15 +15,16 @@
 //
 //
 //
-//   04 August 2020
+//   05 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_WIFI_MACOS_H
-#define PROVISION_QT_WIFI_MACOS_H
+import QtQuick 2.5
+import QtQuick.Layouts 1.5
+import QtQuick.Controls 2.12
 
-#include <QtCore>
+Item {
+    WiFiManager {
+        id: wifiManager
+    }
+}
 
-QStringList
-wifi_enum_mac();
-
-#endif // PROVISION_QT_WIFI_MACOS_H
