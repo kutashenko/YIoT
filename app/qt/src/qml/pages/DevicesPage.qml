@@ -31,8 +31,20 @@ Page {
         color: "transparent"
     }
 
-    DevicesList {
-        id: devicesList
+    header: Header {
+        title: qsTr("Bluetooth low-energy devices")
+        showBackButton: false
+    }
+
+    BleDevicesList {
+        id: bleRequireProvisionList
+        anchors.topMargin: 10
+
+        model: bleEnum
+
+        Component.onCompleted: {
+            bleEnum.startDiscovery()
+        }
     }
 
 }

@@ -37,7 +37,6 @@
 
         <file>qml/resources/sounds/notification.wav</file>
 
-        <file>qml/BLEDevicesPage.qml</file>
         <file>qml/Main.qml</file>
         <file>qml/components/FormLabel.qml</file>
         <file>qml/components/CircleProgressBar.qml</file>
@@ -47,7 +46,7 @@
         <file>qml/components/SelectCredDialog.qml</file>
         <file>qml/components/Container.qml</file>
         <file>qml/components/ImageButton.qml</file>
-        <file>qml/components/DevicesList.qml</file>
+        <file>qml/components/BleDevicesList.qml</file>
         <file>qml/components/FormVendor.qml</file>
         <file>qml/components/FormInput.qml</file>
         <file>qml/components/TextScrollView.qml</file>

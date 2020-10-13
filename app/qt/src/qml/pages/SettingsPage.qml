@@ -31,6 +31,6 @@ Page {
     }
 
     header: Header {
-        title: "Global Settings"
+        title: qsTr("Global Settings")
     }
 }
