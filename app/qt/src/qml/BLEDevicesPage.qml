@@ -25,8 +25,9 @@ import QtQuick.Controls 2.12
 Item {
     id: mainItem
 
-    ColumnLayout {
+//    property alias selectedDevice: mainList.currentItem.selectedData.modelData
 
+    ColumnLayout {
         anchors.fill: parent
         anchors.leftMargin: 5
         anchors.rightMargin: 5
@@ -43,6 +44,7 @@ Item {
             model: bleEnum
 
             spacing: 2
+            focus: true
 
             delegate: Rectangle {
                 property variant selectedData: model
@@ -50,17 +52,18 @@ Item {
                 id: btDelegate
                 width: parent.width
                 height: columnName.height
-
                 clip: true
+                color: ListView.view.currentIndex === index ? "white" : "steelblue"
+
                 Image {
                     id: bticon
                     source: "qrc:/qml/default.png";
-                    width: bttext.height - anchors.margins
-                    height: bttext.height - anchors.margins
+                    width: bttext.height * 2 / 3
+                    height: bttext.height * 2 / 3
                     anchors.top: parent.top
+                    anchors.bottom: parent.bottom
                     anchors.left: parent.left
-                    anchors.leftMargin: 5
-                    anchors.rightMargin: 5
+                    anchors.margins: 7
                 }
 
                 Column {
@@ -89,8 +92,6 @@ Item {
                     }
                 }
 
-                color: ListView.view.currentIndex === index ? "white" : "steelblue"
-
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
@@ -98,70 +99,11 @@ Item {
                     }
                 }
             }
-
-            focus: true
-        }
-
-
-        RowLayout {
-            Layout.alignment: Qt.AlignBottom
-            Layout.preferredHeight: 50
-
-            spacing: 20
-
-            Button {
-                id: btnSetConfig
-                text: qsTr("Set parameters")
-                Layout.fillWidth: true
-                onClicked: setParameters()
-            }
-
-            Button {
-                id: btnInitialize
-                text: qsTr("Initialize")
-                Layout.fillWidth: true
-                onClicked: initializeDevice()
-            }
         }
     }
-
 
     Component.onCompleted: {
         bleEnum.startDiscovery()
     }
-
-    function selectedDevice() {
-        return mainList.currentItem.selectedData.modelData
-    }
-
-    function setParameters() {
-        var component = Qt.createComponent("InitDialog.qml")
-        if (component.status === Component.Ready) {
-            var dialog = component.createObject(applicationWindow)
-            dialog.applied.connect(function()
-            {
-                try {
-                    SnapCfgClient.onSetConfigData(dialog.ssid, dialog.pass, dialog.account)
-                } catch (error) {
-                    console.error("Cannot start initialization of device")
-                }
-                dialog.close()
-            })
-            dialog.open()
-            return dialog
-        }
-        console.error(component.errorString())
-        return null
-    }
-
-    function initializeDevice() {
-        try {
-            var deviceName = btScanerForm.selectedDevice();
-            bleEnum.select(deviceName);
-        } catch (error) {
-            console.error("Cannot start initialization of device")
-        }
-    }
-
 }
 

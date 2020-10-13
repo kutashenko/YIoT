@@ -15,59 +15,58 @@
 //
 //
 //
-//   07 October 2020
+//   05 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-import QtQuick 2.12
+import QtQuick 2.5
+import QtQuick.Layouts 1.5
 import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
 
-Dialog {
+import "../theme"
 
-//    property string ssid: editSSID.text
-//    property string pass: editPass.text
+Item {
+    id: mainItem
+    anchors.fill: parent
 
-    x: (parent.width - width) / 2
-    y: (parent.height - height) / 2
-    visible: true
-    title: qsTr("Initialization parameters")
-    standardButtons: Dialog.Apply | Dialog.Cancel
+//    property alias selectedDevice: mainList.currentItem.selectedData.modelData
 
-    contentItem: Rectangle {
-        color: "darkgrey"
-        implicitWidth: 400
-        implicitHeight: 120
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
 
-        Label {
-            id: labelWiFi
-            text: "WiFi SSID"
-            color: "black"
-        }
+        spacing: 2
 
-        ComboBox {
-            id: editSSID
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: labelWiFi.bottom
-            anchors.topMargin: 5
+        ListView {
+            id: mainList
 
-            model: wifiEnum
+            Layout.alignment: Qt.AlignTop
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            model: bleEnum
+
+            spacing: 2
+            focus: true
 
             delegate: Rectangle {
-                id: wifiDelegate
+                property variant selectedData: model
+
+                id: btDelegate
                 width: parent.width
                 height: columnName.height
+                clip: true
+                color: ListView.view.currentIndex === index ? "white" : "steelblue"
 
-//                clip: true
                 Image {
                     id: bticon
-                    source: "qrc:/qml/default.png";
-                    width: bttext.height - anchors.margins
-                    height: bttext.height - anchors.margins
+                    source: Theme.btImg
+                    width: bttext.height * 2 / 3
+                    height: bttext.height * 2 / 3
                     anchors.top: parent.top
+                    anchors.bottom: parent.bottom
                     anchors.left: parent.left
-                    anchors.leftMargin: 5
-                    anchors.rightMargin: 5
+                    anchors.margins: 7
                 }
 
                 Column {
@@ -96,33 +95,18 @@ Dialog {
                     }
                 }
 
-                color: editSSID.currentIndex === index ? "white" : "steelblue"
-
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        editSSID.currentIndex = index
+                        mainList.currentIndex = index
                     }
                 }
             }
         }
+    }
 
-        Label {
-            id: labelPass
-            text: "WiFi Password"
-            anchors.top: editSSID.bottom
-            color: "black"
-        }
-
-        TextField {
-            id: editPass
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: labelPass.bottom
-            anchors.topMargin: 3
-
-            color: "black"
-            placeholderText: qsTr("WiFi Password")
-        }
+    Component.onCompleted: {
+        bleEnum.startDiscovery()
     }
 }
+

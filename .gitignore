@@ -54,6 +54,7 @@ dkms.conf
 # IDE
 .idea
 cmake-build-*
+*.txt.user
 
 # Cache
 .depends_cache

@@ -15,16 +15,24 @@
 //
 //
 //
-//   05 August 2020
+//   09 October 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-import QtQuick 2.5
-import QtQuick.Layouts 1.5
+import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 
-Item {
-    WiFiManager {
-        id: wifiManager
+import "../theme"
+import "../components"
+
+Page {
+
+    background: Rectangle {
+        color: "transparent"
     }
-}
 
+    DevicesList {
+        id: devicesList
+    }
+
+}

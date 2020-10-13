@@ -23,6 +23,7 @@
 
 #include <KSQApplication.h>
 #include <KSQWiFiEnumerator.h>
+#include <ui/VSQUiHelper.h>
 #include <virgil/iot/qt/netif/VSQNetifBLE.h>
 #include <virgil/iot/qt/netif/VSQNetifBLEEnumerator.h>
 #include <virgil/iot/logger/logger.h>
@@ -33,6 +34,7 @@ KSQApplication::run() {
     QQmlApplicationEngine engine;
     VSQNetifBLEEnumerator bleEnumerator;
     KSQWiFiEnumerator wifiEnumerator;
+    VSQUiHelper uiHelper;
 
     // Prepare IoTKit data
     auto netifBLE = QSharedPointer<VSQNetifBLE>::create();
@@ -66,23 +68,28 @@ KSQApplication::run() {
 
     // Initialize QML
     QQmlContext *context = engine.rootContext();
+    context->setContextProperty("UiHelper", &uiHelper);
+    context->setContextProperty("app", this);
     context->setContextProperty("bleEnum", &bleEnumerator);
     context->setContextProperty("wifiEnum", &wifiEnumerator);
     context->setContextProperty("SnapCfgClient", &VSQIoTKitFacade::instance().snapCfgClient());
-
+    qmlRegisterSingletonType(QUrl("qrc:/qml/theme/Theme.qml"), "Theme", 1, 0, "Theme");
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     engine.load(url);
 
-    // Change size of window for desctop version
-#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS) && !defined(Q_OS_WATCHOS)
-    {
-        QObject *rootObject(engine.rootObjects().first());
-        rootObject->setProperty("width", 640);
-        rootObject->setProperty("height", 400);
-    }
-#endif
-
     return QGuiApplication::instance()->exec();
+}
+
+/******************************************************************************/
+QString
+KSQApplication::organizationDisplayName() const {
+    return tr("Kutashenko");
+}
+
+/******************************************************************************/
+QString
+KSQApplication::applicationDisplayName() const {
+    return tr("BLE provisioner");
 }
 
 /******************************************************************************/

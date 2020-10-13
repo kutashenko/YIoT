@@ -15,33 +15,22 @@
 //
 //
 //
-//   30 July 2020
+//   05 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_APP_H
-#define PROVISION_QT_APP_H
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
-#include <QtCore>
-#include <QGuiApplication>
-#include <virgil/iot/qt/VSQIoTKit.h>
-#include <virgil/iot/qt/netif/VSQUdpBroadcast.h>
+import "../components"
 
-class KSQApplication : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QString organizationDisplayName READ organizationDisplayName CONSTANT)
-    Q_PROPERTY(QString applicationDisplayName READ applicationDisplayName CONSTANT)
-public:
-    KSQApplication() = default;
-    virtual ~KSQApplication() = default;
+Page {
+    id: settingsPage
 
-    int
-    run();
+    background: Rectangle {
+        color: "transparent"
+    }
 
-    QString
-    organizationDisplayName() const;
-
-    QString
-    applicationDisplayName() const;
-};
-
-#endif // PROVISION_QT_APP_H
+    header: Header {
+        title: "Global Settings"
+    }
+}

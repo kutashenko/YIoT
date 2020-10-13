@@ -15,33 +15,5 @@
 //
 //
 //
-//   30 July 2020
+//   09 October 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
-
-#ifndef PROVISION_QT_APP_H
-#define PROVISION_QT_APP_H
-
-#include <QtCore>
-#include <QGuiApplication>
-#include <virgil/iot/qt/VSQIoTKit.h>
-#include <virgil/iot/qt/netif/VSQUdpBroadcast.h>
-
-class KSQApplication : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QString organizationDisplayName READ organizationDisplayName CONSTANT)
-    Q_PROPERTY(QString applicationDisplayName READ applicationDisplayName CONSTANT)
-public:
-    KSQApplication() = default;
-    virtual ~KSQApplication() = default;
-
-    int
-    run();
-
-    QString
-    organizationDisplayName() const;
-
-    QString
-    applicationDisplayName() const;
-};
-
-#endif // PROVISION_QT_APP_H

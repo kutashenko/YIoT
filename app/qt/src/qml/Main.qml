@@ -23,48 +23,43 @@ import QtQuick.Controls 2.12
 import QtQuick.Window 2.2
 import QtQuick.Layouts 1.5
 
+import "./pages"
+import "./theme"
+
 ApplicationWindow {
 
     id: applicationWindow
     visible: true
-    title: qsTr("BLE Provisioner")
+    width: 400
+    height: 600
+    title: app.applicationDisplayName
     background: Rectangle {
-        color: "#303030"
+        color: Theme.mainBackgroundColor
     }
 
-    property int dpi: Screen.pixelDensity * 25.4
-    property int desktopDPI: 120
-    property int dip2pixels: 160
-
-    function dp(x) {
-        if(dpi < desktopDPI) {
-            return x
-        } else {
-            return x * (dpi / dip2pixels)
-        }
-    }
-
-    property int footerHeight: dp(80)
-    property int listItemHeight: dp(80)
-    property int minWidthPerElement : 200
-    property int elementCount : 3
-    property int margin: dp(5)
-    property int dataFontSize: 15
-
-    RowLayout {
+    SwipeView {
+        id: swipeView
         anchors.fill: parent
+        currentIndex: tabBar.currentIndex
 
-        BLEManager {
-            id: btScanerForm
-
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            visible: true
+        DevicesPage {
+            id: devicesPage
         }
 
-        Provision {
-            id: provision
+        SettingsPage {
+            id: settingsPage
+        }
+    }
+
+    footer: TabBar {
+        id: tabBar
+        currentIndex: swipeView.currentIndex
+
+        TabButton {
+            text: qsTr("Devices")
+        }
+        TabButton {
+            text: qsTr("Settings")
         }
     }
 }

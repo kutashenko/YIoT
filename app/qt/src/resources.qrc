@@ -1,10 +1,72 @@
 <RCC>
     <qresource prefix="/">
+        <file>qml/resources/Plus.png</file>
+        <file>qml/resources/Settings.png</file>
+        <file>qml/resources/icons/Logo-Big@3x.png</file>
+        <file>qml/resources/icons/Plus.png</file>
+        <file>qml/resources/icons/bluetooth.png</file>
+        <file>qml/resources/icons/Lock@2x.png</file>
+        <file>qml/resources/icons/Search@2x.png</file>
+        <file>qml/resources/icons/Arrow-Right@2x.png</file>
+        <file>qml/resources/icons/Logo-Big.png</file>
+        <file>qml/resources/icons/Arrow-Right.png</file>
+        <file>qml/resources/icons/Key.png</file>
+        <file>qml/resources/icons/Logo-Big@2x.png</file>
+        <file>qml/resources/icons/Lock.png</file>
+        <file>qml/resources/icons/Grid@2x.png</file>
+        <file>qml/resources/icons/Plus@2x.png</file>
+        <file>qml/resources/icons/Search_Big@2x.png</file>
+        <file>qml/resources/icons/Grid.png</file>
+        <file>qml/resources/icons/Search.png</file>
+        <file>qml/resources/icons/Menu.png</file>
+        <file>qml/resources/icons/Logo.png</file>
+        <file>qml/resources/icons/Arrow-Left.png</file>
+        <file>qml/resources/icons/Logo@2x.png</file>
+        <file>qml/resources/icons/Search_Big.png</file>
+        <file>qml/resources/icons/More@2x.png</file>
+        <file>qml/resources/icons/Arrow-Left@2x.png</file>
+        <file>qml/resources/icons/Key@2x.png</file>
+        <file>qml/resources/icons/Menu@2x.png</file>
+        <file>qml/resources/icons/More.png</file>
+        <file>qml/resources/icons/Close@2x.png</file>
+        <file>qml/resources/icons/Close.png</file>
+
+        <file>qml/resources/fonts/Roboto-Medium.ttf</file>
+        <file>qml/resources/fonts/Roboto-Regular.ttf</file>
+        <file>qml/resources/fonts/Roboto-Bold.ttf</file>
+
+        <file>qml/resources/sounds/notification.wav</file>
+
+        <file>qml/BLEDevicesPage.qml</file>
         <file>qml/Main.qml</file>
-        <file>qml/BLEManager.qml</file>
-        <file>qml/default.png</file>
-        <file>qml/InitDialog.qml</file>
-        <file>qml/Provision.qml</file>
-        <file>qml/WiFiManager.qml</file>
+        <file>qml/components/FormLabel.qml</file>
+        <file>qml/components/CircleProgressBar.qml</file>
+        <file>qml/components/Buttons/PrimaryButton.qml</file>
+        <file>qml/components/Buttons/OutlineButton.qml</file>
+        <file>qml/components/Progress/Progress.qml</file>
+        <file>qml/components/SelectCredDialog.qml</file>
+        <file>qml/components/Container.qml</file>
+        <file>qml/components/ImageButton.qml</file>
+        <file>qml/components/DevicesList.qml</file>
+        <file>qml/components/FormVendor.qml</file>
+        <file>qml/components/FormInput.qml</file>
+        <file>qml/components/TextScrollView.qml</file>
+        <file>qml/components/Popups/Popup.qml</file>
+        <file>qml/components/Form.qml</file>
+        <file>qml/components/FormSecondaryButton.qml</file>
+        <file>qml/components/CommonHelpers/IconWithText.qml</file>
+        <file>qml/components/SettingsButton.qml</file>
+        <file>qml/components/FormImage.qml</file>
+        <file>qml/components/Header.qml</file>
+        <file>qml/components/Footer.qml</file>
+        <file>qml/components/ContextMenu.qml</file>
+        <file>qml/components/AppStatus.qml</file>
+        <file>qml/components/FormPrimaryButton.qml</file>
+        <file>qml/theme/Theme.qml</file>
+        <file>qml/pages/AboutPage.qml</file>
+        <file>qml/pages/SettingsPage.qml</file>
+        <file>qml/pages/DevicesPage.qml</file>
+        <file>qml/pages/QRReaderPage.qml</file>
+        <file>qml/base/Platform.qml</file>
     </qresource>
 </RCC>
