@@ -29,7 +29,24 @@ ListView {
     anchors.fill: parent
 
     spacing: 1
-    model: bleEnum
+
+    model: ListModel {
+        ListElement {
+            name: qsTr("WiFi credentials")
+            image: "Key"
+            property var action: function() {
+                showWiFiSettings()
+            }
+        }
+
+        ListElement {
+            name: qsTr("Event triggers")
+            image: "Lock"
+            property var action: function() {
+                showEventsSettings()
+            }
+        }
+    }
 
     delegate: Rectangle {
         id: base
@@ -44,11 +61,12 @@ ListView {
 
             Image {
                 id: icon
-                source: Theme.btImg
+                source: "qrc:/qml/resources/icons/%1.png".arg(image)
                 Layout.maximumHeight: listDelegate.height * 0.7
                 Layout.maximumWidth: Layout.maximumHeight
                 fillMode: Image.PreserveAspectFit
                 Layout.alignment: Qt.AlignLeft
+                Layout.leftMargin: 10
             }
 
             Text {
@@ -63,66 +81,30 @@ ListView {
                 Layout.fillWidth: true
             }
 
-            Text {
-                id: rssiText
-                text: rssi
-                color: Theme.primaryTextColor
-                verticalAlignment: Text.AlignVCenter
-                font.pointSize: UiHelper.fixFontSz(14)
-
-                Layout.alignment: Qt.AlignLeft
-                Layout.fillHeight: true
-                Layout.rightMargin: 5
-            }
-
             RowLayout {
                 id: actionsBlock
                 Layout.rightMargin: 10
 
-                ImageButton {
-                    id: btnInfo
-                    image: "Search"
-                    z: 100
-
-                    onClicked: {
-                        console.log("Click: Info")
-                    }
-                }
-
-                ImageButton {
-                    id: btnProvision
-                    image: "Plus"
-
-                    onClicked: {
-                        console.log("Click: Provision")
-                    }
-                }
-
-                states: [
-                        State { when: list.currentIndex == index;
-                            PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 80    }
-                        },
-                        State { when: list.currentIndex != index;
-                            PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 0    }
-                        }]
-
-                transitions: Transition {
-                    NumberAnimation { property: "Layout.maximumWidth"; duration: 100}
+                Image {
+                    id: iconAction
+                    source: "qrc:/qml/resources/icons/Arrow-Right.png"
+                    Layout.maximumHeight: listDelegate.height * 0.7
+                    Layout.maximumWidth: Layout.maximumHeight
+                    fillMode: Image.PreserveAspectFit
+                    Layout.alignment: Qt.AlignRight
+                    Layout.rightMargin: 10
                 }
             }
         }
 
         MouseArea {
-            enabled: true
             anchors.fill: parent
             hoverEnabled: true
-            anchors.rightMargin: list.currentIndex == index ? actionsBlock.width : 0
             onClicked: {
-                list.currentIndex = index
+                action()
             }
 
             onEntered: {
-                list.currentIndex = index
                 base.color = Theme.contactsBackgroundColor
             }
 
@@ -130,9 +112,5 @@ ListView {
                 base.color = "transparent"
             }
         }
-    }
-
-    Component.onCompleted: {
-        bleEnum.startDiscovery()
     }
 }

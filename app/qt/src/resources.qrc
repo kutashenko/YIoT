@@ -47,6 +47,7 @@
         <file>qml/components/Container.qml</file>
         <file>qml/components/ImageButton.qml</file>
         <file>qml/components/BleDevicesList.qml</file>
+        <file>qml/components/WiFiDevicesList.qml</file>
         <file>qml/components/FormVendor.qml</file>
         <file>qml/components/FormInput.qml</file>
         <file>qml/components/TextScrollView.qml</file>
@@ -62,11 +63,14 @@
         <file>qml/components/AppStatus.qml</file>
         <file>qml/components/FormPrimaryButton.qml</file>
         <file>qml/components/LeftSideMenu.qml</file>
+        <file>qml/components/SettingsMenuList.qml</file>
         <file>qml/theme/Theme.qml</file>
         <file>qml/pages/AboutPage.qml</file>
         <file>qml/pages/SettingsPage.qml</file>
         <file>qml/pages/DevicesPage.qml</file>
         <file>qml/pages/QRReaderPage.qml</file>
+        <file>qml/pages/settings/WiFiSettingsPage.qml</file>
+        <file>qml/pages/settings/EventsSettingsPage.qml</file>
         <file>qml/base/Platform.qml</file>
     </qresource>
 </RCC>

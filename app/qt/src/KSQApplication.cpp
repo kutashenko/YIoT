@@ -83,13 +83,13 @@ KSQApplication::run() {
 /******************************************************************************/
 QString
 KSQApplication::organizationDisplayName() const {
-    return tr("Kutashenko");
+    return tr("Keep it simple");
 }
 
 /******************************************************************************/
 QString
 KSQApplication::applicationDisplayName() const {
-    return tr("BLE provisioner");
+    return tr("Simple manufacture");
 }
 
 /******************************************************************************/

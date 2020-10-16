@@ -54,6 +54,7 @@ Drawer {
         FormPrimaryButton {
             text: qsTr("Local devices")
             onClicked: {
+                drawer.close()
                 showLocalDevices()
             }
         }
@@ -61,7 +62,16 @@ Drawer {
         FormPrimaryButton {
             text: qsTr("Settings")
             onClicked: {
+                drawer.close()
                 showSettings()
+            }
+        }
+
+        FormPrimaryButton {
+            text: qsTr("About")
+            onClicked: {
+                drawer.close()
+                showAbout()
             }
         }
     }

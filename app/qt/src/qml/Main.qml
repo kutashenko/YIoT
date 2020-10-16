@@ -24,6 +24,7 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.5
 
 import "./pages"
+import "./pages/settings"
 import "./components"
 import "./theme"
 
@@ -44,14 +45,22 @@ ApplicationWindow {
     }
 
     SwipeView {
-        readonly property int _localDevicePageIdx: 0
-        readonly property int _settingsPageIdx: 1
+        readonly property int aboutPageIdx: 0
+        readonly property int localDevicePageIdx: 1
+        readonly property int settingsPageIdx: 2
+        readonly property int wifiSettingsPageIdx: 3
+        readonly property int eventsSettingsPageIdx: 4
 
-        property int _backPageIdx: _localDevicePageIdx
+        property int backPageIdx: localDevicePageIdx
 
         id: swipeView
         anchors.fill: parent
-        currentIndex: _localDevicePageIdx
+        interactive: false
+        currentIndex: localDevicePageIdx
+
+        AboutPage {
+            id: aboutPage
+        }
 
         DevicesPage {
             id: devicesPage
@@ -60,6 +69,14 @@ ApplicationWindow {
         SettingsPage {
             id: settingsPage
         }
+
+        WiFiSettingsPage {
+            id: wifiSettingsPage
+        }
+
+        EventsSettingsPage {
+            id: eventsSettingsPage
+        }
     }
 
     function showLeftMenu() {
@@ -67,16 +84,26 @@ ApplicationWindow {
     }
 
     function showLocalDevices() {
-        leftSideMenu.close()
-        swipeView.currentIndex = swipeView._localDevicePageIdx
+        swipeView.currentIndex = swipeView.localDevicePageIdx
     }
 
     function showSettings() {
-        leftSideMenu.close()
-        swipeView.currentIndex = swipeView._settingsPageIdx
+        swipeView.currentIndex = swipeView.settingsPageIdx
+    }
+
+    function showWiFiSettings() {
+        swipeView.currentIndex = swipeView.wifiSettingsPageIdx
+    }
+
+    function showEventsSettings() {
+        swipeView.currentIndex = swipeView.eventsSettingsPageIdx
+    }
+
+    function showAbout() {
+        swipeView.currentIndex = swipeView.aboutPageIdx
     }
 
     function back() {
-        swipeView.currentIndex = swipeView._backPageIdx
+        swipeView.currentIndex = swipeView.backPageIdx
     }
 }

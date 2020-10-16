@@ -15,32 +15,29 @@
 //
 //
 //
-//   09 October 2020
+//   05 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
 
-import "../theme"
-import "../components"
+import "../../components"
 
 Page {
+    id: eventsSettingsPage
 
     background: Rectangle {
         color: "transparent"
     }
 
     header: Header {
-        title: qsTr("Local devices")
-        showBackButton: false
-        showMenuButton: true
-        showSettingsButton: true
+        title: qsTr("Events Settings")
+        backAction: function() { showSettings() }
     }
 
-    BleDevicesList {
-        id: bleRequireProvisionList
-        anchors.topMargin: 1
+    Form {
+        Label {
+            text: "EVENTS SETTINGS"
+        }
     }
-
 }

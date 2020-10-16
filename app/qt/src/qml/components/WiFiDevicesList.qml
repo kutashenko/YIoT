@@ -29,7 +29,7 @@ ListView {
     anchors.fill: parent
 
     spacing: 1
-    model: bleEnum
+    model: wifiEnum
 
     delegate: Rectangle {
         id: base
@@ -133,6 +133,6 @@ ListView {
     }
 
     Component.onCompleted: {
-        bleEnum.startDiscovery()
+        wifiEnum.start()
     }
 }

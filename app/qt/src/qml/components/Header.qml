@@ -9,9 +9,10 @@ ToolBar {
     property alias title: titleLabel.text
     property bool showBackButton: true
     property bool showMenuButton: false
+    property bool showSettingsButton: false
     property alias showSeporator: seporator.visible
     property alias backgroundColor: background.color
-    default property alias menu: contextMenu.contentData
+    property var backAction: function() { back() }
 
     background: Rectangle {
         id: background
@@ -46,7 +47,7 @@ ToolBar {
 
             // TODO: Componets sholdn't know about mainView
             // The logic must be as abastract as possible.
-            onClicked: back()
+            onClicked: backAction()
         }
 
         ImageButton {
@@ -81,14 +82,10 @@ ToolBar {
             id: menuButton
             image: "More"
              // TODO(fpohtmeh): try with visibility
-            opacity: contextMenu.count ? 1 : 0
-            enabled: contextMenu.count
+            opacity: showSettingsButton ? 1 : 0
+            enabled: showSettingsButton
             onClicked: {
-                contextMenu.open()
-            }
-
-            ContextMenu {
-                id: contextMenu
+                showSettings()
             }
         }
     }

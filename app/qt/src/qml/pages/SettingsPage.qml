@@ -33,4 +33,8 @@ Page {
     header: Header {
         title: qsTr("Global Settings")
     }
+
+    SettingsMenuList {
+        id: settingsMenu
+    }
 }
