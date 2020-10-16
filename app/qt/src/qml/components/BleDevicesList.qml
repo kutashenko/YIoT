@@ -32,8 +32,8 @@ ListView {
 
     delegate: Rectangle {
         width: parent.width
-        height: 40
-        color: Theme.contactsBackgroundColor
+        height: 45
+        color: "transparent"
 
         RowLayout {
             id: listDelegate
@@ -52,7 +52,7 @@ ListView {
             Text {
                 id: nameText
                 text: name
-                color: Theme.labelColor
+                color: Theme.primaryTextColor
                 verticalAlignment: Text.AlignVCenter
                 font.pointSize: UiHelper.fixFontSz(14)
 
@@ -64,7 +64,7 @@ ListView {
             Text {
                 id: rssiText
                 text: rssi
-                color: Theme.labelColor
+                color: Theme.primaryTextColor
                 verticalAlignment: Text.AlignVCenter
                 font.pointSize: UiHelper.fixFontSz(14)
 

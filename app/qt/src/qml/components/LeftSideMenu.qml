@@ -15,37 +15,54 @@
 //
 //
 //
-//   09 October 2020
+//   05 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-import QtQuick 2.12
+import QtQuick 2.5
+import QtQuick.Layouts 1.5
 import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
 
 import "../theme"
-import "../components"
 
-Page {
+Drawer {
+    id: drawer
+    dragMargin: 15
+    width: 0.8 * parent.width
+    height: parent.height
+    clip: true
 
     background: Rectangle {
-        color: "transparent"
+        color: Theme.contactsBackgroundColor
     }
 
-    header: Header {
-        title: qsTr("Bluetooth low-energy devices")
-        showBackButton: false
-        showMenuButton: true
-    }
+    ColumnLayout {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        ImageButton {
+            id: btnClose
+            image: "Menu"
 
-    BleDevicesList {
-        id: bleRequireProvisionList
-        anchors.topMargin: 1
+            Layout.topMargin: 10
+            Layout.alignment: Qt.AlignRight
 
-        model: bleEnum
-
-        Component.onCompleted: {
-            bleEnum.startDiscovery()
+            onClicked: drawer.close()
         }
     }
 
+    Form {
+        FormPrimaryButton {
+            text: qsTr("Local devices")
+            onClicked: {
+                showLocalDevices()
+            }
+        }
+
+        FormPrimaryButton {
+            text: qsTr("Settings")
+            onClicked: {
+                showSettings()
+            }
+        }
+    }
 }

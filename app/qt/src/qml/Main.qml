@@ -24,6 +24,7 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.5
 
 import "./pages"
+import "./components"
 import "./theme"
 
 ApplicationWindow {
@@ -33,14 +34,24 @@ ApplicationWindow {
     width: 400
     height: 600
     title: app.applicationDisplayName
+
     background: Rectangle {
         color: Theme.mainBackgroundColor
     }
 
+    LeftSideMenu {
+        id: leftSideMenu
+    }
+
     SwipeView {
+        readonly property int _localDevicePageIdx: 0
+        readonly property int _settingsPageIdx: 1
+
+        property int _backPageIdx: _localDevicePageIdx
+
         id: swipeView
         anchors.fill: parent
-        currentIndex: tabBar.currentIndex
+        currentIndex: _localDevicePageIdx
 
         DevicesPage {
             id: devicesPage
@@ -51,15 +62,21 @@ ApplicationWindow {
         }
     }
 
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
+    function showLeftMenu() {
+        leftSideMenu.open()
+    }
 
-        TabButton {
-            text: qsTr("Devices")
-        }
-        TabButton {
-            text: qsTr("Settings")
-        }
+    function showLocalDevices() {
+        leftSideMenu.close()
+        swipeView.currentIndex = swipeView._localDevicePageIdx
+    }
+
+    function showSettings() {
+        leftSideMenu.close()
+        swipeView.currentIndex = swipeView._settingsPageIdx
+    }
+
+    function back() {
+        swipeView.currentIndex = swipeView._backPageIdx
     }
 }

@@ -61,6 +61,7 @@
         <file>qml/components/ContextMenu.qml</file>
         <file>qml/components/AppStatus.qml</file>
         <file>qml/components/FormPrimaryButton.qml</file>
+        <file>qml/components/LeftSideMenu.qml</file>
         <file>qml/theme/Theme.qml</file>
         <file>qml/pages/AboutPage.qml</file>
         <file>qml/pages/SettingsPage.qml</file>

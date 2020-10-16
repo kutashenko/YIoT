@@ -8,12 +8,15 @@ ToolBar {
 
     property alias title: titleLabel.text
     property bool showBackButton: true
+    property bool showMenuButton: false
     property alias showSeporator: seporator.visible
+    property alias backgroundColor: background.color
     default property alias menu: contextMenu.contentData
 
     background: Rectangle {
+        id: background
         implicitHeight: 60
-        color: "transparent"
+        color: Theme.mainBackgroundColor
 
         Rectangle {
             id: seporator
@@ -36,13 +39,27 @@ ToolBar {
 
             opacity: showBackButton ? 1 : 0
             enabled: showBackButton
+            visible: !showMenuButton
 
             id: backButton
             image: "Arrow-Left"
 
             // TODO: Componets sholdn't know about mainView
             // The logic must be as abastract as possible.
-            onClicked: mainView.back()
+            onClicked: back()
+        }
+
+        ImageButton {
+            id: btnProvision
+            image: "Menu"
+
+            opacity: showMenuButton ? 1 : 0
+            enabled: showMenuButton
+            visible: !showBackButton
+
+            Layout.leftMargin: 12
+
+            onClicked: showLeftMenu()
         }
 
         Label {
