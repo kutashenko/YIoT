@@ -94,7 +94,7 @@ ListView {
                     image: "Plus"
 
                     onClicked: {
-                        console.log("Click: Provision")
+                        showPopupError(qsTr("Need to set WiFi credentials"), showWiFiSettings)
                     }
                 }
 

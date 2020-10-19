@@ -8,6 +8,7 @@ Item {
     property alias popupColorText: message.color
     property bool popupModal: true
     property bool popupOnTop: false
+    property var action: function() {  }
 
     Popup {
         id: popup
@@ -16,8 +17,8 @@ Item {
 
         background: Rectangle {
             id: popupBackground
-            implicitWidth: root.width
-            implicitHeight: 25
+            implicitWidth: applicationWindow.width
+            implicitHeight: 35
         }
 
         enter: Transition {
@@ -32,7 +33,7 @@ Item {
             popupClose.stop()
         }
 
-        y: popupOnTop ? 0 : (root.height - 25)
+        y: popupOnTop ? 0 : (applicationWindow.height - 35)
         modal: popupModal
         focus: popupModal
 
@@ -41,15 +42,23 @@ Item {
         Text {
             id: message
             anchors.centerIn: parent
-            font.pointSize: UiHelper.fixFontSz(12)
+            font.pointSize: UiHelper.fixFontSz(14)
         }
         onOpened: popupClose.start()
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                popup.close()
+                action()
+            }
+        }
     }
 
     // Popup will be closed automatically in 2 seconds after its opened
     Timer {
         id: popupClose
-        interval: 2000
+        interval: 3000
         onTriggered: popup.close()
     }
 }

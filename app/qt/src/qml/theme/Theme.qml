@@ -35,6 +35,7 @@ Item {
     readonly property url mainLogo: "../resources/icons/Logo-Big.png"
 
     readonly property url btImg: "qrc:/qml/resources/icons/bluetooth.png"
+    readonly property url wifiImg: "qrc:/qml/resources/icons/WiFi.png"
 
     // texts
     readonly property string mainLogoText: app.organizationDisplayName

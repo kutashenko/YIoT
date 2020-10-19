@@ -30,6 +30,7 @@
         <file>qml/resources/icons/More.png</file>
         <file>qml/resources/icons/Close@2x.png</file>
         <file>qml/resources/icons/Close.png</file>
+        <file>qml/resources/icons/WiFi.png</file>
 
         <file>qml/resources/fonts/Roboto-Medium.ttf</file>
         <file>qml/resources/fonts/Roboto-Regular.ttf</file>
@@ -40,8 +41,6 @@
         <file>qml/Main.qml</file>
         <file>qml/components/FormLabel.qml</file>
         <file>qml/components/CircleProgressBar.qml</file>
-        <file>qml/components/Buttons/PrimaryButton.qml</file>
-        <file>qml/components/Buttons/OutlineButton.qml</file>
         <file>qml/components/Progress/Progress.qml</file>
         <file>qml/components/SelectCredDialog.qml</file>
         <file>qml/components/Container.qml</file>
@@ -70,6 +69,7 @@
         <file>qml/pages/DevicesPage.qml</file>
         <file>qml/pages/QRReaderPage.qml</file>
         <file>qml/pages/settings/WiFiSettingsPage.qml</file>
+        <file>qml/pages/settings/WiFiPasswordPage.qml</file>
         <file>qml/pages/settings/EventsSettingsPage.qml</file>
         <file>qml/base/Platform.qml</file>
     </qresource>

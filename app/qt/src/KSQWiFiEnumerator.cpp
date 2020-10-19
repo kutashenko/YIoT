@@ -83,7 +83,7 @@ void
 KSQWiFiEnumerator::onFindWiFi() {
     std::thread t([this]() {
         auto list = wifi_enum();
-        const bool isSame = list.keys() != m_wifiList.keys();
+        const bool isSame = list.keys() == m_wifiList.keys();
         m_wifiList = list;
 
         QVector<int> roles;
@@ -142,6 +142,16 @@ KSQWiFiEnumerator::roleNames() const {
     roles[Name] = "name";
     roles[RSSI] = "rssi";
     return roles;
+}
+
+/******************************************************************************/
+QString
+KSQWiFiEnumerator::get(int index) const {
+    if (index >= 0 && index < m_wifiList.count()) {
+        return m_wifiList.keys().at(index);
+    }
+
+    return "";
 }
 
 /******************************************************************************/

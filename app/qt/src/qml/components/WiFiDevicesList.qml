@@ -35,7 +35,7 @@ ListView {
         id: base
         width: parent.width
         height: 45
-        color: "transparent"
+        color: (list.currentIndex == index) ? Theme.contactsBackgroundColor : "transparent"
 
         RowLayout {
             id: listDelegate
@@ -44,11 +44,12 @@ ListView {
 
             Image {
                 id: icon
-                source: Theme.btImg
-                Layout.maximumHeight: listDelegate.height * 0.7
+                source: Theme.wifiImg
+                Layout.maximumHeight: listDelegate.height * 0.6
                 Layout.maximumWidth: Layout.maximumHeight
                 fillMode: Image.PreserveAspectFit
                 Layout.alignment: Qt.AlignLeft
+                Layout.leftMargin: 5
             }
 
             Text {
@@ -72,62 +73,16 @@ ListView {
 
                 Layout.alignment: Qt.AlignLeft
                 Layout.fillHeight: true
-                Layout.rightMargin: 5
-            }
-
-            RowLayout {
-                id: actionsBlock
-                Layout.rightMargin: 10
-
-                ImageButton {
-                    id: btnInfo
-                    image: "Search"
-                    z: 100
-
-                    onClicked: {
-                        console.log("Click: Info")
-                    }
-                }
-
-                ImageButton {
-                    id: btnProvision
-                    image: "Plus"
-
-                    onClicked: {
-                        console.log("Click: Provision")
-                    }
-                }
-
-                states: [
-                        State { when: list.currentIndex == index;
-                            PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 80    }
-                        },
-                        State { when: list.currentIndex != index;
-                            PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 0    }
-                        }]
-
-                transitions: Transition {
-                    NumberAnimation { property: "Layout.maximumWidth"; duration: 100}
-                }
+                Layout.rightMargin: 15
             }
         }
 
         MouseArea {
             enabled: true
             anchors.fill: parent
-            hoverEnabled: true
-            anchors.rightMargin: list.currentIndex == index ? actionsBlock.width : 0
             onClicked: {
                 list.currentIndex = index
-            }
-
-            onEntered: {
-                list.currentIndex = index
-                base.color = Theme.contactsBackgroundColor
-            }
-
-            onExited: {
-                base.color = "transparent"
+                showWiFiPassword(wifiEnum.get(index))
             }
         }
     }

@@ -48,6 +48,10 @@ public:
     QHash<int, QByteArray>
     roleNames() const override;
 
+    Q_INVOKABLE
+    QString
+    get(int index) const;
+
 public slots:
     void
     start();

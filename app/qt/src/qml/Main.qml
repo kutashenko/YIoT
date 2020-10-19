@@ -26,6 +26,7 @@ import QtQuick.Layouts 1.5
 import "./pages"
 import "./pages/settings"
 import "./components"
+import "./components/Popups"
 import "./theme"
 
 ApplicationWindow {
@@ -44,12 +45,17 @@ ApplicationWindow {
         id: leftSideMenu
     }
 
+    Popup {
+        id: inform
+    }
+
     SwipeView {
         readonly property int aboutPageIdx: 0
         readonly property int localDevicePageIdx: 1
         readonly property int settingsPageIdx: 2
         readonly property int wifiSettingsPageIdx: 3
-        readonly property int eventsSettingsPageIdx: 4
+        readonly property int wifiPasswordPageIdx: 4
+        readonly property int eventsSettingsPageIdx: 5
 
         property int backPageIdx: localDevicePageIdx
 
@@ -74,6 +80,10 @@ ApplicationWindow {
             id: wifiSettingsPage
         }
 
+        WiFiPasswordPage {
+            id: wifiPasswordPage
+        }
+
         EventsSettingsPage {
             id: eventsSettingsPage
         }
@@ -95,6 +105,11 @@ ApplicationWindow {
         swipeView.currentIndex = swipeView.wifiSettingsPageIdx
     }
 
+    function showWiFiPassword(ssid) {
+        wifiPasswordPage.setTitle(ssid)
+        swipeView.currentIndex = swipeView.wifiPasswordPageIdx
+    }
+
     function showEventsSettings() {
         swipeView.currentIndex = swipeView.eventsSettingsPageIdx
     }
@@ -105,5 +120,24 @@ ApplicationWindow {
 
     function back() {
         swipeView.currentIndex = swipeView.backPageIdx
+    }
+
+    // Show Popup message
+    function showPopup(message, color, textColor, isOnTop, isModal, action) {
+        inform.popupColor = color
+        inform.popupColorText = textColor
+        inform.popupView.popMessage = message
+        inform.popupOnTop = isOnTop
+        inform.popupModal = isModal
+        inform.action = action
+        inform.popupView.open()
+    }
+
+    function showPopupError(message, action) {
+        showPopup(message, Theme.buttonPrimaryColor, Theme.primaryTextColor, true, true, action)
+    }
+
+    function showPopupInform(message) {
+        // TODO: Add
     }
 }
