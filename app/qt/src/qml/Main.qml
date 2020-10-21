@@ -50,42 +50,55 @@ ApplicationWindow {
     }
 
     SwipeView {
-        readonly property int aboutPageIdx: 0
-        readonly property int localDevicePageIdx: 1
+        readonly property int devicePageIdx: 0
+        readonly property int setupDevicePageIdx: 1
         readonly property int settingsPageIdx: 2
-        readonly property int wifiSettingsPageIdx: 3
-        readonly property int wifiPasswordPageIdx: 4
-        readonly property int eventsSettingsPageIdx: 5
 
-        property int backPageIdx: localDevicePageIdx
+        property int backPageIdx: devicePageIdx
 
         id: swipeView
         anchors.fill: parent
+        visible: !aboutPage.visible
         interactive: false
-        currentIndex: localDevicePageIdx
-
-        AboutPage {
-            id: aboutPage
-        }
+        currentIndex: devicePageIdx
 
         DevicesPage {
             id: devicesPage
         }
 
+        DevicesSetupPage {
+            id: devicesSetupPage
+        }
+
         SettingsPage {
             id: settingsPage
         }
+    }
 
-        WiFiSettingsPage {
-            id: wifiSettingsPage
+    AboutPage {
+        id: aboutPage
+        visible: false
+    }
+
+    footer: TabBar {
+        id: tabBar
+        visible: !aboutPage.visible
+        currentIndex: swipeView.currentIndex
+
+        TabButton {
+            icon.color: "transparent"
+            icon.source: "resources/icons/Device.png"
+            onClicked: swipeShow(0)
         }
-
-        WiFiPasswordPage {
-            id: wifiPasswordPage
+        TabButton {
+            icon.color: "transparent"
+            icon.source: "resources/icons/DeviceSetup.png"
+            onClicked: swipeShow(1)
         }
-
-        EventsSettingsPage {
-            id: eventsSettingsPage
+        TabButton {
+            icon.color: "transparent"
+            icon.source: "resources/icons/Settings.png"
+            onClicked: swipeShow(2)
         }
     }
 
@@ -93,33 +106,38 @@ ApplicationWindow {
         leftSideMenu.open()
     }
 
-    function showLocalDevices() {
-        swipeView.currentIndex = swipeView.localDevicePageIdx
+    function showAbout() {
+        aboutPage.visible = true
+    }
+
+    function swipeShow(idx) {
+        aboutPage.visible = false
+        swipeView.currentIndex = idx
+        for (var i = 0; i < swipeView.count; ++i) {
+            var item = swipeView.itemAt(i)
+            item.visible = i == swipeView.currentIndex
+        }
+    }
+
+    function showDevices() {
+        swipeShow(swipeView.devicePageIdx)
+    }
+
+    function showDevicesSetup() {
+        swipeShow(swipeView.setupDevicePageIdx)
     }
 
     function showSettings() {
-        swipeView.currentIndex = swipeView.settingsPageIdx
+        swipeShow(swipeView.settingsPageIdx)
     }
 
-    function showWiFiSettings() {
-        swipeView.currentIndex = swipeView.wifiSettingsPageIdx
+    function showSettingsElement(idx) {
+        swipeShow(swipeView.settingsPageIdx)
+        settingsPage.swipeSettingsShow(idx)
     }
 
-    function showWiFiPassword(ssid) {
-        wifiPasswordPage.setTitle(ssid)
-        swipeView.currentIndex = swipeView.wifiPasswordPageIdx
-    }
-
-    function showEventsSettings() {
-        swipeView.currentIndex = swipeView.eventsSettingsPageIdx
-    }
-
-    function showAbout() {
-        swipeView.currentIndex = swipeView.aboutPageIdx
-    }
-
-    function back() {
-        swipeView.currentIndex = swipeView.backPageIdx
+    function showSettingsForWiFi() {
+        showSettingsElement(settingsPage.wifiNetworksIdx)
     }
 
     // Show Popup message

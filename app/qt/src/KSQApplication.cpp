@@ -22,6 +22,7 @@
 #include <QtQml>
 
 #include <KSQApplication.h>
+#include <KSQActiveDevicesEnumerator.h>
 #include <KSQWiFiEnumerator.h>
 #include <ui/VSQUiHelper.h>
 #include <virgil/iot/qt/netif/VSQNetifBLE.h>
@@ -32,6 +33,7 @@
 int
 KSQApplication::run() {
     QQmlApplicationEngine engine;
+    KSQActiveDevicesEnumerator activeDevicesEnumerator;
     VSQNetifBLEEnumerator bleEnumerator;
     KSQWiFiEnumerator wifiEnumerator;
     VSQUiHelper uiHelper;
@@ -70,6 +72,7 @@ KSQApplication::run() {
     QQmlContext *context = engine.rootContext();
     context->setContextProperty("UiHelper", &uiHelper);
     context->setContextProperty("app", this);
+    context->setContextProperty("activeDevEnum", &activeDevicesEnumerator);
     context->setContextProperty("bleEnum", &bleEnumerator);
     context->setContextProperty("wifiEnum", &wifiEnumerator);
     context->setContextProperty("SnapCfgClient", &VSQIoTKitFacade::instance().snapCfgClient());

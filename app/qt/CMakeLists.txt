@@ -65,13 +65,16 @@ target_sources(ble-provision-app
         # Headers
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQApplication.h
         ${CMAKE_CURRENT_LIST_DIR}/include/ui/VSQUiHelper.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/KSQActiveDevicesEnumerator.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQWiFiEnumerator.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/KSActiveDevice.h
         $<$<PLATFORM_ID:Darwin>:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
 
         # Sources
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQApplication.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/ui/VSQUiHelper.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/KSQActiveDevicesEnumerator.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQWiFiEnumerator.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-hal.cpp

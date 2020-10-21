@@ -13,6 +13,7 @@ ToolBar {
     property alias showSeporator: seporator.visible
     property alias backgroundColor: background.color
     property var backAction: function() { back() }
+    property var settingsAction: function() { showAbout() }
 
     background: Rectangle {
         id: background
@@ -85,7 +86,7 @@ ToolBar {
             opacity: showSettingsButton ? 1 : 0
             enabled: showSettingsButton
             onClicked: {
-                showSettings()
+                settingsAction()
             }
         }
     }

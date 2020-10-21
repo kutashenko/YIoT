@@ -7,9 +7,11 @@ Item {
 
     default property alias children: formContainer.children
     property alias formSpacing: formContainer.spacing
+    property bool stretched: false
 
     ColumnLayout {
         id: formContainer
+        anchors.fill: stretched ? parent : 0
 
         anchors {
             verticalCenter: parent.verticalCenter

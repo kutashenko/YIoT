@@ -74,7 +74,7 @@ Page {
             Layout.bottomMargin: 10
             text: qsTr("Apply password")
             onClicked: {
-                showLocalDevices()
+                showDevicesSetup()
             }
         }
     }

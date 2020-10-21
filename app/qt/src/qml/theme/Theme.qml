@@ -18,7 +18,7 @@ Item {
     readonly property color mainBackgroundColor : "#13191C"
     readonly property color contactsBackgroundColor : "#202A2F"
     readonly property color color : "#FF0000"
-    readonly property color buttonPrimaryColor: "#D32F2F"
+    readonly property color buttonPrimaryColor: "#3CB371"
     readonly property color brandColor: "white"
     readonly property color primaryTextColor: "#FFFFFF"
     readonly property color secondaryTextColor: "#B0BEC5"

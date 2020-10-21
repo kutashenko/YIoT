@@ -33,14 +33,14 @@ Page {
 
     header: Header {
         title: qsTr("Select WiFi or share current")
-        backAction: function() { showSettings() }
+        backAction: function() { showMenuSettings() }
     }
 
     ColumnLayout {
         anchors.topMargin: 1
         anchors.fill: parent
-        WiFiDevicesList {
-            id: wifiRequireProvisionList
+        WiFiNetworksList {
+            id: wifiNetworksList
             Layout.fillHeight: true
         }
 
@@ -48,7 +48,7 @@ Page {
             Layout.bottomMargin: 10
             text: qsTr("Share current WiFi network")
             onClicked: {
-                showLocalDevices()
+                showDevicesSetup()
             }
         }
     }

@@ -15,29 +15,25 @@
 //
 //
 //
-//   05 August 2020
+//   04 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+#ifndef PROVISION_QT_ACTIVE_DEVICE_H
+#define PROVISION_QT_ACTIVE_DEVICE_H
 
-import "../../components"
+#include <QtCore>
 
-Page {
-    id: eventsSettingsPage
+struct KSActiveDeviceInfo {
+    QDateTime lastUpdate;
+    QString image;
 
-    background: Rectangle {
-        color: "transparent"
+    KSActiveDeviceInfo(QString img = "") {
+        lastUpdate = QDateTime::currentDateTime();
+        image = img;
     }
+};
 
-    header: Header {
-        title: qsTr("Events Settings")
-        backAction: function() { showMenuSettings() }
-    }
+typedef QMap<QString, KSActiveDeviceInfo> KSQActiveDevices;
 
-    Form {
-        Label {
-            text: "EVENTS SETTINGS"
-        }
-    }
-}
+
+#endif // PROVISION_QT_ACTIVE_DEVICE_H

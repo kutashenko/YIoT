@@ -25,24 +25,14 @@ import QtQuick.Layouts 1.12
 import "../theme"
 import "../components"
 
-Page {
+Form {
+    id: form
+    stretched: true
 
-    background: Rectangle {
-        color: "transparent"
+    FormVendor {}
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: { form.visible = false }
     }
-
-    header: Header {
-        title: qsTr("About")
-        showBackButton: true
-        showMenuButton: false
-    }
-
-    Form {
-        id: form
-
-        FormVendor {
-            Layout.bottomMargin: 20
-        }
-    }
-
 }

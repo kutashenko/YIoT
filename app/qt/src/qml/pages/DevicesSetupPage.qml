@@ -32,7 +32,7 @@ Page {
     }
 
     header: Header {
-        title: qsTr("Controlled devices")
+        title: qsTr("Devices setup")
         showBackButton: false
         showMenuButton: true
         showSettingsButton: true
@@ -44,7 +44,7 @@ Page {
         anchors.topMargin: 1
 
         spacing: 1
-        model: activeDevEnum
+        model: bleEnum
 
         delegate: Rectangle {
             id: base
@@ -59,10 +59,9 @@ Page {
 
                 Image {
                     id: icon
-                    source: "qrc:/qml/resources/icons/%1.png".arg(image)
+                    source: Theme.btImg
                     Layout.maximumHeight: listDelegate.height * 0.7
                     Layout.maximumWidth: Layout.maximumHeight
-                    Layout.leftMargin: 5
                     fillMode: Image.PreserveAspectFit
                     Layout.alignment: Qt.AlignLeft
                 }
@@ -77,52 +76,62 @@ Page {
                     Layout.alignment: Qt.AlignLeft
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                }
+
+                Text {
+                    id: rssiText
+                    text: rssi
+                    color: Theme.primaryTextColor
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: UiHelper.fixFontSz(14)
+
+                    Layout.alignment: Qt.AlignLeft
+                    Layout.fillHeight: true
                     Layout.rightMargin: 5
                 }
 
-//                RowLayout {
-//                    id: actionsBlock
-//                    Layout.rightMargin: 10
-//
-//                    ImageButton {
-//                        id: btnInfo
-//                        image: "Search"
-//                        z: 100
-//
-//                        onClicked: {
-//                            console.log("Click: Info")
-//                        }
-//                    }
-//
-//                    ImageButton {
-//                        id: btnProvision
-//                        image: "Plus"
-//
-//                        onClicked: {
-//                            showPopupError(qsTr("Need to set WiFi credentials"), showWiFiSettings)
-//                        }
-//                    }
-//
-//                    states: [
-//                            State { when: list.currentIndex == index;
-//                                PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 80    }
-//                            },
-//                            State { when: list.currentIndex != index;
-//                                PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 0    }
-//                            }]
-//
-//                    transitions: Transition {
-//                        NumberAnimation { property: "Layout.maximumWidth"; duration: 100}
-//                    }
-//                }
+                RowLayout {
+                    id: actionsBlock
+                    Layout.rightMargin: 10
+
+                    ImageButton {
+                        id: btnInfo
+                        image: "Search"
+                        z: 100
+
+                        onClicked: {
+                            console.log("Click: Info")
+                        }
+                    }
+
+                    ImageButton {
+                        id: btnProvision
+                        image: "Plus"
+
+                        onClicked: {
+                            showPopupError(qsTr("Need to set WiFi credentials"), showSettingsForWiFi)
+                        }
+                    }
+
+                    states: [
+                            State { when: list.currentIndex == index;
+                                PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 80    }
+                            },
+                            State { when: list.currentIndex != index;
+                                PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 0    }
+                            }]
+
+                    transitions: Transition {
+                        NumberAnimation { property: "Layout.maximumWidth"; duration: 100}
+                    }
+                }
             }
 
             MouseArea {
                 enabled: true
                 anchors.fill: parent
                 hoverEnabled: true
-//                anchors.rightMargin: list.currentIndex == index ? actionsBlock.width : 0
-                anchors.rightMargin: 0
+                anchors.rightMargin: list.currentIndex == index ? actionsBlock.width : 0
                 onClicked: {
                     list.currentIndex = index
                 }

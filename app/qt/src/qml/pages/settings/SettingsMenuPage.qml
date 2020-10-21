@@ -15,24 +15,25 @@
 //
 //
 //
-//   09 October 2020
+//   05 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-import "../theme"
-import "../components"
+import "../../theme"
+import "../../components"
 
 Page {
+    id: settingsPage
 
     background: Rectangle {
         color: "transparent"
     }
 
     header: Header {
-        title: qsTr("Controlled devices")
+        title: qsTr("Global Settings")
         showBackButton: false
         showMenuButton: true
         showSettingsButton: true
@@ -41,10 +42,26 @@ Page {
     ListView {
         id: list
         anchors.fill: parent
-        anchors.topMargin: 1
 
         spacing: 1
-        model: activeDevEnum
+
+        model: ListModel {
+            ListElement {
+                name: qsTr("WiFi credentials")
+                image: "Key"
+                property var action: function() {
+                    showWiFiSettings()
+                }
+            }
+
+            ListElement {
+                name: qsTr("Event triggers")
+                image: "Lock"
+                property var action: function() {
+                    showEventsSettings()
+                }
+            }
+        }
 
         delegate: Rectangle {
             id: base
@@ -62,9 +79,9 @@ Page {
                     source: "qrc:/qml/resources/icons/%1.png".arg(image)
                     Layout.maximumHeight: listDelegate.height * 0.7
                     Layout.maximumWidth: Layout.maximumHeight
-                    Layout.leftMargin: 5
                     fillMode: Image.PreserveAspectFit
                     Layout.alignment: Qt.AlignLeft
+                    Layout.leftMargin: 10
                 }
 
                 Text {
@@ -77,58 +94,32 @@ Page {
                     Layout.alignment: Qt.AlignLeft
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.rightMargin: 5
                 }
 
-//                RowLayout {
-//                    id: actionsBlock
-//                    Layout.rightMargin: 10
-//
-//                    ImageButton {
-//                        id: btnInfo
-//                        image: "Search"
-//                        z: 100
-//
-//                        onClicked: {
-//                            console.log("Click: Info")
-//                        }
-//                    }
-//
-//                    ImageButton {
-//                        id: btnProvision
-//                        image: "Plus"
-//
-//                        onClicked: {
-//                            showPopupError(qsTr("Need to set WiFi credentials"), showWiFiSettings)
-//                        }
-//                    }
-//
-//                    states: [
-//                            State { when: list.currentIndex == index;
-//                                PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 80    }
-//                            },
-//                            State { when: list.currentIndex != index;
-//                                PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 0    }
-//                            }]
-//
-//                    transitions: Transition {
-//                        NumberAnimation { property: "Layout.maximumWidth"; duration: 100}
-//                    }
-//                }
+                RowLayout {
+                    id: actionsBlock
+                    Layout.rightMargin: 10
+
+                    Image {
+                        id: iconAction
+                        source: "qrc:/qml/resources/icons/Arrow-Right.png"
+                        Layout.maximumHeight: listDelegate.height * 0.7
+                        Layout.maximumWidth: Layout.maximumHeight
+                        fillMode: Image.PreserveAspectFit
+                        Layout.alignment: Qt.AlignRight
+                        Layout.rightMargin: 10
+                    }
+                }
             }
 
             MouseArea {
-                enabled: true
                 anchors.fill: parent
                 hoverEnabled: true
-//                anchors.rightMargin: list.currentIndex == index ? actionsBlock.width : 0
-                anchors.rightMargin: 0
                 onClicked: {
-                    list.currentIndex = index
+                    action()
                 }
 
                 onEntered: {
-                    list.currentIndex = index
                     base.color = Theme.contactsBackgroundColor
                 }
 
@@ -136,10 +127,6 @@ Page {
                     base.color = "transparent"
                 }
             }
-        }
-
-        Component.onCompleted: {
-            bleEnum.startDiscovery()
         }
     }
 }

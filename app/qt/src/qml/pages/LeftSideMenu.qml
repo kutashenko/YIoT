@@ -23,6 +23,7 @@ import QtQuick.Layouts 1.5
 import QtQuick.Controls 2.12
 
 import "../theme"
+import "../components"
 
 Drawer {
     id: drawer
@@ -52,10 +53,18 @@ Drawer {
 
     Form {
         FormPrimaryButton {
-            text: qsTr("Local devices")
+            text: qsTr("Controlled devices")
             onClicked: {
                 drawer.close()
-                showLocalDevices()
+                showDevices()
+            }
+        }
+
+        FormPrimaryButton {
+            text: qsTr("Devices setup")
+            onClicked: {
+                drawer.close()
+                showDevicesSetup()
             }
         }
 
