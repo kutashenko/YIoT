@@ -46,13 +46,15 @@ _initializer_exec_task(void *pvParameters);
 #define TWDT_TIMEOUT_S 5
 
 static vs_status_e
-vs_snap_cfg_config(const vs_cfg_configuration_t *configuration);
+vs_snap_cfg_config(const vs_cfg_wifi_configuration_t *configuration);
 
 static void
 wifi_status_cb(bool ready);
 
 static vs_status_e
 start_wifi(void);
+
+vs_snap_cfg_server_service_t cfg_server_cb = {vs_snap_cfg_config, NULL, NULL, NULL};
 
 //******************************************************************************
 void
@@ -180,7 +182,7 @@ _initializer_exec_task(void *pvParameters) {
 
         //  CFG server service
         VS_LOG_DEBUG("Initialization snap cfg server");
-        snap_cfg_server = vs_snap_cfg_server(vs_snap_cfg_config);
+        snap_cfg_server = vs_snap_cfg_server(cfg_server_cb);
         VS_LOG_DEBUG("Register snap cfg server");
         STATUS_CHECK(vs_snap_register_service(snap_cfg_server), "Cannot register _CFG server service");
 
@@ -229,7 +231,7 @@ start_wifi(void) {
 
 /******************************************************************************/
 static vs_status_e
-vs_snap_cfg_config(const vs_cfg_configuration_t *configuration) {
+vs_snap_cfg_config(const vs_cfg_wifi_configuration_t *configuration) {
     CHECK_NOT_ZERO_RET(configuration, VS_CODE_ERR_INCORRECT_ARGUMENT);
     VS_LOG_DEBUG("Configure :");
     VS_LOG_DEBUG("     ssid : %s", configuration->ssid);
