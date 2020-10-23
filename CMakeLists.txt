@@ -32,7 +32,7 @@ include(helpers)
 # ---------------------------------------------------------------------------
 #   Options
 # ---------------------------------------------------------------------------
-option(BUILD_SERVICE_ENABLE "Enable building of BLE service" ON)
+option(BUILD_DEVICE_ENABLE "Enable building of Device app" ON)
 option(BUILD_APP_ENABLE "Enable building of Application" ON)
 option(BUILD_ISO_PACKER_ENABLE "Enable building of ISO Packer" ON)
 
@@ -59,10 +59,10 @@ add_subdirectory(${IOTKIT_PATH}/sdk)
 add_subdirectory(${IOTKIT_PATH}/demo/nix/common)
 
 # ---------------------------------------------------------------------------
-#	BLE provisioning service
+#	Device provisioning service
 # ---------------------------------------------------------------------------
-if (BUILD_SERVICE_ENABLE)
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/service)
+if (BUILD_DEVICE_ENABLE)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/device)
 endif()
 
 # ---------------------------------------------------------------------------
