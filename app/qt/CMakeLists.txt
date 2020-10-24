@@ -20,7 +20,6 @@
 
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
-project(ble-provision-app VERSION 0.1.0 LANGUAGES C CXX)
 
 # ---------------------------------------------------------------------------
 #   C++
@@ -30,47 +29,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
-# ---------------------------------------------------------------------------
-#   Qt
-# ---------------------------------------------------------------------------
-find_package(Qt5 COMPONENTS Core Widgets Test Network Concurrent Qml)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
-
-# ---------------------------------------------------------------------------
-#   IoTKit Qt Wrapper
-# ---------------------------------------------------------------------------
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cmake/iotkit-qt)
+include(GNUInstallDirs)
+include(FetchContent)
 
 # ---------------------------------------------------------------------------
 #   Poject Name
 # ---------------------------------------------------------------------------
 set (KS_TARGET_NAME ble-provision-app)
-
-# ---------------------------------------------------------------------------
-#   Detecting platform if KS_PLATFORM not specified
-# ---------------------------------------------------------------------------
-if(NOT KS_PLATFORM)
-    if(ANDROID)
-        message(STATUS "Detected target platform: [Android]")
-        set(KS_PLATFORM "android")
-    elseif(UNIX)
-        message(STATUS "Detected target platform: [Unix]")
-        set(KS_PLATFORM "linux")
-    elseif(MACOS)
-        message(STATUS "Detected target platform: [MacOS]")
-        set(KS_PLATFORM "macos")
-    elseif(IOS)
-        message(STATUS "Detected target platform: [IOS]")
-        set(KS_PLATFORM "ios")
-    elseif(MINGW32)
-        message(STATUS "Detected target platform: [Windows]")
-        set(KS_PLATFORM "windows")
-    endif()
-endif()
 
 # ---------------------------------------------------------------------------
 #   Detecting build type
@@ -90,8 +55,9 @@ set(KS_QT_EXTRA "")
 if(KS_PLATFORM STREQUAL "ios")
     # Android
 elseif(KS_PLATFORM STREQUAL "android")
-    # Get firebase
-    get_firebase()
+
+    # Add deployers targets
+    include(deployers)
 
     # Set Android version name
     set(ANDROID_VERSION_NAME "${KS_TARGET_VERSION}")
@@ -127,26 +93,35 @@ elseif(KS_PLATFORM STREQUAL "android")
 endif()
 
 # ---------------------------------------------------------------------------
+#   Qt
+# ---------------------------------------------------------------------------
+find_package(Qt5 COMPONENTS Core Widgets Test Network Concurrent Qml ${KS_QT_EXTRA})
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+# ---------------------------------------------------------------------------
 #   Prepare for build target
 # ---------------------------------------------------------------------------
 # Android
 if(KS_PLATFORM STREQUAL "android")
     message("-- Prepare sources for Android ...")
     add_library(${KS_TARGET_NAME} SHARED)
-    include(${ANDROID_SDK}/android_openssl/CMakeLists.txt)
+    # include(${ANDROID_SDK}/android_openssl/CMakeLists.txt)
 
-    if (ANDROID_ABI STREQUAL "armeabi-v7a")
-        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/arm/")
-    elseif (ANDROID_ABI STREQUAL "arm64-v8a")
-        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/arm64/")
-    elseif (ANDROID_ABI STREQUAL "x86")
-        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/x86/")
-    elseif (ANDROID_ABI STREQUAL "x86_64")
-        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/x86_64/")
-    endif()
-
-    message(STATUS "Android OpenSSL root path:    [${SSL_ROOT_PATH}]")
-    message(STATUS "Android OpenSSL library path: [${KS_ANDROID_SSL_DIR}]")
+#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
+#        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/arm/")
+#    elseif (ANDROID_ABI STREQUAL "arm64-v8a")
+#        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/arm64/")
+#    elseif (ANDROID_ABI STREQUAL "x86")
+#        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/x86/")
+#    elseif (ANDROID_ABI STREQUAL "x86_64")
+#        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/x86_64/")
+#    endif()
+#
+#    message(STATUS "Android OpenSSL root path:    [${SSL_ROOT_PATH}]")
+#    message(STATUS "Android OpenSSL library path: [${KS_ANDROID_SSL_DIR}]")
 
     # MacOS
 elseif(KS_PLATFORM STREQUAL "macos")
@@ -177,6 +152,11 @@ elseif(KS_PLATFORM STREQUAL "macos")
 else()
     add_executable(${KS_TARGET_NAME})
 endif()
+
+# ---------------------------------------------------------------------------
+#   IoTKit Qt Wrapper
+# ---------------------------------------------------------------------------
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cmake/iotkit-qt)
 
 # ---------------------------------------------------------------------------
 #	Header/Source files
@@ -260,7 +240,7 @@ target_link_libraries(${KS_TARGET_NAME}
         enable_pedantic_mode
         )
 
-if (APPLE)
+if (KS_PLATFORM STREQUAL "macos")
     #   macOS
     target_link_libraries(${KS_TARGET_NAME}
             PUBLIC
@@ -292,7 +272,7 @@ install(TARGETS ${KS_TARGET_NAME}
 #------------------------------------------------------------------------------
 #   Deployment
 # ---------------------------------------------------------------------------
-if (APPLE)
+if (KS_PLATFORM STREQUAL "macos")
    #
    #   Configure plist file
    #
