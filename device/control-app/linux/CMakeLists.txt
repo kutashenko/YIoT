@@ -39,7 +39,7 @@ option(SECURE_PROVISION "Enable secure provision" OFF)
 # ---------------------------------------------------------------------------
 
 #   Ext projects path
-set(EXT_PATH "${CMAKE_CURRENT_LIST_DIR}/../../ext")
+set(EXT_PATH "${CMAKE_CURRENT_LIST_DIR}/../../../ext")
 
 #   Path to Bluez-DBus
 set(BLUEZ_DBUS_PATH "${EXT_PATH}/bluez-dbus")
@@ -59,13 +59,13 @@ set(BUILD_SHARED_LIBS CACHE BOOL OFF FORCE)
 # ---------------------------------------------------------------------------
 #	Linux BLE provisioning application
 # ---------------------------------------------------------------------------
-add_executable(ble-provision-service)
+add_executable(ks-device)
 
 
 # ---------------------------------------------------------------------------
 #	Header/Source files
 # ---------------------------------------------------------------------------
-target_sources(ble-provision-service
+target_sources(ks-device
         PRIVATE
         # Headers
         ${CMAKE_CURRENT_LIST_DIR}/include/iotkit-impl/init.h
@@ -86,7 +86,7 @@ target_sources(ble-provision-service
 # ---------------------------------------------------------------------------
 #	Definitions
 # ---------------------------------------------------------------------------
-target_compile_definitions(ble-provision-service
+target_compile_definitions(ks-device
         PRIVATE
         $<$<BOOL:${SECURE_PROVISION}>:SECURE_PROVISION=1>
         )
@@ -95,7 +95,7 @@ target_compile_definitions(ble-provision-service
 # ---------------------------------------------------------------------------
 #   Include directories
 # ---------------------------------------------------------------------------
-target_include_directories(ble-provision-service
+target_include_directories(ks-device
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
         )
@@ -104,7 +104,7 @@ target_include_directories(ble-provision-service
 # ---------------------------------------------------------------------------
 #	Compile options
 # ---------------------------------------------------------------------------
-target_compile_options(ble-provision-service
+target_compile_options(ks-device
         PRIVATE
         -Wno-multichar
         )
@@ -113,7 +113,7 @@ target_compile_options(ble-provision-service
 # ---------------------------------------------------------------------------
 #	Link libraries
 # ---------------------------------------------------------------------------
-target_link_libraries(ble-provision-service
+target_link_libraries(ks-device
         PRIVATE
 
         # IoTKit
@@ -133,13 +133,13 @@ target_link_libraries(ble-provision-service
 #   Format code
 # ---------------------------------------------------------------------------
 if (COMMAND add_clangformat)
-    add_clangformat(ble-provision-service)
+    add_clangformat(ks-device)
 endif ()
 
 
 #------------------------------------------------------------------------------
 #   Install
 # ---------------------------------------------------------------------------
-install(TARGETS ble-provision-service
+install(TARGETS ks-device
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         )

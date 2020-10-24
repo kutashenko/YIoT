@@ -26,7 +26,8 @@
 #endif
 
 /******************************************************************************/
-KSQWiFiNetworks wifi_enum() {
+KSQWiFiNetworks
+wifi_enum() {
     KSQWiFiNetworks res;
     CWInterface* wifi = [[CWWiFiClient sharedWiFiClient] interface];
     NSArray *networkScan = [[wifi scanForNetworksWithName:nil error:nil] allObjects];

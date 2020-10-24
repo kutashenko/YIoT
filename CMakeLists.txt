@@ -44,7 +44,7 @@ option(BUILD_ISO_PACKER_ENABLE "Enable building of ISO Packer" ON)
 
 set(IOTKIT_PATH "${CMAKE_CURRENT_LIST_DIR}/ext/iotkit")
 #TODO: Fix it !
-set(VIRGIL_IOT_CONFIG_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/service/linux/include/config)
+set(VIRGIL_IOT_CONFIG_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/device/control-app/linux/include/config)
 #set(GO_DISABLE CACHE BOOL ON FORCE)
 option(ENABLE_TESTING OFF)
 option(ENABLE_HEAVY_TESTS OFF)

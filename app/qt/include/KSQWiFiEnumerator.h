@@ -78,6 +78,11 @@ private:
     QStringList
     _findWiFiGeneral();
 #endif
+
+#if defined(Q_OS_LINUX)
+    KSQWiFiNetworks
+    wifi_enum();
+#endif
 };
 
 #endif // PROVISION_QT_WIFI_ENUM_H

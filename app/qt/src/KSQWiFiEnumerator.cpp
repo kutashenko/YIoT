@@ -59,17 +59,15 @@ KSQWiFiEnumerator::stop() {
 
 /******************************************************************************/
 #if !defined(Q_OS_MACOS) && !defined(Q_OS_WIN32)
-QStringList
+KSQWiFiNetworks
 KSQWiFiEnumerator::wifi_enum() {
-    QStringList wifiList;
+    KSQWiFiNetworks wifiList;
     auto netcfgList = m_ncm.allConfigurations();
     for (auto &x : netcfgList) {
         qDebug() << x.name() << " : " << x.bearerTypeName();
         if (x.bearerType() == QNetworkConfiguration::BearerWLAN) {
-            if (x.name() == "") {
-                wifiList << "Unknown(Other Network)";
-            } else {
-                wifiList << x.name();
+            if (x.name() != "") {
+                wifiList[x.name()] = KSWiFiInfo();
             }
         }
     }
@@ -94,8 +92,8 @@ KSQWiFiEnumerator::onFindWiFi() {
             endResetModel();
         }
 
-        auto topLeft = createIndex(0,0);
-        auto bottomRight = createIndex(m_wifiList.count(),0);
+        auto topLeft = createIndex(0, 0);
+        auto bottomRight = createIndex(m_wifiList.count(), 0);
         emit dataChanged(topLeft, bottomRight, roles);
 
         qDebug() << m_wifiList.keys();

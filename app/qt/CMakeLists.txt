@@ -46,6 +46,11 @@ set(CMAKE_AUTORCC ON)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cmake/iotkit-qt)
 
 # ---------------------------------------------------------------------------
+#   Poject Name
+# ---------------------------------------------------------------------------
+set (KS_TARGET_NAME ble-provision-app)
+
+# ---------------------------------------------------------------------------
 #   Detecting platform if KS_PLATFORM not specified
 # ---------------------------------------------------------------------------
 if(NOT KS_PLATFORM)
@@ -66,16 +71,6 @@ if(NOT KS_PLATFORM)
         set(KS_PLATFORM "windows")
     endif()
 endif()
-
-# ---------------------------------------------------------------------------
-#   Application
-# ---------------------------------------------------------------------------
-if (KS_PLATFORM STREQUAL "macos")
-    include(${CMAKE_CURRENT_LIST_DIR}/cmake/macdeploy.cmake)
-    add_executable(ble-provision-app MACOSX_BUNDLE)
-else ()
-    add_executable(ble-provision-app)
-endif ()
 
 # ---------------------------------------------------------------------------
 #   Detecting build type
@@ -186,7 +181,7 @@ endif()
 # ---------------------------------------------------------------------------
 #	Header/Source files
 # ---------------------------------------------------------------------------
-target_sources(ble-provision-app
+target_sources(${KS_TARGET_NAME}
         PRIVATE
 
         # Headers
@@ -195,8 +190,8 @@ target_sources(ble-provision-app
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQActiveDevicesEnumerator.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQWiFiEnumerator.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSActiveDevice.h
-        $<$<PLATFORM_ID:Darwin>:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
-        $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
+        $<$<STREQUAL:"${VS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
+        $<$<STREQUAL:"${VS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
 
         # Sources
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQApplication.cpp
@@ -205,8 +200,8 @@ target_sources(ble-provision-app
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQWiFiEnumerator.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-hal.cpp
-        $<$<PLATFORM_ID:Darwin>:${CMAKE_CURRENT_LIST_DIR}/src/macos/KSMacWiFi.mm>
-        $<$<PLATFORM_ID:Windows>:${CMAKE_CURRENT_LIST_DIR}/src/win/KSWinWiFi.cpp>
+        $<$<STREQUAL:"${VS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/src/macos/KSMacWiFi.mm>
+        $<$<STREQUAL:"${VS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/src/win/KSWinWiFi.cpp>
 
         # Qt Resources
         ${CMAKE_CURRENT_LIST_DIR}/src/resources.qrc
@@ -216,7 +211,7 @@ target_sources(ble-provision-app
 # ---------------------------------------------------------------------------
 #	Definitions
 # ---------------------------------------------------------------------------
-target_compile_definitions(ble-provision-app
+target_compile_definitions(${KS_TARGET_NAME}
         PRIVATE
         )
 
@@ -224,7 +219,7 @@ target_compile_definitions(ble-provision-app
 # ---------------------------------------------------------------------------
 #   Include directories
 # ---------------------------------------------------------------------------
-target_include_directories(ble-provision-app
+target_include_directories(${KS_TARGET_NAME}
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
         )
@@ -233,7 +228,7 @@ target_include_directories(ble-provision-app
 # ---------------------------------------------------------------------------
 #	Compile options
 # ---------------------------------------------------------------------------
-target_compile_options(ble-provision-app
+target_compile_options(${KS_TARGET_NAME}
         PRIVATE
         )
 
@@ -241,7 +236,7 @@ target_compile_options(ble-provision-app
 # ---------------------------------------------------------------------------
 #	Link libraries
 # ---------------------------------------------------------------------------
-target_link_libraries(ble-provision-app
+target_link_libraries(${KS_TARGET_NAME}
         PUBLIC
 
         # Qt5
@@ -256,7 +251,10 @@ target_link_libraries(ble-provision-app
         iotkit-qt-lib
 
         #   Windows
-        $<$<PLATFORM_ID:Windows>:wlanapi>
+        $<$<STREQUAL:"${KS_PLATFORM}","windows">:wlanapi>
+
+        #   Linux
+        $<$<STREQUAL:"${KS_PLATFORM}","linux">:pthread>
 
         # Compiler options
         enable_pedantic_mode
@@ -264,7 +262,7 @@ target_link_libraries(ble-provision-app
 
 if (APPLE)
     #   macOS
-    target_link_libraries(ble-provision-app
+    target_link_libraries(${KS_TARGET_NAME}
             PUBLIC
             "-framework CoreWLAN"
             "-framework Foundation"
@@ -276,14 +274,14 @@ endif()
 #   Format code
 # ---------------------------------------------------------------------------
 if (COMMAND add_clangformat)
-    add_clangformat(ble-provision-app)
+    add_clangformat(${KS_TARGET_NAME})
 endif ()
 
 
 #------------------------------------------------------------------------------
 #   Install
 # ---------------------------------------------------------------------------
-install(TARGETS ble-provision-app
+install(TARGETS ${KS_TARGET_NAME}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -298,12 +296,12 @@ if (APPLE)
    #
    #   Configure plist file
    #
-   set_target_properties(ble-provision-app PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_LIST_DIR}/platform/macos/macos-info.plist)
+   set_target_properties(${KS_TARGET_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_LIST_DIR}/platform/macos/macos-info.plist)
    set (MACOSX_DEPLOYMENT_TARGET 10.14)
    set (PLIST_DST "${CMAKE_CURRENT_LIST_DIR}/platform/macos/macos-info.plist")
    set (PLIST_TMPL "${PLIST_DST}.in")
    configure_file(${PLIST_TMPL} ${PLIST_DST})
 
-#   macdeployqt(ble-provision-app "${CMAKE_CURRENT_LIST_DIR}/src/qml")
+#   macdeployqt(${KS_TARGET_NAME} "${CMAKE_CURRENT_LIST_DIR}/src/qml")
 endif ()
 
