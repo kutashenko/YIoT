@@ -21,14 +21,6 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 # ---------------------------------------------------------------------------
-# Include Cmake helpers
-# ---------------------------------------------------------------------------
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-
-include(vsplatforms)
-include(varpadding)
-
-# ---------------------------------------------------------------------------
 # Project version
 # ---------------------------------------------------------------------------
 set(KS_TARGET_VERSION "0.1.0")
@@ -37,6 +29,14 @@ set(KS_TARGET_VERSION "0.1.0")
 # Define project
 # ---------------------------------------------------------------------------
 project(ble-provision VERSION ${KS_TARGET_VERSION} LANGUAGES C CXX)
+
+# ---------------------------------------------------------------------------
+# Include Cmake helpers
+# ---------------------------------------------------------------------------
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
+include(vsplatforms)
+include(varpadding)
 
 # ---------------------------------------------------------------------------
 #	CMake Helpers

@@ -56,7 +56,6 @@ set(INC_BLE_NETIF "${DEFAULT_IMPL_NETIF_PATH}/ble/include/virgil/iot/qt/netif")
 set(SRC_HELPERS "${FACADE_PATH}/src/helpers")
 set(SRC_SNAP "${FACADE_PATH}/src")
 
-
 # ---------------------------------------------------------------------------
 #   IoTKit Qt wrapper lib
 # ---------------------------------------------------------------------------

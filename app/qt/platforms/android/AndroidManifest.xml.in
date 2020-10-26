@@ -10,7 +10,7 @@
     <application
         android:hardwareAccelerated="true"
         android:name="org.qtproject.qt5.android.bindings.QtApplication"
-        android:label="Virgil Secure messenger"
+        android:label="@VS_APPLICATION_DISPLAY_NAME@"
         android:extractNativeLibs="true"
         android:theme="@style/AppTheme"
         android:icon="@drawable/icon"
@@ -18,7 +18,7 @@
         <activity
             android:configChanges="orientation|keyboardHidden"
             android:name="org.qtproject.qt5.android.bindings.QtActivity"
-            android:label="Virgil Secure messenger"
+            android:label="@VS_APPLICATION_DISPLAY_NAME@"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:launchMode="singleTop"
@@ -92,4 +92,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 </manifest>

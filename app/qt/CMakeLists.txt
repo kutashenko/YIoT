@@ -108,22 +108,22 @@ set(CMAKE_AUTORCC ON)
 if(KS_PLATFORM STREQUAL "android")
     message("-- Prepare sources for Android ...")
     add_library(${KS_TARGET_NAME} SHARED)
-    # include(${ANDROID_SDK}/android_openssl/CMakeLists.txt)
+    include(${ANDROID_SDK}/android_openssl/CMakeLists.txt)
 
-#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
-#        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/arm/")
-#    elseif (ANDROID_ABI STREQUAL "arm64-v8a")
-#        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/arm64/")
-#    elseif (ANDROID_ABI STREQUAL "x86")
-#        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/x86/")
-#    elseif (ANDROID_ABI STREQUAL "x86_64")
-#        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/x86_64/")
-#    endif()
-#
-#    message(STATUS "Android OpenSSL root path:    [${SSL_ROOT_PATH}]")
-#    message(STATUS "Android OpenSSL library path: [${KS_ANDROID_SSL_DIR}]")
+    if (ANDROID_ABI STREQUAL "armeabi-v7a")
+        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/arm/")
+    elseif (ANDROID_ABI STREQUAL "arm64-v8a")
+        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/arm64/")
+    elseif (ANDROID_ABI STREQUAL "x86")
+        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/x86/")
+    elseif (ANDROID_ABI STREQUAL "x86_64")
+        set(KS_ANDROID_SSL_DIR "${SSL_ROOT_PATH}/latest/x86_64/")
+    endif()
 
-    # MacOS
+    message(STATUS "Android OpenSSL root path:    [${SSL_ROOT_PATH}]")
+    message(STATUS "Android OpenSSL library path: [${KS_ANDROID_SSL_DIR}]")
+
+# MacOS
 elseif(KS_PLATFORM STREQUAL "macos")
 
     set(App_ICON "${KS_CUSTOMER_DIR}/platforms/macos/pkg_resources/${MACOSX_BUNDLE_ICON_FILE}.icns")
@@ -131,24 +131,25 @@ elseif(KS_PLATFORM STREQUAL "macos")
             PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
     # Sparkle
-    message(STATUS "Copy Sparkle framework")
-    execute_process(
-            COMMAND mkdir -p ${CMAKE_BINARY_DIR}/${KS_TARGET_NAME}.app/Contents/Frameworks
-            COMMAND cp -Rf ${PREBUILT_DIR}/${KS_PLATFORM}/sparkle/Sparkle.framework ${CMAKE_BINARY_DIR}/${KS_TARGET_NAME}.app/Contents/Frameworks
-    )
+    #message(STATUS "Copy Sparkle framework")
+    #execute_process(
+    #        COMMAND mkdir -p ${CMAKE_BINARY_DIR}/${KS_TARGET_NAME}.app/Contents/Frameworks
+    #        COMMAND cp -Rf ${PREBUILT_DIR}/${KS_PLATFORM}/sparkle/Sparkle.framework ${CMAKE_BINARY_DIR}/${KS_TARGET_NAME}.app/Contents/Frameworks
+    #)
 
     add_executable(${KS_TARGET_NAME} MACOSX_BUNDLE ${App_ICON} )
 
     set_target_properties(${KS_TARGET_NAME}
             PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_LIST_DIR}/platforms/macos/Info.plist.in"
             )
-    set_target_properties(${KS_TARGET_NAME}
-            PROPERTIES LINK_FLAGS "-F${PREBUILT_DIR}/${KS_PLATFORM}/sparkle -framework Sparkle -framework CoreFoundation -framework Foundation"
-            )
+    #set_target_properties(${KS_TARGET_NAME}
+    #        PROPERTIES LINK_FLAGS "-F${PREBUILT_DIR}/${KS_PLATFORM}/sparkle -framework Sparkle -framework CoreFoundation -framework Foundation"
+    #        )
 
 
     #    macdeployqt(${KS_TARGET_NAME} "${CMAKE_CURRENT_LIST_DIR}/src/qml")
-    # Other
+
+# Other
 else()
     add_executable(${KS_TARGET_NAME})
 endif()

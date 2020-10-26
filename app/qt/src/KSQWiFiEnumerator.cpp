@@ -22,6 +22,12 @@
 
 #include <thread>
 
+#if 1
+// TODO: Remove after fixing of deprecated functionality
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 /******************************************************************************/
 KSQWiFiEnumerator::KSQWiFiEnumerator() {
 #if defined(Q_OS_MACOS)
@@ -153,3 +159,7 @@ KSQWiFiEnumerator::get(int index) const {
 }
 
 /******************************************************************************/
+
+#if 1
+#pragma GCC diagnostic pop
+#endif

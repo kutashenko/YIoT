@@ -74,7 +74,16 @@ private:
     static const int kScanPeriodMs = 5000;
     QTimer m_timer;
 #else
+
+#if 1
+    // TODO: Remove after fixing of deprecated functionality
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     QNetworkConfigurationManager m_ncm;
+#if 1
+#pragma GCC diagnostic pop
+#endif
     QStringList
     _findWiFiGeneral();
 #endif
