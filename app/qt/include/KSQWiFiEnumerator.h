@@ -70,7 +70,7 @@ private slots:
 private:
     KSQWiFiNetworks m_wifiList;
 
-#if defined(Q_OS_MACOS)
+#if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
     static const int kScanPeriodMs = 5000;
     QTimer m_timer;
 #else

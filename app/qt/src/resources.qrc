@@ -47,7 +47,6 @@
         <file>qml/components/FormLabel.qml</file>
         <file>qml/components/CircleProgressBar.qml</file>
         <file>qml/components/Progress/Progress.qml</file>
-        <file>qml/components/SelectCredDialog.qml</file>
         <file>qml/components/Container.qml</file>
         <file>qml/components/ImageButton.qml</file>
         <file>qml/components/WiFiNetworksList.qml</file>

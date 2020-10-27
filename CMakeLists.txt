@@ -82,7 +82,6 @@ message(STATUS "KS_PLATFORM_DESKTOP: ${KS_PLATFORM_DESKTOP}")
 # ---------------------------------------------------------------------------
 option(BUILD_DEVICE_ENABLE "Enable building of Device app" ON)
 option(BUILD_APP_ENABLE "Enable building of Application" ON)
-option(BUILD_ISO_PACKER_ENABLE "Enable building of ISO Packer" ON)
 
 
 # ---------------------------------------------------------------------------
@@ -91,8 +90,6 @@ option(BUILD_ISO_PACKER_ENABLE "Enable building of ISO Packer" ON)
 if (NOT KS_PLATFORM STREQUAL "linux")
     set (BUILD_DEVICE_ENABLE OFF)
 endif()
-
-# set (BUILD_ISO_PACKER_ENABLE FORCE)
 
 
 # ---------------------------------------------------------------------------
@@ -121,13 +118,6 @@ add_subdirectory(${IOTKIT_PATH}/demo/nix/common)
 # ---------------------------------------------------------------------------
 if (BUILD_DEVICE_ENABLE)
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/device)
-endif()
-
-# ---------------------------------------------------------------------------
-#	ISO packer for BLE provisioning Service
-# ---------------------------------------------------------------------------
-if (BUILD_ISO_PACKER_ENABLE)
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/iso-packer)
 endif()
 
 # ---------------------------------------------------------------------------

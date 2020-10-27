@@ -22,6 +22,10 @@
 
 #include <thread>
 
+#ifdef Q_OS_ANDROID
+#include "android/KSQAndroid.h"
+#endif // Q_OS_ANDROID
+
 #if 1
 // TODO: Remove after fixing of deprecated functionality
 #pragma GCC diagnostic push
@@ -30,7 +34,7 @@
 
 /******************************************************************************/
 KSQWiFiEnumerator::KSQWiFiEnumerator() {
-#if defined(Q_OS_MACOS)
+#if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
     m_timer.setSingleShot(false);
     m_timer.setInterval(kScanPeriodMs);
     connect(&m_timer, &QTimer::timeout, this, &KSQWiFiEnumerator::onFindWiFi);
@@ -47,7 +51,7 @@ KSQWiFiEnumerator::~KSQWiFiEnumerator() {
 /******************************************************************************/
 void
 KSQWiFiEnumerator::start() {
-#if defined(Q_OS_MACOS)
+#if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
     m_timer.start();
 #else
     m_ncm.updateConfigurations();
@@ -67,18 +71,21 @@ KSQWiFiEnumerator::stop() {
 #if !defined(Q_OS_MACOS) && !defined(Q_OS_WIN32)
 KSQWiFiNetworks
 KSQWiFiEnumerator::wifi_enum() {
+#ifdef Q_OS_ANDROID
+    return KSQAndroid::enumWifi();
+#else
     KSQWiFiNetworks wifiList;
     auto netcfgList = m_ncm.allConfigurations();
     for (auto &x : netcfgList) {
-        qDebug() << x.name() << " : " << x.bearerTypeName();
+        qDebug() << x.name() << " : " << x.bearerTypeName() << " : " << x.identifier();
         if (x.bearerType() == QNetworkConfiguration::BearerWLAN) {
             if (x.name() != "") {
                 wifiList[x.name()] = KSWiFiInfo();
             }
         }
     }
-
     return wifiList;
+#endif
 }
 #endif
 

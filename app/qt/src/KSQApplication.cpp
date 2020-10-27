@@ -29,6 +29,10 @@
 #include <virgil/iot/qt/netif/VSQNetifBLEEnumerator.h>
 #include <virgil/iot/logger/logger.h>
 
+#ifdef Q_OS_ANDROID
+#include "android/KSQAndroid.h"
+#endif // Q_OS_ANDROID
+
 /******************************************************************************/
 int
 KSQApplication::run() {
@@ -79,6 +83,12 @@ KSQApplication::run() {
     qmlRegisterSingletonType(QUrl("qrc:/qml/theme/Theme.qml"), "Theme", 1, 0, "Theme");
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     engine.load(url);
+
+    QTimer::singleShot(100, []() {
+#ifdef Q_OS_ANDROID
+        KSQAndroid::hideSplashScreen();
+#endif
+    });
 
     return QGuiApplication::instance()->exec();
 }
