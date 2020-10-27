@@ -37,6 +37,12 @@ include(FetchContent)
 # ---------------------------------------------------------------------------
 set (KS_TARGET_NAME ble-provision-app)
 
+set(VS_ORGANIZATION_NAME "Kutashenko")
+set(VS_ORGANIZATION_DISPLAYNAME "Kutashenko")
+
+set(VS_APPLICATION_NAME "Simple IoT")
+set(VS_APPLICATION_DISPLAY_NAME "Simple IoT")
+
 # ---------------------------------------------------------------------------
 #   Detecting build type
 # ---------------------------------------------------------------------------
@@ -123,10 +129,37 @@ if(KS_PLATFORM STREQUAL "android")
     message(STATUS "Android OpenSSL root path:    [${SSL_ROOT_PATH}]")
     message(STATUS "Android OpenSSL library path: [${KS_ANDROID_SSL_DIR}]")
 
+# Linux
+elseif(VS_PLATFORM STREQUAL "linux")
+    add_executable(${KS_TARGET_NAME})
+    # Add deployers targets
+    include(deployers)
+
 # MacOS
 elseif(KS_PLATFORM STREQUAL "macos")
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+    set(MACOSX_BUNDLE_ICON_FILE MyIcon.icns)
+    set(MACOSX_BUNDLE_BACKGROUND_FILE "Background.png")
+    set(MACOSX_DEPLOYMENT_TARGET 10.14)
+    set(VS_BUNDLE_PREFIX "io.kutashenko")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "${VS_BUNDLE_PREFIX}.${PROJECT_NAME}")
+    list(APPEND VS_TEMPLATES "${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos/release-notes.html.in=${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos/release-notes.html")
+    list(APPEND VS_TEMPLATES "${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos/dmg.json.in=${CMAKE_BINARY_DIR}/dmg.json")
+    foreach(VS_TMP IN LISTS VS_TEMPLATES)
+        string(REPLACE "=" ";" VS_TMP_LIST ${VS_TMP})
+        list(GET VS_TMP_LIST 0 VS_TEMPLATE_SRC)
+        list(GET VS_TMP_LIST 1 VS_TEMPLATE_DST)
+        if(NOT EXISTS "${VS_TEMPLATE_SRC}")
+            message(FATAL_ERROR "Template [${VS_TEMPLATE_SRC}] not found !")
+        endif()
+        message(STATUS "Processing template file: [${VS_TEMPLATE_SRC}]")
+        configure_file("${VS_TEMPLATE_SRC}" "${VS_TEMPLATE_DST}" @ONLY)
+    endforeach()
 
-    set(App_ICON "${KS_CUSTOMER_DIR}/platforms/macos/pkg_resources/${MACOSX_BUNDLE_ICON_FILE}.icns")
+    include(deployers)
+
+    set(App_ICON "${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos/pkg_resources/${MACOSX_BUNDLE_ICON_FILE}")
     set_source_files_properties(${App_ICON}
             PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
@@ -282,9 +315,9 @@ if (KS_PLATFORM STREQUAL "macos")
    #
    #   Configure plist file
    #
-   set_target_properties(${KS_TARGET_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_LIST_DIR}/platform/macos/macos-info.plist)
+   set_target_properties(${KS_TARGET_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_LIST_DIR}/platforms/macos/macos-info.plist)
    set (MACOSX_DEPLOYMENT_TARGET 10.14)
-   set (PLIST_DST "${CMAKE_CURRENT_LIST_DIR}/platform/macos/macos-info.plist")
+   set (PLIST_DST "${CMAKE_CURRENT_LIST_DIR}/platforms/macos/macos-info.plist")
    set (PLIST_TMPL "${PLIST_DST}.in")
    configure_file(${PLIST_TMPL} ${PLIST_DST})
 

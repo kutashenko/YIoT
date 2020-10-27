@@ -55,6 +55,9 @@ endfunction()
 # ---------------------------------------------------------------------------
 # Check target platform and customer variable
 # ---------------------------------------------------------------------------
+if(KS_PLATFORM OR VS_CUSTOMER AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/../transitive-args.cmake")
+    file(REMOVE "${CMAKE_CURRENT_LIST_DIR}/../transitive-args.cmake")
+endif()
 
 if(KS_PLATFORM)
     file(APPEND "${CMAKE_CURRENT_LIST_DIR}/../transitive-args.cmake" "set(KS_PLATFORM \"${KS_PLATFORM}\" CACHE \"STRING\" \"Target build platform\")\n")
@@ -133,7 +136,7 @@ if(KS_PLATFORM)
     # -- MacOS
     elseif(KS_PLATFORM STREQUAL "macos")
         set(QT_PREFIX_PATH "clang_64")
-        prepare_qt_sdk()    
+        prepare_qt_sdk(CMAKE_PREFIX_PATH CMAKE_FIND_ROOT_PATH QT_QMAKE_EXECUTABLE)
     
     # -- IOS
     elseif(KS_PLATFORM STREQUAL "ios")
@@ -141,12 +144,12 @@ if(KS_PLATFORM)
         set(CMAKE_SYSTEM_NAME "iOS")
         set(CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO)
         set(CMAKE_IOS_INSTALL_COMBINED YES)
-        prepare_qt_sdk()
+        prepare_qt_sdk(CMAKE_PREFIX_PATH CMAKE_FIND_ROOT_PATH QT_QMAKE_EXECUTABLE)
     
     # -- Windows
     elseif(KS_PLATFORM STREQUAL "windows")
         set(QT_PREFIX_PATH "mingw32")
-        prepare_qt_sdk()    
+        prepare_qt_sdk(CMAKE_PREFIX_PATH CMAKE_FIND_ROOT_PATH QT_QMAKE_EXECUTABLE)
     endif()
 endif()
 

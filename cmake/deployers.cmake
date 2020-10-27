@@ -32,77 +32,121 @@
 #
 #   Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 
-if(VS_PLATFORM STREQUAL "android")
+if (KS_PLATFORM STREQUAL "android")
 
-  # Create "apk" and "aab" targets
+    # Create "apk" and "aab" targets
 
-  find_program(ANDROID_DEPLOY_QT androiddeployqt)
-  
-  if(DEFINED ENV{JAVA_HOME})
-    set(JAVA_HOME $ENV{JAVA_HOME} CACHE INTERNAL "Saved JAVA_HOME variable")
-  elseif(EXISTS "/etc/alternatives/java_sdk")
-    set(JAVA_HOME "/etc/alternatives/java_sdk" CACHE INTERNAL "Saved JAVA_HOME variable")
-  endif()
-  
-  if(JAVA_HOME)
-    set(android_deploy_qt_jdk "--jdk ${JAVA_HOME}")
-    message(STATUS "Java home: [${android_deploy_qt_jdk}]")
-  endif()
+    find_program(ANDROID_DEPLOY_QT androiddeployqt)
 
-  if (ANDROID_SDK_PLATFORM)
-    set(android_deploy_qt_platform "--android-platform ${ANDROID_SDK_PLATFORM}")
-    message(STATUS "Android deploy QT platform: [${ANDROID_SDK_PLATFORM}]")
-  endif()
-    
-  set(ANDROID_SDK_BUILD_TOOLS_VERSION "29.0.2")
+    if (DEFINED ENV{JAVA_HOME})
+        set(JAVA_HOME $ENV{JAVA_HOME} CACHE INTERNAL "Saved JAVA_HOME variable")
+    elseif (EXISTS "/etc/alternatives/java_sdk")
+        set(JAVA_HOME "/etc/alternatives/java_sdk" CACHE INTERNAL "Saved JAVA_HOME variable")
+    endif ()
 
-  if(VS_KEYCHAIN_PASSWORD)
-    set(ANDROID_DEPLOY_QT_PARAMS "--storepass '${VS_KEYCHAIN_PASSWORD}'")
-  endif()
-  
-  if(VS_KEY_PASSWORD)
-    set(ANDROID_DEPLOY_QT_PARAMS "${ANDROID_DEPLOY_QT_PARAMS} --keypass '${VS_KEY_PASSWORD}'")  
-  endif()
-  
-  add_custom_target(apk_release
-    COMMAND ${CMAKE_COMMAND} -E env JAVA_HOME=${JAVA_HOME} ${ANDROID_DEPLOY_QT}
-       --input "${CMAKE_BINARY_DIR}/android_deployment_settings.json"
-       --output "${CMAKE_BINARY_DIR}/android-build"
-       --apk "${CMAKE_BINARY_DIR}/android-build/${PROJECT_NAME}.apk"
-       ${android_deploy_qt_platform}
-       ${android_deploy_qt_jdk}
-       --gradle
-       --sign "${VS_KEYCHAIN}"
-       ${ANDROID_DEPLOY_QT_PARAMS}      
-       --no-gdbserver      
-    VERBATIM)
+    if (JAVA_HOME)
+        set(android_deploy_qt_jdk "--jdk ${JAVA_HOME}")
+        message(STATUS "Java home: [${android_deploy_qt_jdk}]")
+    endif ()
 
-  add_custom_target(aab_release
-    COMMAND ${CMAKE_COMMAND} -E env JAVA_HOME=${JAVA_HOME} ${ANDROID_DEPLOY_QT}
-      --input "${CMAKE_BINARY_DIR}/android_deployment_settings.json"
-      --output "${CMAKE_BINARY_DIR}/android-build"
-      --apk "${CMAKE_BINARY_DIR}/android-build/${PROJECT_NAME}.apk"
-      --aab
-      ${android_deploy_qt_platform}
-      ${android_deploy_qt_jdk}
-      --gradle
-      --sign "${VS_KEYCHAIN}"
-      ${ANDROID_DEPLOY_QT_PARAMS}      
-      --no-gdbserver      
-   VERBATIM)
+    if (ANDROID_SDK_PLATFORM)
+        set(android_deploy_qt_platform "--android-platform ${ANDROID_SDK_PLATFORM}")
+        message(STATUS "Android deploy QT platform: [${ANDROID_SDK_PLATFORM}]")
+    endif ()
 
-elseif(VS_PLATFORM STREQUAL "linux")
+    set(ANDROID_SDK_BUILD_TOOLS_VERSION "29.0.2")
 
-  find_program(LINUX_DEPLOY_QT cqtdeployer)
+    if (VS_KEYCHAIN_PASSWORD)
+        set(ANDROID_DEPLOY_QT_PARAMS "--storepass '${VS_KEYCHAIN_PASSWORD}'")
+    endif ()
 
-  add_custom_target(deploy
-    COMMAND ${LINUX_DEPLOY_QT}
-       -bin ${PROJECT_NAME} 
-       -qmlDir ${PROJECT_SOURCE_DIR}/src/qml 
-       -targetDir ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dist
-       -qmake ${QT_QMAKE_EXECUTABLE} clear
-    VERBATIM)
+    if (VS_KEY_PASSWORD)
+        set(ANDROID_DEPLOY_QT_PARAMS "${ANDROID_DEPLOY_QT_PARAMS} --keypass '${VS_KEY_PASSWORD}'")
+    endif ()
 
-elseif(VS_PLATFORM STREQUAL "macos")
+    add_custom_target(apk_release
+            COMMAND ${CMAKE_COMMAND} -E env JAVA_HOME=${JAVA_HOME} ${ANDROID_DEPLOY_QT}
+            --input "${CMAKE_BINARY_DIR}/android_deployment_settings.json"
+            --output "${CMAKE_BINARY_DIR}/android-build"
+            --apk "${CMAKE_BINARY_DIR}/android-build/${PROJECT_NAME}.apk"
+            ${android_deploy_qt_platform}
+            ${android_deploy_qt_jdk}
+            --gradle
+            --sign "${VS_KEYCHAIN}"
+            ${ANDROID_DEPLOY_QT_PARAMS}
+            --no-gdbserver
+            VERBATIM)
 
-endif()
+    add_custom_target(aab_release
+            COMMAND ${CMAKE_COMMAND} -E env JAVA_HOME=${JAVA_HOME} ${ANDROID_DEPLOY_QT}
+            --input "${CMAKE_BINARY_DIR}/android_deployment_settings.json"
+            --output "${CMAKE_BINARY_DIR}/android-build"
+            --apk "${CMAKE_BINARY_DIR}/android-build/${PROJECT_NAME}.apk"
+            --aab
+            ${android_deploy_qt_platform}
+            ${android_deploy_qt_jdk}
+            --gradle
+            --sign "${VS_KEYCHAIN}"
+            ${ANDROID_DEPLOY_QT_PARAMS}
+            --no-gdbserver
+            VERBATIM)
+
+elseif (KS_PLATFORM STREQUAL "linux")
+
+    find_program(LINUX_DEPLOY_QT cqtdeployer)
+
+    add_custom_target(deploy
+            COMMAND ${LINUX_DEPLOY_QT}
+            -bin ${PROJECT_NAME}
+            -qmlDir ${PROJECT_SOURCE_DIR}/qt/src/qml
+            -targetDir ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dist
+            -qmake ${QT_QMAKE_EXECUTABLE} clear
+            VERBATIM)
+
+elseif (KS_PLATFORM STREQUAL "macos")
+
+    find_program(MAC_DEPLOY_QT macdeployqt)
+    find_program(MAC_CODESIGN codesign)
+    find_program(MAC_APPDMG appdmg)
+
+    add_custom_target(dmg_release
+            COMMAND echo "Deploy MacOS bundle data..."
+            COMMAND ${MAC_DEPLOY_QT}
+            ${CMAKE_BINARY_DIR}/app/qt/${PROJECT_NAME}.app
+            -qmldir=${PROJECT_SOURCE_DIR}/qt/src/qml
+            -verbose=1
+            COMMAND echo "Signing bundle..."
+            COMMAND ${MAC_CODESIGN}
+            --display
+            --verbose=4
+            --force
+            --deep
+            --timestamp
+            --options runtime
+            -s "${VS_MACOS_IDENT}"
+            "${CMAKE_BINARY_DIR}/app/qt/${PROJECT_NAME}.app"
+            COMMAND echo "Create DMG..."
+            COMMAND ${MAC_APPDMG}
+            "${CMAKE_BINARY_DIR}/dmg.json"
+            "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dmg"
+            -v
+            COMMAND echo "Set DMG icon..."
+            COMMAND
+            ${PROJECT_SOURCE_DIR}/qt/platforms/macos/tools/seticon
+            ${PROJECT_SOURCE_DIR}/qt/platforms/macos/pkg_resources/${MACOSX_BUNDLE_ICON_FILE}
+            "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dmg"
+            VERBATIM)
+
+    add_custom_target(dmg_debug
+            COMMAND echo "Deploy MacOS bundle data (without signing)..."
+            COMMAND ${MAC_DEPLOY_QT}
+            ${CMAKE_BINARY_DIR}/app/qt/${PROJECT_NAME}.app
+            -qmldir=${PROJECT_SOURCE_DIR}/qt/src/qml
+            -verbose=1
+            -dmg
+            COMMAND
+            ${PROJECT_SOURCE_DIR}/qt/platforms/macos/tools/seticon
+            ${PROJECT_SOURCE_DIR}/qt/platforms/macos/pkg_resources/${MACOSX_BUNDLE_ICON_FILE}
+            "${CMAKE_BINARY_DIR}/app/qt/${PROJECT_NAME}.dmg"
+            VERBATIM)
+endif ()
