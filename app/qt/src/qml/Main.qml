@@ -52,7 +52,8 @@ ApplicationWindow {
     SwipeView {
         readonly property int devicePageIdx: 0
         readonly property int setupDevicePageIdx: 1
-        readonly property int settingsPageIdx: 2
+        readonly property int sharePageIdx: 2
+        readonly property int settingsPageIdx: 3
 
         property int backPageIdx: devicePageIdx
 
@@ -85,8 +86,6 @@ ApplicationWindow {
     }
 
     footer: TabBar {
-        readonly property int iconSz: 50
-
         id: tabBar
         visible: !aboutPage.visible
         currentIndex: swipeView.currentIndex
@@ -95,60 +94,24 @@ ApplicationWindow {
             color: "transparent"
         }
 
-        TabButton {
-            icon.color: Theme.tabImages
-            icon.source: "resources/icons/dark/control-devices.png"
-            icon.height: tabBar.iconSz
-            icon.width: tabBar.iconSz
-            background: Rectangle {
-                height: 2
-                width: tabBar.iconSz
-                anchors.horizontalCenter: parent.horizontalCenter
-                color: tabBar.currentIndex == 0 ? Theme.buttonPrimaryColor : Theme.buttonInvertedColor
-            }
-            onClicked: swipeShow(0)
+        MainTabButton {
+            idx: 0
+            image: "control-devices"
         }
 
-        TabButton {
-            icon.color: "transparent"
-            icon.source: "resources/icons/dark/setup-devices.png"
-            icon.height: tabBar.iconSz
-            icon.width: tabBar.iconSz
-            background: Rectangle {
-                height: 2
-                width: tabBar.iconSz
-                anchors.horizontalCenter: parent.horizontalCenter
-                color: tabBar.currentIndex == 1 ? Theme.buttonPrimaryColor : Theme.buttonInvertedColor
-            }
-            onClicked: swipeShow(1)
+        MainTabButton {
+            idx: 1
+            image: "setup-devices"
         }
 
-        TabButton {
-            icon.color: "transparent"
-            icon.source: "resources/icons/dark/share-access.png"
-            icon.height: tabBar.iconSz
-            icon.width: tabBar.iconSz
-            background: Rectangle {
-                height: 2
-                width: tabBar.iconSz
-                anchors.horizontalCenter: parent.horizontalCenter
-                color: tabBar.currentIndex == 2 ? Theme.buttonPrimaryColor : Theme.buttonInvertedColor
-            }
-            onClicked: swipeShow(2)
+        MainTabButton {
+            idx: 2
+            image: "share-access"
         }
 
-        TabButton {
-            icon.color: "transparent"
-            icon.source: "resources/icons/dark/settings.png"
-            icon.height: tabBar.iconSz
-            icon.width: tabBar.iconSz
-            background: Rectangle {
-                height: 2
-                width: tabBar.iconSz
-                anchors.horizontalCenter: parent.horizontalCenter
-                color: tabBar.currentIndex == 3 ? Theme.buttonPrimaryColor : Theme.buttonInvertedColor
-            }
-            onClicked: swipeShow(3)
+        MainTabButton {
+            idx: 3
+            image: "settings"
         }
     }
 
@@ -175,6 +138,10 @@ ApplicationWindow {
 
     function showDevicesSetup() {
         swipeShow(swipeView.setupDevicePageIdx)
+    }
+
+    function showShared() {
+        swipeShow(swipeView.sharePageIdx)
     }
 
     function showSettings() {

@@ -12,6 +12,9 @@ public:
     static void
     hideSplashScreen();
 
+    static void
+    requestPermissions();
+
     static KSQWiFiNetworks
     enumWifi();
 };

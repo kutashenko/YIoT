@@ -10,7 +10,12 @@
 void
 KSQAndroid::hideSplashScreen() {
     QtAndroid::hideSplashScreen();
+}
 
+
+/******************************************************************************/
+void
+KSQAndroid::requestPermissions() {
     const QVector<QString> permissions({"android.permission.ACCESS_FINE_LOCATION"});
 
     for (const QString &permission : permissions) {

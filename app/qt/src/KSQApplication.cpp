@@ -84,9 +84,10 @@ KSQApplication::run() {
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     engine.load(url);
 
-    QTimer::singleShot(100, []() {
+    QTimer::singleShot(200, []() {
 #ifdef Q_OS_ANDROID
         KSQAndroid::hideSplashScreen();
+        KSQAndroid::requestPermissions();
 #endif
     });
 

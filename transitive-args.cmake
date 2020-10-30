@@ -1,1 +1,1 @@
-set(KS_PLATFORM "macos" CACHE "STRING" "Target build platform")
+set(KS_PLATFORM "android" CACHE "STRING" "Target build platform")
