@@ -61,6 +61,8 @@ cmake-build-*
 
 # Generated
 app/qt/platform/macos/macos-info.plist
+build/*
+artifacts/*
 
 #
 #   Do not ignore
