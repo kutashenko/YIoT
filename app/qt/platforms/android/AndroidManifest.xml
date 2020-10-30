@@ -13,8 +13,8 @@
         android:label="YIoT"
         android:extractNativeLibs="true"
         android:theme="@style/AppTheme"
-        android:icon="@drawable/icon"
-        android:roundIcon="@drawable/icon_round">
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round">
         <activity
             android:configChanges="orientation|keyboardHidden"
             android:name="org.qtproject.qt5.android.bindings.QtActivity"
