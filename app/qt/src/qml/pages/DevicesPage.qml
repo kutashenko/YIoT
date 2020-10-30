@@ -59,7 +59,7 @@ Page {
 
                 Image {
                     id: icon
-                    source: "qrc:/qml/resources/icons/%1.png".arg(image)
+                    source: "qrc:/qml/resources/icons/dark/%1.png".arg(image)
                     Layout.maximumHeight: listDelegate.height * 0.7
                     Layout.maximumWidth: Layout.maximumHeight
                     Layout.leftMargin: 5

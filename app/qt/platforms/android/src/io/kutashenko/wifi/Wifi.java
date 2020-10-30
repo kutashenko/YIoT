@@ -1,23 +1,18 @@
 package io.kutashenko.wifi;
 
-import android.net.NetworkInfo.DetailedState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.app.Activity;
-import android.content.Context;
-import android.content.BroadcastReceiver;
-import android.util.Log;
-import org.qtproject.qt5.android.bindings.QtActivity;
-import android.net.ConnectivityManager;
-import android.content.IntentFilter;
-import android.annotation.SuppressLint;
-import android.app.ListActivity;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+
+import android.content.Context;
+import android.content.BroadcastReceiver;
+
+import android.app.Activity;
+import android.util.Log;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;

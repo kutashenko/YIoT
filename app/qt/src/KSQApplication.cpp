@@ -96,13 +96,13 @@ KSQApplication::run() {
 /******************************************************************************/
 QString
 KSQApplication::organizationDisplayName() const {
-    return tr("Keep it simple");
+    return tr("Your IoT");
 }
 
 /******************************************************************************/
 QString
 KSQApplication::applicationDisplayName() const {
-    return tr("Simple manufacture");
+    return tr("YIoT");
 }
 
 /******************************************************************************/

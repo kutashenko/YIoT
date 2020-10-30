@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <manifest
-    package="io.kutashenko.iot.android"
+    package="io.kutashenko.yiot.android"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionName="-- %%INSERT_VERSION_NAME%% --"
     android:versionCode="-- %%INSERT_VERSION_CODE%% --"
@@ -10,7 +10,7 @@
     <application
         android:hardwareAccelerated="true"
         android:name="org.qtproject.qt5.android.bindings.QtApplication"
-        android:label="Simple IoT"
+        android:label="YIoT"
         android:extractNativeLibs="true"
         android:theme="@style/AppTheme"
         android:icon="@drawable/icon"
@@ -18,7 +18,7 @@
         <activity
             android:configChanges="orientation|keyboardHidden"
             android:name="org.qtproject.qt5.android.bindings.QtActivity"
-            android:label="Simple IoT"
+            android:label="YIoT"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:launchMode="singleTop"

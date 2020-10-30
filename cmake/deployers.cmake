@@ -133,7 +133,7 @@ elseif (KS_PLATFORM STREQUAL "macos")
             COMMAND echo "Set DMG icon..."
             COMMAND
             ${PROJECT_SOURCE_DIR}/qt/platforms/macos/tools/seticon
-            ${PROJECT_SOURCE_DIR}/qt/platforms/macos/pkg_resources/${MACOSX_BUNDLE_ICON_FILE}
+            ${PROJECT_SOURCE_DIR}/qt/platforms/macos/pkg_resources/${MACOSX_DMG_ICON_FILE}
             "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.dmg"
             VERBATIM)
 
@@ -146,7 +146,7 @@ elseif (KS_PLATFORM STREQUAL "macos")
             -dmg
             COMMAND
             ${PROJECT_SOURCE_DIR}/qt/platforms/macos/tools/seticon
-            ${PROJECT_SOURCE_DIR}/qt/platforms/macos/pkg_resources/${MACOSX_BUNDLE_ICON_FILE}
+            ${PROJECT_SOURCE_DIR}/qt/platforms/macos/pkg_resources/${MACOSX_DMG_ICON_FILE}
             "${CMAKE_BINARY_DIR}/app/qt/${PROJECT_NAME}.dmg"
             VERBATIM)
 endif ()

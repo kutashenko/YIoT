@@ -24,11 +24,11 @@
 
 /******************************************************************************/
 KSQActiveDevicesEnumerator::KSQActiveDevicesEnumerator() {
-    m_devicesList["Lamp 1"] = KSActiveDeviceInfo("Bulb");
-    m_devicesList["Temp Sensor 123"] = KSActiveDeviceInfo("Temp");
-    m_devicesList["Front door lock 1"] = KSActiveDeviceInfo("Lock");
-    m_devicesList["Lamp Office"] = KSActiveDeviceInfo("Bulb");
-    m_devicesList["Test"] = KSActiveDeviceInfo("Bulb");
+    m_devicesList["Lamp"] = KSActiveDeviceInfo("bulb");
+    m_devicesList["Wash machine"] = KSActiveDeviceInfo("wash-machine");
+    m_devicesList["Car"] = KSActiveDeviceInfo("car");
+    m_devicesList["Door lock"] = KSActiveDeviceInfo("lock");
+    m_devicesList["PC"] = KSActiveDeviceInfo("pc");
 }
 
 /******************************************************************************/

@@ -15,18 +15,24 @@ Item {
     }
 
     // colors
-    readonly property color mainBackgroundColor : "#13191C"
-    readonly property color contactsBackgroundColor : "#202A2F"
-    readonly property color color : "#FF0000"
-    readonly property color buttonPrimaryColor: "#3CB371"
+    readonly property color mainBackgroundColor : "#0A0A0A"
+    readonly property color contactsBackgroundColor: "#222222"
+
+    readonly property color color : "#ffffff"
     readonly property color brandColor: "white"
-    readonly property color primaryTextColor: "#FFFFFF"
-    readonly property color secondaryTextColor: "#B0BEC5"
+    readonly property color primaryTextColor: "#ffffff"
+    readonly property color secondaryTextColor: "#e5e5e5"
     readonly property color labelColor: "#6F828C"
-    readonly property color menuBackgroundColor: "#7D929E"
-    readonly property color menuSeparatorColor: "#90A4AE"
     readonly property color inputBackgroundColor: "#37474F"
-    readonly property color chatBackgroundColor: "#263238"
+
+    readonly property color buttonPrimaryColor: "#ffffff"
+    readonly property color buttonPrimaryTextColor: "#0A0A0A"
+    readonly property color buttonInvertedColor: "#0A0A0A"
+    readonly property color buttonInvertedTextColor: "#ffffff"
+
+    readonly property color tabImages : "#ffffff"
+
+
 
     // sizes
     readonly property real formMaximumWidth: 260
@@ -34,8 +40,8 @@ Item {
     // icons
     readonly property url mainLogo: "../resources/icons/Logo-Big.png"
 
-    readonly property url btImg: "qrc:/qml/resources/icons/bluetooth.png"
-    readonly property url wifiImg: "qrc:/qml/resources/icons/WiFi.png"
+    readonly property url btImg: "qrc:/qml/resources/icons/dark/bt.png"
+    readonly property url wifiImg: "qrc:/qml/resources/icons/dark/wifi.png"
 
     // texts
     readonly property string mainLogoText: app.organizationDisplayName

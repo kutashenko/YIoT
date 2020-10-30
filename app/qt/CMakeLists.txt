@@ -40,8 +40,8 @@ set (KS_TARGET_NAME ble-provision-app)
 set(VS_ORGANIZATION_NAME "Kutashenko")
 set(VS_ORGANIZATION_DISPLAYNAME "Kutashenko")
 
-set(VS_APPLICATION_NAME "Simple IoT")
-set(VS_APPLICATION_DISPLAY_NAME "Simple IoT")
+set(VS_APPLICATION_NAME "YIoT")
+set(VS_APPLICATION_DISPLAY_NAME "YIoT")
 
 # ---------------------------------------------------------------------------
 #   Detecting build type
@@ -140,6 +140,7 @@ elseif(KS_PLATFORM STREQUAL "macos")
     set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
     set(MACOSX_BUNDLE_ICON_FILE MyIcon.icns)
+    set(MACOSX_DMG_ICON_FILE Installer.icns)
     set(MACOSX_BUNDLE_BACKGROUND_FILE "Background.png")
     set(MACOSX_DEPLOYMENT_TARGET 10.14)
     set(VS_BUNDLE_PREFIX "io.kutashenko")

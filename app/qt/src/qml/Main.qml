@@ -70,6 +70,10 @@ ApplicationWindow {
             id: devicesSetupPage
         }
 
+        SharePage {
+            id: sharePage
+        }
+
         SettingsPage {
             id: settingsPage
         }
@@ -81,24 +85,70 @@ ApplicationWindow {
     }
 
     footer: TabBar {
+        readonly property int iconSz: 50
+
         id: tabBar
         visible: !aboutPage.visible
         currentIndex: swipeView.currentIndex
 
+        background: Rectangle {
+            color: "transparent"
+        }
+
         TabButton {
-            icon.color: "transparent"
-            icon.source: "resources/icons/Device.png"
+            icon.color: Theme.tabImages
+            icon.source: "resources/icons/dark/control-devices.png"
+            icon.height: tabBar.iconSz
+            icon.width: tabBar.iconSz
+            background: Rectangle {
+                height: 2
+                width: tabBar.iconSz
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: tabBar.currentIndex == 0 ? Theme.buttonPrimaryColor : Theme.buttonInvertedColor
+            }
             onClicked: swipeShow(0)
         }
+
         TabButton {
             icon.color: "transparent"
-            icon.source: "resources/icons/DeviceSetup.png"
+            icon.source: "resources/icons/dark/setup-devices.png"
+            icon.height: tabBar.iconSz
+            icon.width: tabBar.iconSz
+            background: Rectangle {
+                height: 2
+                width: tabBar.iconSz
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: tabBar.currentIndex == 1 ? Theme.buttonPrimaryColor : Theme.buttonInvertedColor
+            }
             onClicked: swipeShow(1)
         }
+
         TabButton {
             icon.color: "transparent"
-            icon.source: "resources/icons/Settings.png"
+            icon.source: "resources/icons/dark/share-access.png"
+            icon.height: tabBar.iconSz
+            icon.width: tabBar.iconSz
+            background: Rectangle {
+                height: 2
+                width: tabBar.iconSz
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: tabBar.currentIndex == 2 ? Theme.buttonPrimaryColor : Theme.buttonInvertedColor
+            }
             onClicked: swipeShow(2)
+        }
+
+        TabButton {
+            icon.color: "transparent"
+            icon.source: "resources/icons/dark/settings.png"
+            icon.height: tabBar.iconSz
+            icon.width: tabBar.iconSz
+            background: Rectangle {
+                height: 2
+                width: tabBar.iconSz
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: tabBar.currentIndex == 3 ? Theme.buttonPrimaryColor : Theme.buttonInvertedColor
+            }
+            onClicked: swipeShow(3)
         }
     }
 
@@ -152,7 +202,7 @@ ApplicationWindow {
     }
 
     function showPopupError(message, action) {
-        showPopup(message, Theme.buttonPrimaryColor, Theme.primaryTextColor, true, true, action)
+        showPopup(message, Theme.buttonPrimaryColor, Theme.buttonPrimaryTextColor, true, true, action)
     }
 
     function showPopupInform(message) {

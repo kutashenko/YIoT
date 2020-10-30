@@ -4,7 +4,6 @@
         <file>qml/resources/Settings.png</file>
         <file>qml/resources/icons/Logo-Big@3x.png</file>
         <file>qml/resources/icons/Plus.png</file>
-        <file>qml/resources/icons/bluetooth.png</file>
         <file>qml/resources/icons/Lock@2x.png</file>
         <file>qml/resources/icons/Search@2x.png</file>
         <file>qml/resources/icons/Arrow-Right@2x.png</file>
@@ -30,12 +29,30 @@
         <file>qml/resources/icons/More.png</file>
         <file>qml/resources/icons/Close@2x.png</file>
         <file>qml/resources/icons/Close.png</file>
-        <file>qml/resources/icons/WiFi.png</file>
         <file>qml/resources/icons/Bulb.png</file>
         <file>qml/resources/icons/Device.png</file>
         <file>qml/resources/icons/DeviceSetup.png</file>
         <file>qml/resources/icons/Settings.png</file>
         <file>qml/resources/icons/Temp.png</file>
+
+        <file>qml/resources/icons/dark/bt.png</file>
+        <file>qml/resources/icons/dark/wifi.png</file>
+        <file>qml/resources/icons/dark/control-devices.png</file>
+        <file>qml/resources/icons/dark/setup-devices.png</file>
+        <file>qml/resources/icons/dark/share-access.png</file>
+        <file>qml/resources/icons/dark/settings.png</file>
+        <file>qml/resources/icons/dark/bulb.png</file>
+        <file>qml/resources/icons/dark/lock.png</file>
+        <file>qml/resources/icons/dark/events.png</file>
+        <file>qml/resources/icons/dark/car.png</file>
+        <file>qml/resources/icons/dark/pc.png</file>
+        <file>qml/resources/icons/dark/creds.png</file>
+        <file>qml/resources/icons/dark/secure-enclave.png</file>
+        <file>qml/resources/icons/dark/wash-machine.png</file>
+
+        <file>qml/resources/icons/test-qr.png</file>
+
+
 
         <file>qml/resources/fonts/Roboto-Medium.ttf</file>
         <file>qml/resources/fonts/Roboto-Regular.ttf</file>
@@ -76,6 +93,7 @@
         <file>qml/pages/DevicesPage.qml</file>
         <file>qml/pages/DevicesSetupPage.qml</file>
         <file>qml/pages/QRReaderPage.qml</file>
+        <file>qml/pages/SharePage.qml</file>
         <file>qml/base/Platform.qml</file>
     </qresource>
 </RCC>

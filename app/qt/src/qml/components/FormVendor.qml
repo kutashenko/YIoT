@@ -42,7 +42,7 @@ Column {
 
         font.pointSize: UiHelper.fixFontSz(13)
         font.letterSpacing: 0.3
-        color: Theme.menuSeparatorColor
+        color: Theme.brandColor
         anchors.horizontalCenter: parent.horizontalCenter
     }
 }

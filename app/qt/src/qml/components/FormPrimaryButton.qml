@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.12
 import "../theme"
 
 Button {
+    property bool inverted: false
+
     id: button
 
     Layout.fillWidth: true
@@ -19,7 +21,7 @@ Button {
         font.pointSize: UiHelper.fixFontSz(15)
         font.letterSpacing: 0
         opacity: enabled ? 1.0 : 0.3
-        color: Theme.primaryTextColor
+        color: inverted ? Theme.buttonInvertedTextColor : Theme.buttonPrimaryTextColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
@@ -28,7 +30,7 @@ Button {
     background: Rectangle {
         implicitWidth: 100
         implicitHeight: 40
-        color: Theme.buttonPrimaryColor
+        color: inverted ? Theme.buttonInvertedColor : Theme.buttonPrimaryColor
         opacity: button.down ? 0.7 : 1
         radius: height/2
     }

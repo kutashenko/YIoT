@@ -48,7 +48,7 @@ Page {
         model: ListModel {
             ListElement {
                 name: qsTr("WiFi credentials")
-                image: "Key"
+                image: "creds"
                 property var action: function() {
                     showWiFiSettings()
                 }
@@ -56,7 +56,7 @@ Page {
 
             ListElement {
                 name: qsTr("Event triggers")
-                image: "Lock"
+                image: "events"
                 property var action: function() {
                     showEventsSettings()
                 }
@@ -76,7 +76,7 @@ Page {
 
                 Image {
                     id: icon
-                    source: "qrc:/qml/resources/icons/%1.png".arg(image)
+                    source: "qrc:/qml/resources/icons/dark/%1.png".arg(image)
                     Layout.maximumHeight: listDelegate.height * 0.7
                     Layout.maximumWidth: Layout.maximumHeight
                     fillMode: Image.PreserveAspectFit
