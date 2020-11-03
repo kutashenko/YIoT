@@ -34,16 +34,14 @@ project(ble-provision VERSION ${KS_TARGET_VERSION} LANGUAGES C CXX)
 # Include Cmake helpers
 # ---------------------------------------------------------------------------
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-
-include(vsplatforms)
-include(varpadding)
-
-# ---------------------------------------------------------------------------
-#	CMake Helpers
-# ---------------------------------------------------------------------------
 set (IOTKIT_PATH "${CMAKE_CURRENT_LIST_DIR}/ext/iotkit")
 set (CMAKE_MODULE_PATH "${IOTKIT_PATH}/sdk/cmake" ${CMAKE_MODULE_PATH})
+
+include(TransitiveToolchainArgs)
+include(vsplatforms)
+include(varpadding)
 include(helpers)
+include(clangformat)
 
 # ---------------------------------------------------------------------------
 #   Detecting platform if KS_PLATFORM not specified
