@@ -23,8 +23,14 @@
 
 #include <QtCore>
 #include <QGuiApplication>
+
+#include <KSQActiveDevicesEnumerator.h>
+#include <KSQWiFiEnumerator.h>
+
+#include <virgil/iot/qt/netif/VSQNetifBLEEnumerator.h>
 #include <virgil/iot/qt/VSQIoTKit.h>
 #include <virgil/iot/qt/netif/VSQUdpBroadcast.h>
+#include <virgil/iot/qt/netif/VSQNetifBLE.h>
 
 class KSQApplication : public QObject {
     Q_OBJECT
@@ -42,6 +48,15 @@ public:
 
     QString
     applicationDisplayName() const;
+
+    Q_INVOKABLE bool
+    deviceConfigureWiFi(QString deviceName);
+
+private:
+    KSQActiveDevicesEnumerator m_activeDevicesEnumerator;
+    VSQNetifBLEEnumerator m_bleEnumerator;
+    KSQWiFiEnumerator m_wifiEnumerator;
+    QSharedPointer<VSQNetifBLE> m_netifBLE;
 };
 
 #endif // PROVISION_QT_APP_H

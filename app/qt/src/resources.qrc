@@ -37,6 +37,7 @@
 
         <file>qml/resources/icons/dark/bt.png</file>
         <file>qml/resources/icons/dark/wifi.png</file>
+        <file>qml/resources/icons/dark/wifi-dimmed.png</file>
         <file>qml/resources/icons/dark/control-devices.png</file>
         <file>qml/resources/icons/dark/setup-devices.png</file>
         <file>qml/resources/icons/dark/share-access.png</file>

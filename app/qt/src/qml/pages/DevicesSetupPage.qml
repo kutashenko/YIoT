@@ -106,10 +106,11 @@ Page {
 
                     ImageButton {
                         id: btnProvision
-                        image: "Plus"
+                        image: "dark/wifi-dimmed"
 
                         onClicked: {
-                            showPopupError(qsTr("Need to set WiFi credentials"), showSettingsForWiFi)
+//                            showPopupError(qsTr("Need to set WiFi credentials"), showSettingsForWiFi)
+                              app.deviceConfigureWiFi(name)
                         }
                     }
 
