@@ -88,10 +88,11 @@ ApplicationWindow {
     footer: TabBar {
         id: tabBar
         visible: !aboutPage.visible
+        z: 5
         currentIndex: swipeView.currentIndex
 
         background: Rectangle {
-            color: "transparent"
+            color: Theme.mainBackgroundColor
         }
 
         MainTabButton {
@@ -113,6 +114,10 @@ ApplicationWindow {
             idx: 3
             image: "settings"
         }
+    }
+
+    Component.onCompleted: {
+        showDevicesSetup()
     }
 
     function showLeftMenu() {
