@@ -89,7 +89,8 @@ Page {
     }
 
     function showWiFiPassword(ssid) {
-        wifiPassSettingsPage.setTitle(ssid)
+        console.log("showWiFiPassword: ", ssid)
+        wifiPassSettingsPage.prepare(ssid)
         swipeSettingsShow(settingsSwipeView.wifiPassIdx)
     }
 

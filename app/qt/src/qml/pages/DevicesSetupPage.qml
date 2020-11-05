@@ -48,7 +48,7 @@ Page {
 
         delegate: Rectangle {
             id: base
-            width: parent.width
+            width: list.width
             height: 45
             color: "transparent"
 
@@ -109,8 +109,12 @@ Page {
                         image: "dark/wifi-dimmed"
 
                         onClicked: {
-//                            showPopupError(qsTr("Need to set WiFi credentials"), showSettingsForWiFi)
-                              app.deviceConfigureWiFi(name)
+                            var cred = settings.getWiFiCredDefault()
+                            if (cred.ready) {
+                                bleController.configureWiFi(name, cred.ssid, cred.pass)
+                            } else {
+                                showPopupError(qsTr("Need to set WiFi credentials"), showSettingsForWiFi)
+                            }
                         }
                     }
 
@@ -139,7 +143,7 @@ Page {
 
                 onEntered: {
                     list.currentIndex = index
-                    base.color = Theme.contactsBackgroundColor
+                    base.color = Theme.contrastBackgroundColor
                 }
 
                 onExited: {
@@ -149,7 +153,7 @@ Page {
         }
 
         Component.onCompleted: {
-            bleEnum.startDiscovery()
         }
+
     }
 }

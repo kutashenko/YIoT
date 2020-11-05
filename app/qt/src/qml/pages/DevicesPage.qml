@@ -129,7 +129,7 @@ Page {
 
                 onEntered: {
                     list.currentIndex = index
-                    base.color = Theme.contactsBackgroundColor
+                    base.color = Theme.contrastBackgroundColor
                 }
 
                 onExited: {
@@ -139,7 +139,7 @@ Page {
         }
 
         Component.onCompleted: {
-            bleEnum.startDiscovery()
+
         }
     }
 }

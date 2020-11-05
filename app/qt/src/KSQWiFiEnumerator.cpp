@@ -41,6 +41,10 @@ KSQWiFiEnumerator::KSQWiFiEnumerator() {
 #else
     connect(&m_ncm, &QNetworkConfigurationManager::updateCompleted, this, &KSQWiFiEnumerator::onFindWiFi);
 #endif
+
+    QTimer::singleShot(200, [this]() {
+        start();
+    });
 }
 
 /******************************************************************************/
@@ -94,26 +98,33 @@ void
 KSQWiFiEnumerator::onFindWiFi() {
     std::thread t([this]() {
         auto list = wifi_enum();
-        const bool isSame = list.keys() == m_wifiList.keys();
-        m_wifiList = list;
-
-        QVector<int> roles;
-        if (isSame) {
-            roles << RSSI;
-        } else {
-            beginResetModel();
-            endResetModel();
-        }
-
-        auto topLeft = createIndex(0, 0);
-        auto bottomRight = createIndex(m_wifiList.count(), 0);
-        emit dataChanged(topLeft, bottomRight, roles);
-
-        qDebug() << m_wifiList.keys();
-        emit fireWiFiListUpdated(m_wifiList.keys());
+        QMetaObject::invokeMethod(this, "updateList",
+                                  Qt::BlockingQueuedConnection,
+                                  Q_ARG(KSQWiFiNetworks&, list));
     });
 
     t.detach();
+}
+
+/******************************************************************************/
+void
+KSQWiFiEnumerator::updateList(KSQWiFiNetworks& list) {
+    const bool isSame = list.keys() == m_wifiList.keys();
+    m_wifiList = list;
+
+    QVector<int> roles;
+    if (isSame) {
+        roles << RSSI;
+    } else {
+        beginResetModel();
+        endResetModel();
+    }
+
+    auto topLeft = createIndex(0, 0);
+    auto bottomRight = createIndex(m_wifiList.count(), 0);
+    emit dataChanged(topLeft, bottomRight, roles);
+
+    qDebug() << m_wifiList.keys();
 }
 
 /******************************************************************************/
@@ -153,16 +164,6 @@ KSQWiFiEnumerator::roleNames() const {
     roles[Name] = "name";
     roles[RSSI] = "rssi";
     return roles;
-}
-
-/******************************************************************************/
-QString
-KSQWiFiEnumerator::get(int index) const {
-    if (index >= 0 && index < m_wifiList.count()) {
-        return m_wifiList.keys().at(index);
-    }
-
-    return "";
 }
 
 /******************************************************************************/

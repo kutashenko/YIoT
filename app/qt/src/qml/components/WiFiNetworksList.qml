@@ -25,7 +25,7 @@ import QtQuick.Controls 2.12
 import "../theme"
 
 ListView {
-    id: list
+    id: wifiList
     anchors.fill: parent
 
     spacing: 1
@@ -33,9 +33,9 @@ ListView {
 
     delegate: Rectangle {
         id: base
-        width: parent.width
+        width: wifiList.width
         height: 45
-        color: (list.currentIndex == index) ? Theme.contactsBackgroundColor : "transparent"
+        color: colorIfActive(name)
 
         RowLayout {
             id: listDelegate
@@ -80,14 +80,28 @@ ListView {
         MouseArea {
             enabled: true
             anchors.fill: parent
+            hoverEnabled: true
             onClicked: {
-                list.currentIndex = index
-                showWiFiPassword(wifiEnum.get(index))
+                wifiList.currentIndex = index
+                showWiFiPassword(name)
+            }
+
+            onEntered: {
+                wifiList.currentIndex = index
+                base.color = Theme.contrastBackgroundColor
+            }
+
+            onExited: {
+                base.color = colorIfActive(name)
             }
         }
     }
 
     Component.onCompleted: {
-        wifiEnum.start()
+    }
+
+    function colorIfActive(name) {
+        var isActive = settings.defaultWiFi === name
+        return isActive ? Theme.contrastBackgroundColor : "transparent"
     }
 }

@@ -83,6 +83,7 @@
         <file>qml/components/AppStatus.qml</file>
         <file>qml/components/FormPrimaryButton.qml</file>
         <file>qml/components/MainTabButton.qml</file>
+        <file>qml/components/SettingsStorage.qml</file>
 
         <file>qml/pages/LeftSideMenu.qml</file>
         <file>qml/pages/settings/SettingsMenuPage.qml</file>

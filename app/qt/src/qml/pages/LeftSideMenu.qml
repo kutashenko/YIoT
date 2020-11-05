@@ -33,7 +33,7 @@ Drawer {
     clip: true
 
     background: Rectangle {
-        color: Theme.contactsBackgroundColor
+        color: Theme.contrastBackgroundColor
     }
 
     ColumnLayout {

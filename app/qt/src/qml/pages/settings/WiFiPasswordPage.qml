@@ -74,13 +74,29 @@ Page {
             Layout.bottomMargin: 10
             text: qsTr("Apply password")
             onClicked: {
-                showDevicesSetup()
+                useWiFiNetwork(ssid, password.text)
             }
         }
     }
 
-    function setTitle(aSsid) {
+    function prepare(aSsid) {
         ssid = aSsid;
+
+        // Set page title
         header.title = qsTr("WiFi password for ") + ssid
+
+        // Load data from KeyChain
+        settings.loadWiFiCred(ssid, function (s, p) {
+            password.text = p
+            console.log("Password is: " + p)
+        })
+    }
+
+    function useWiFiNetwork(ssid, pass) {
+        // Set default WiFi Network in settings
+        settings.setWiFiCredDefault(ssid, pass)
+
+        // Switch to devices page
+        showDevicesSetup()
     }
 }

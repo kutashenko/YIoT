@@ -16,7 +16,7 @@ Item {
 
     // colors
     readonly property color mainBackgroundColor : "#0A0A0A"
-    readonly property color contactsBackgroundColor: "#222222"
+    readonly property color contrastBackgroundColor: "#222222"
 
     readonly property color color : "#ffffff"
     readonly property color brandColor: "white"

@@ -35,7 +35,7 @@ include(FetchContent)
 # ---------------------------------------------------------------------------
 #   Poject Name
 # ---------------------------------------------------------------------------
-set (KS_TARGET_NAME ble-provision-app)
+set (KS_TARGET_NAME yiot)
 
 set(VS_ORGANIZATION_NAME "Kutashenko")
 set(VS_ORGANIZATION_DISPLAYNAME "Kutashenko")
@@ -194,6 +194,14 @@ endif()
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cmake/iotkit-qt)
 
 # ---------------------------------------------------------------------------
+#   Qt Keychain
+# ---------------------------------------------------------------------------
+set(BUILD_TEST_APPLICATION CACHE BOOL OFF FORCE)
+set(BUILD_TRANSLATIONS CACHE BOOL OFF FORCE)
+set(QTKEYCHAIN_STATIC CACHE BOOL ON FORCE)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../ext/qtkeychain qtkeychain)
+
+# ---------------------------------------------------------------------------
 #	Header/Source files
 # ---------------------------------------------------------------------------
 target_sources(${KS_TARGET_NAME}
@@ -204,6 +212,7 @@ target_sources(${KS_TARGET_NAME}
         ${CMAKE_CURRENT_LIST_DIR}/include/ui/VSQUiHelper.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQActiveDevicesEnumerator.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQWiFiEnumerator.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/KSQBLEController.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSActiveDevice.h
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
@@ -214,6 +223,7 @@ target_sources(${KS_TARGET_NAME}
         ${CMAKE_CURRENT_LIST_DIR}/src/ui/VSQUiHelper.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQActiveDevicesEnumerator.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQWiFiEnumerator.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/KSQBLEController.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-hal.cpp
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/src/macos/KSMacWiFi.mm>
@@ -266,6 +276,9 @@ target_link_libraries(${KS_TARGET_NAME}
 
         #   IoTKit Qt
         iotkit-qt-lib
+
+        #   Qt keychain
+        qtkeychain
 
         #   Windows
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:wlanapi>

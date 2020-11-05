@@ -41,14 +41,16 @@ ApplicationWindow {
         color: Theme.mainBackgroundColor
     }
 
-    LeftSideMenu {
-        id: leftSideMenu
-    }
+    // Left-side menu
+    LeftSideMenu { id: leftSideMenu }
 
-    Popup {
-        id: inform
-    }
+    // Information popup
+    Popup { id: inform }
 
+    // About application page
+    AboutPage { id: aboutPage; visible: false }
+
+    // Main pages
     SwipeView {
         readonly property int devicePageIdx: 0
         readonly property int setupDevicePageIdx: 1
@@ -63,28 +65,13 @@ ApplicationWindow {
         interactive: false
         currentIndex: devicePageIdx
 
-        DevicesPage {
-            id: devicesPage
-        }
-
-        DevicesSetupPage {
-            id: devicesSetupPage
-        }
-
-        SharePage {
-            id: sharePage
-        }
-
-        SettingsPage {
-            id: settingsPage
-        }
+        DevicesPage { id: devicesPage }
+        DevicesSetupPage { id: devicesSetupPage }
+        SharePage { id: sharePage }
+        SettingsPage { id: settingsPage }
     }
 
-    AboutPage {
-        id: aboutPage
-        visible: false
-    }
-
+    // Manual switcher of main pages
     footer: TabBar {
         id: tabBar
         visible: !aboutPage.visible
@@ -95,26 +82,14 @@ ApplicationWindow {
             color: Theme.mainBackgroundColor
         }
 
-        MainTabButton {
-            idx: 0
-            image: "control-devices"
-        }
-
-        MainTabButton {
-            idx: 1
-            image: "setup-devices"
-        }
-
-        MainTabButton {
-            idx: 2
-            image: "share-access"
-        }
-
-        MainTabButton {
-            idx: 3
-            image: "settings"
-        }
+        MainTabButton { idx: 0; image: "control-devices" }
+        MainTabButton { idx: 1; image: "setup-devices" }
+        MainTabButton { idx: 2; image: "share-access" }
+        MainTabButton { idx: 3; image: "settings" }
     }
+
+    // Settings container
+    SettingsStorage { id: settings }
 
     Component.onCompleted: {
         showDevicesSetup()

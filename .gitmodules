@@ -4,3 +4,6 @@
 [submodule "ext/bluez-dbus"]
 	path = ext/bluez-dbus
 	url = https://github.com/kutashenko/bluez-dbus-cpp.git
+[submodule "ext/qtkeychain"]
+	path = ext/qtkeychain
+	url = https://github.com/kutashenko/qtkeychain.git

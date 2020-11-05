@@ -120,7 +120,7 @@ Page {
                 }
 
                 onEntered: {
-                    base.color = Theme.contactsBackgroundColor
+                    base.color = Theme.contrastBackgroundColor
                 }
 
                 onExited: {

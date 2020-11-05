@@ -48,24 +48,22 @@ public:
     QHash<int, QByteArray>
     roleNames() const override;
 
-    Q_INVOKABLE
-    QString
-    get(int index) const;
-
 public slots:
+
+signals:
+
+private slots:
     void
     start();
 
     void
     stop();
 
-signals:
-    void
-    fireWiFiListUpdated(QStringList list);
-
-private slots:
     void
     onFindWiFi();
+
+    void
+    updateList(KSQWiFiNetworks& list);
 
 private:
     KSQWiFiNetworks m_wifiList;

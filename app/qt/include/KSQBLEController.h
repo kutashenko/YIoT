@@ -15,43 +15,48 @@
 //
 //
 //
-//   30 July 2020
+//   04 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_APP_H
-#define PROVISION_QT_APP_H
+#ifndef PROVISION_QT_BLE_CONTROLLER_H
+#define PROVISION_QT_BLE_CONTROLLER_H
 
 #include <QtCore>
-#include <QGuiApplication>
 
-#include <KSQActiveDevicesEnumerator.h>
-#include <KSQWiFiEnumerator.h>
-#include <KSQBLEController.h>
+#include <virgil/iot/qt/netif/VSQNetifBLEEnumerator.h>
+#include <virgil/iot/qt/netif/VSQNetifBLE.h>
 
-#include <virgil/iot/qt/VSQIoTKit.h>
-#include <virgil/iot/qt/netif/VSQUdpBroadcast.h>
-
-class KSQApplication : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QString organizationDisplayName READ organizationDisplayName CONSTANT)
-    Q_PROPERTY(QString applicationDisplayName READ applicationDisplayName CONSTANT)
+class KSQBLEController : public QObject {
+Q_OBJECT
 public:
-    KSQApplication() = default;
-    virtual ~KSQApplication() = default;
 
-    int
-    run();
+    KSQBLEController();
+    virtual ~KSQBLEController();
 
-    QString
-    organizationDisplayName() const;
+    QSharedPointer<VSQNetifBLE>
+    netif();
 
-    QString
-    applicationDisplayName() const;
+    VSQNetifBLEEnumerator *
+    model();
+
+public slots:
+
+    Q_INVOKABLE bool
+    configureWiFi(const QString & deviceName, const QString & ssid, const QString & password);
+
+private slots:
+    void
+    onConnected(bool);
+
+    void
+    onConfigurationDone(bool);
 
 private:
-    KSQActiveDevicesEnumerator m_activeDevicesEnumerator;
-    KSQWiFiEnumerator m_wifiEnumerator;
-    KSQBLEController m_bleController;
+    VSQNetifBLEEnumerator m_bleEnumerator;
+    QSharedPointer<VSQNetifBLE> m_netifBLE;
+
+    bool m_needWiFiConfig;
+
 };
 
-#endif // PROVISION_QT_APP_H
+#endif // PROVISION_QT_BLE_CONTROLLER_H
