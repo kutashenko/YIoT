@@ -10,6 +10,7 @@ ToolBar {
     property bool showBackButton: true
     property bool showMenuButton: false
     property bool showSettingsButton: false
+    property bool hideButtons: false
     property alias showSeporator: seporator.visible
     property alias backgroundColor: background.color
     property var backAction: function() { back() }
@@ -28,7 +29,7 @@ ToolBar {
             anchors.rightMargin: 20
 
             height: 1
-            color: Theme.mainBackgroundColor
+            color: Theme.contrastBackgroundColor
             anchors.bottom: parent.bottom
         }
     }
@@ -41,7 +42,7 @@ ToolBar {
 
             opacity: showBackButton ? 1 : 0
             enabled: showBackButton
-            visible: !showMenuButton
+            visible: !hideButtons && !showMenuButton
 
             id: backButton
             image: "Arrow-Left"
@@ -57,7 +58,7 @@ ToolBar {
 
             opacity: showMenuButton ? 1 : 0
             enabled: showMenuButton
-            visible: !showBackButton
+            visible: !hideButtons && !showBackButton
 
             Layout.leftMargin: 12
 
@@ -85,6 +86,7 @@ ToolBar {
              // TODO(fpohtmeh): try with visibility
             opacity: showSettingsButton ? 1 : 0
             enabled: showSettingsButton
+            visible: !hideButtons
             onClicked: {
                 settingsAction()
             }

@@ -33,6 +33,16 @@ KSQBLEController::KSQBLEController() {
             this,
             &KSQBLEController::onConnected);
 
+    connect(m_netifBLE.data(),
+            &VSQNetifBLE::fireDeviceDisconnected,
+            this,
+            &KSQBLEController::onDisconnected);
+
+    connect(m_netifBLE.data(),
+            &VSQNetifBLE::fireDeviceError,
+            this,
+            &KSQBLEController::onDeviceError);
+
     connect(&VSQIoTKitFacade::instance().snapCfgClient(),
             &VSQSnapCfgClient::fireConfigurationDone,
             this,
@@ -58,22 +68,47 @@ KSQBLEController::model() {
 
 /******************************************************************************/
 void
-KSQBLEController::onConnected(bool) {
+KSQBLEController::onConnected(bool success) {
+    if (!success) {
+        emit fireError(tr("Connection error"));
+        return;
+    }
+
+    emit fireConnected();
+
     if (m_needWiFiConfig) {
         m_needWiFiConfig = false;
         VSQIoTKitFacade::instance().snapCfgClient().onConfigureDevices();
+        emit fireDataSent();
     }
+}
+
+/******************************************************************************/
+void
+KSQBLEController::onDisconnected() {
+    emit fireDisconnected();
+}
+
+/******************************************************************************/
+void
+KSQBLEController::onDeviceError() {
+    emit fireError(tr("unknown"));
 }
 
 /******************************************************************************/
 void
 KSQBLEController::onConfigurationDone(bool) {
     m_netifBLE->close();
+    emit fireDataReceived();
 }
 
 /******************************************************************************/
 bool
 KSQBLEController::configureWiFi(const QString & deviceName, const QString & ssid, const QString & password) {
+    qDebug() << "deviceName: " << deviceName;
+    qDebug() << "ssid      : " << ssid;
+    qDebug() << "password  : " << password;
+
     auto ble = m_bleEnumerator.devInfo(deviceName);
     if (!ble.isValid()) {
         return false;

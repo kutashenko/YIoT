@@ -39,6 +39,13 @@ public:
     VSQNetifBLEEnumerator *
     model();
 
+signals:
+    void fireConnected();
+    void fireDisconnected();
+    void fireError(QString text);
+    void fireDataSent();
+    void fireDataReceived();
+
 public slots:
 
     Q_INVOKABLE bool
@@ -47,6 +54,12 @@ public slots:
 private slots:
     void
     onConnected(bool);
+
+    void
+    onDisconnected();
+
+    void
+    onDeviceError();
 
     void
     onConfigurationDone(bool);

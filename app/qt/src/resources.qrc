@@ -50,6 +50,7 @@
         <file>qml/resources/icons/dark/creds.png</file>
         <file>qml/resources/icons/dark/secure-enclave.png</file>
         <file>qml/resources/icons/dark/wash-machine.png</file>
+        <file>qml/resources/icons/dark/upload.gif</file>
 
         <file>qml/resources/icons/test-qr.png</file>
 
@@ -97,6 +98,7 @@
         <file>qml/pages/DevicesSetupPage.qml</file>
         <file>qml/pages/QRReaderPage.qml</file>
         <file>qml/pages/SharePage.qml</file>
+        <file>qml/pages/CredLoadPage.qml</file>
 
         <file>qml/theme/Theme.qml</file>
 

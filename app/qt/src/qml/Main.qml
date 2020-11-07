@@ -42,13 +42,16 @@ ApplicationWindow {
     }
 
     // Left-side menu
-    LeftSideMenu { id: leftSideMenu }
+    LeftSideMenu { id: leftSideMenu; enabled: !credLoad.visible }
 
     // Information popup
     Popup { id: inform }
 
     // About application page
     AboutPage { id: aboutPage; visible: false }
+
+    // Page with Credentials upload information
+    CredLoadPage { id: credLoad; visible: !aboutPage.visible && !swipeView.visible}
 
     // Main pages
     SwipeView {
@@ -61,7 +64,7 @@ ApplicationWindow {
 
         id: swipeView
         anchors.fill: parent
-        visible: !aboutPage.visible
+        visible: !aboutPage.visible && !credLoad.visible
         interactive: false
         currentIndex: devicePageIdx
 
@@ -74,7 +77,7 @@ ApplicationWindow {
     // Manual switcher of main pages
     footer: TabBar {
         id: tabBar
-        visible: !aboutPage.visible
+        visible: !aboutPage.visible && !credLoad.visible
         z: 5
         currentIndex: swipeView.currentIndex
 
@@ -102,6 +105,14 @@ ApplicationWindow {
     function showAbout() {
         aboutPage.visible = true
     }
+
+    function showCredLoad() {
+        credLoad.visible = true
+    }
+
+    function hideCredLoad() {
+            credLoad.visible = false
+        }
 
     function swipeShow(idx) {
         aboutPage.visible = false

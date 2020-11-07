@@ -22,6 +22,8 @@ Item {
     readonly property color brandColor: "white"
     readonly property color primaryTextColor: "#ffffff"
     readonly property color secondaryTextColor: "#e5e5e5"
+    readonly property color errorTextColor: "#f5425d"
+    readonly property color succesTextColor: "#3cde6a"
     readonly property color labelColor: "#6F828C"
     readonly property color inputBackgroundColor: "#37474F"
 

@@ -108,14 +108,7 @@ Page {
                         id: btnProvision
                         image: "dark/wifi-dimmed"
 
-                        onClicked: {
-                            var cred = settings.getWiFiCredDefault()
-                            if (cred.ready) {
-                                bleController.configureWiFi(name, cred.ssid, cred.pass)
-                            } else {
-                                showPopupError(qsTr("Need to set WiFi credentials"), showSettingsForWiFi)
-                            }
-                        }
+                        onClicked: { startProvision(name) }
                     }
 
                     states: [
@@ -155,5 +148,20 @@ Page {
         Component.onCompleted: {
         }
 
+    }
+
+    function startProvision(name) {
+        var cred = settings.getWiFiCredDefault()
+        if (cred.ready) {
+            showCredLoad()
+            bleController.configureWiFi(name, cred.ssid, cred.pass)
+        } else {
+            showPopupError(qsTr("Need to set WiFi credentials"), showSettingsForWiFi)
+        }
+    }
+
+    function terminateProvision() {
+        hideCredLoad()
+        showDevicesSetup()
     }
 }
