@@ -15,47 +15,43 @@
 //
 //
 //
-//   30 July 2020
+//   04 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_APP_H
-#define PROVISION_QT_APP_H
+#ifndef PROVISION_QT_LAMP_MONO_CONTROLLER_H
+#define PROVISION_QT_LAMP_MONO_CONTROLLER_H
 
 #include <QtCore>
-#include <QGuiApplication>
 
-#include <KSQActiveDevicesEnumerator.h>
-#include <KSQWiFiEnumerator.h>
-#include <KSQBLEController.h>
+#include <virgil/iot/qt/netif/VSQNetifBLEEnumerator.h>
+#include <virgil/iot/qt/netif/VSQNetifBLE.h>
 
-#include <devices/lamp/mono/KSQLampMonoController.h>
+class KSQLampMonoController : public QObject {
+Q_OBJECT
+Q_PROPERTY(QString state READ state WRITE setState NOTIFY fireStateChanged)
 
-#include <virgil/iot/qt/VSQIoTKit.h>
-#include <virgil/iot/qt/netif/VSQUdpBroadcast.h>
-
-class KSQApplication : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QString organizationDisplayName READ organizationDisplayName CONSTANT)
-    Q_PROPERTY(QString applicationDisplayName READ applicationDisplayName CONSTANT)
 public:
-    KSQApplication() = default;
-    virtual ~KSQApplication() = default;
 
-    int
-    run();
+    KSQLampMonoController();
+    virtual ~KSQLampMonoController() = default;
 
-    QString
-    organizationDisplayName() const;
+    Q_INVOKABLE QString
+    state();
 
-    QString
-    applicationDisplayName() const;
+signals:
+    void fireStateChanged(QString);
+
+public slots:
+    Q_INVOKABLE void
+    setState(QString state);
 
 private:
-    KSQActiveDevicesEnumerator m_activeDevicesEnumerator;
-    KSQWiFiEnumerator m_wifiEnumerator;
-    KSQBLEController m_bleController;
+    static const QString kStateUnknown;
+    static const QString kStateOn;
+    static const QString kStateOff;
+    static const QStringList kStates;
 
-    KSQLampMonoController m_lampMonoController;
+    QString m_state;
 };
 
-#endif // PROVISION_QT_APP_H
+#endif // PROVISION_QT_LAMP_MONO_CONTROLLER_H

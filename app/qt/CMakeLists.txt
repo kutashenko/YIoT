@@ -214,6 +214,7 @@ target_sources(${KS_TARGET_NAME}
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQWiFiEnumerator.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQBLEController.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSActiveDevice.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/devices/lamp/mono/KSQLampMonoController.h
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<STREQUAL:"${KS_PLATFORM}","android">:${CMAKE_CURRENT_LIST_DIR}/include/android/KSQAndroid.h>
@@ -226,6 +227,7 @@ target_sources(${KS_TARGET_NAME}
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQBLEController.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-hal.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/devices/lamp/mono/KSQLampMonoController.cpp
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/src/macos/KSMacWiFi.mm>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/src/win/KSWinWiFi.cpp>
         $<$<STREQUAL:"${KS_PLATFORM}","android">:${CMAKE_CURRENT_LIST_DIR}/src/android/KSQAndroid.cpp>

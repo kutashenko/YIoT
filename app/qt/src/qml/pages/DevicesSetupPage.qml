@@ -161,7 +161,6 @@ Page {
     }
 
     function terminateProvision() {
-        hideCredLoad()
         showDevicesSetup()
     }
 }

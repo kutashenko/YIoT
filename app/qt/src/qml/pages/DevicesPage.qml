@@ -121,10 +121,9 @@ Page {
                 enabled: true
                 anchors.fill: parent
                 hoverEnabled: true
-//                anchors.rightMargin: list.currentIndex == index ? actionsBlock.width : 0
                 anchors.rightMargin: 0
                 onClicked: {
-                    list.currentIndex = index
+                    showLampMono()
                 }
 
                 onEntered: {

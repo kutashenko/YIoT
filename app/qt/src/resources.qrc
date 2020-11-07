@@ -51,10 +51,11 @@
         <file>qml/resources/icons/dark/secure-enclave.png</file>
         <file>qml/resources/icons/dark/wash-machine.png</file>
         <file>qml/resources/icons/dark/upload.gif</file>
+        <file>qml/resources/icons/dark/devices/lamp/mono/unknown.png</file>
+        <file>qml/resources/icons/dark/devices/lamp/mono/on.png</file>
+        <file>qml/resources/icons/dark/devices/lamp/mono/off.png</file>
 
         <file>qml/resources/icons/test-qr.png</file>
-
-
 
         <file>qml/resources/fonts/Roboto-Medium.ttf</file>
         <file>qml/resources/fonts/Roboto-Regular.ttf</file>
@@ -99,6 +100,7 @@
         <file>qml/pages/QRReaderPage.qml</file>
         <file>qml/pages/SharePage.qml</file>
         <file>qml/pages/CredLoadPage.qml</file>
+        <file>qml/pages/devices/lamp/mono/LampMono.qml</file>
 
         <file>qml/theme/Theme.qml</file>
 

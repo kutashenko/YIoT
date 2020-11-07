@@ -24,6 +24,7 @@ import QtQuick.Window 2.2
 import QtQuick.Layouts 1.5
 
 import "./pages"
+import "./pages/devices/lamp/mono"
 import "./pages/settings"
 import "./components"
 import "./components/Popups"
@@ -42,16 +43,28 @@ ApplicationWindow {
     }
 
     // Left-side menu
-    LeftSideMenu { id: leftSideMenu; enabled: !credLoad.visible }
+    LeftSideMenu { id: leftSideMenu }
 
     // Information popup
     Popup { id: inform }
 
     // About application page
-    AboutPage { id: aboutPage; visible: false }
+    AboutPage { id: aboutPage }
 
     // Page with Credentials upload information
-    CredLoadPage { id: credLoad; visible: !aboutPage.visible && !swipeView.visible}
+    CredLoadPage { id: credLoad }
+
+    // Devices
+    SwipeView {
+        readonly property int lampMonoPageIdx: 0
+
+        id: devicesSwipeView
+        anchors.fill: parent
+        interactive: false
+        currentIndex: lampMonoPageIdx
+
+        LampMono { id: lampMonoPage }
+    }
 
     // Main pages
     SwipeView {
@@ -64,7 +77,6 @@ ApplicationWindow {
 
         id: swipeView
         anchors.fill: parent
-        visible: !aboutPage.visible && !credLoad.visible
         interactive: false
         currentIndex: devicePageIdx
 
@@ -77,7 +89,6 @@ ApplicationWindow {
     // Manual switcher of main pages
     footer: TabBar {
         id: tabBar
-        visible: !aboutPage.visible && !credLoad.visible
         z: 5
         currentIndex: swipeView.currentIndex
 
@@ -98,24 +109,68 @@ ApplicationWindow {
         showDevicesSetup()
     }
 
+    StateGroup {
+        id: w
+        state: "main"
+
+        states: [
+            State {
+                name: "about"
+                PropertyChanges { target: aboutPage; visible: true }
+                PropertyChanges { target: credLoad; visible: false }
+                PropertyChanges { target: devicesSwipeView; visible: false }
+                PropertyChanges { target: swipeView; visible: false }
+                PropertyChanges { target: tabBar; visible: false }
+                PropertyChanges { target: leftSideMenu; enabled: false }
+            },
+            State {
+                name: "main"
+                PropertyChanges { target: aboutPage; visible: false }
+                PropertyChanges { target: credLoad; visible: false }
+                PropertyChanges { target: devicesSwipeView; visible: false }
+                PropertyChanges { target: swipeView; visible: true }
+                PropertyChanges { target: tabBar; visible: true }
+                PropertyChanges { target: leftSideMenu; enabled: true }
+            },
+            State {
+                name: "credLoad"
+                PropertyChanges { target: aboutPage; visible: false }
+                PropertyChanges { target: credLoad; visible: true }
+                PropertyChanges { target: devicesSwipeView; visible: false }
+                PropertyChanges { target: swipeView; visible: false }
+                PropertyChanges { target: tabBar; visible: false }
+                PropertyChanges { target: leftSideMenu; enabled: false }
+            },
+            State {
+                name: "deviceControl"
+                PropertyChanges { target: aboutPage; visible: false }
+                PropertyChanges { target: credLoad; visible: false }
+                PropertyChanges { target: devicesSwipeView; visible: true }
+                PropertyChanges { target: swipeView; visible: false }
+                PropertyChanges { target: tabBar; visible: false }
+                PropertyChanges { target: leftSideMenu; enabled: false }
+            }
+        ]
+    }
+
     function showLeftMenu() {
         leftSideMenu.open()
     }
 
     function showAbout() {
-        aboutPage.visible = true
+        w.state = "about"
     }
 
     function showCredLoad() {
-        credLoad.visible = true
+        w.state = "credLoad"
     }
 
-    function hideCredLoad() {
-            credLoad.visible = false
-        }
+    function showLampMono() {
+        w.state = "deviceControl"
+    }
 
     function swipeShow(idx) {
-        aboutPage.visible = false
+        w.state = "main"
         swipeView.currentIndex = idx
         for (var i = 0; i < swipeView.count; ++i) {
             var item = swipeView.itemAt(i)

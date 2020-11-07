@@ -56,6 +56,7 @@ KSQApplication::run() {
     context->setContextProperty("bleController", &m_bleController);
     context->setContextProperty("bleEnum", m_bleController.model());
     context->setContextProperty("wifiEnum", &m_wifiEnumerator);
+    context->setContextProperty("monoLampController", &m_lampMonoController);
     qmlRegisterSingletonType(QUrl("qrc:/qml/theme/Theme.qml"), "Theme", 1, 0, "Theme");
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     engine.load(url);
