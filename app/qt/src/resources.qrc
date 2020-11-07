@@ -100,7 +100,7 @@
         <file>qml/pages/QRReaderPage.qml</file>
         <file>qml/pages/SharePage.qml</file>
         <file>qml/pages/CredLoadPage.qml</file>
-        <file>qml/pages/devices/lamp/mono/LampMono.qml</file>
+        <file>qml/pages/devices/lamp/mono/LampMonoControl.qml</file>
 
         <file>qml/theme/Theme.qml</file>
 

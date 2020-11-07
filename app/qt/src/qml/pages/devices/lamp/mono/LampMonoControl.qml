@@ -27,8 +27,6 @@ import "../../../../components"
 
 Page {
     id: p
-    anchors.fill: parent
-    state: "unknown"
 
     background: Rectangle {
         color: "transparent"
@@ -61,6 +59,7 @@ Page {
                 verticalAlignment: Text.AlignVCenter
                 font.family: Theme.mainFont
                 font.pointSize: UiHelper.fixFontSz(24)
+                color: Theme.brandColor
             }
 
             Image {
@@ -72,6 +71,17 @@ Page {
 
                 fillMode: Image.PreserveAspectFit
                 source: "qrc:/qml/resources/icons/dark/devices/lamp/mono/%1".arg(img)
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (monoLampController.state !== "on") {
+                            monoLampController.state = "on"
+                        } else {
+                            monoLampController.state = "off"
+                        }
+                    }
+                }
             }
 
             FormPrimaryButton {
@@ -88,7 +98,7 @@ Page {
     states: [
         State {
             name: "unknown"
-            PropertyChanges { target: infoText; text: qsTr("unknown") }
+            PropertyChanges { target: infoText; text: qsTr("Unknown state") }
             PropertyChanges { target: stateImage; img: "unknown" }
         },
         State {
@@ -104,22 +114,15 @@ Page {
     ]
 
     onVisibleChanged: {
-        state = "unknown"
+        state = monoLampController.state
     }
 
     Connections {
         target: monoLampController
 
-        onFireTurnOn: {
-            state = "on"
-        }
-
-        onFireTurnOff: {
-            state = "off"
-        }
-
-        onFireError: {
-            state = "unknown"
+        onFireStateChanged: {
+            state = monoLampController.state
         }
     }
+
 }

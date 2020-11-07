@@ -63,7 +63,7 @@ ApplicationWindow {
         interactive: false
         currentIndex: lampMonoPageIdx
 
-        LampMono { id: lampMonoPage }
+        LampMonoControl { id: lampMonoPage }
     }
 
     // Main pages
