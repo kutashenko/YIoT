@@ -63,7 +63,7 @@ private slots:
     onFindWiFi();
 
     void
-    updateList(KSQWiFiNetworks& list);
+    updateList(KSQWiFiNetworks &list);
 
 private:
     KSQWiFiNetworks m_wifiList;

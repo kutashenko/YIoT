@@ -27,9 +27,8 @@
 #include <virgil/iot/qt/netif/VSQNetifBLE.h>
 
 class KSQBLEController : public QObject {
-Q_OBJECT
+    Q_OBJECT
 public:
-
     KSQBLEController();
     virtual ~KSQBLEController();
 
@@ -40,16 +39,21 @@ public:
     model();
 
 signals:
-    void fireConnected();
-    void fireDisconnected();
-    void fireError(QString text);
-    void fireDataSent();
-    void fireDataReceived();
+    void
+    fireConnected();
+    void
+    fireDisconnected();
+    void
+    fireError(QString text);
+    void
+    fireDataSent();
+    void
+    fireDataReceived();
 
 public slots:
 
     Q_INVOKABLE bool
-    configureWiFi(const QString & deviceName, const QString & ssid, const QString & password);
+    configureWiFi(const QString &deviceName, const QString &ssid, const QString &password);
 
 private slots:
     void
@@ -69,7 +73,6 @@ private:
     QSharedPointer<VSQNetifBLE> m_netifBLE;
 
     bool m_needWiFiConfig;
-
 };
 
 #endif // PROVISION_QT_BLE_CONTROLLER_H

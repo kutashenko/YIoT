@@ -42,9 +42,7 @@ KSQWiFiEnumerator::KSQWiFiEnumerator() {
     connect(&m_ncm, &QNetworkConfigurationManager::updateCompleted, this, &KSQWiFiEnumerator::onFindWiFi);
 #endif
 
-    QTimer::singleShot(200, [this]() {
-        start();
-    });
+    QTimer::singleShot(200, [this]() { start(); });
 }
 
 /******************************************************************************/
@@ -98,9 +96,7 @@ void
 KSQWiFiEnumerator::onFindWiFi() {
     std::thread t([this]() {
         auto list = wifi_enum();
-        QMetaObject::invokeMethod(this, "updateList",
-                                  Qt::BlockingQueuedConnection,
-                                  Q_ARG(KSQWiFiNetworks&, list));
+        QMetaObject::invokeMethod(this, "updateList", Qt::BlockingQueuedConnection, Q_ARG(KSQWiFiNetworks &, list));
     });
 
     t.detach();
@@ -108,7 +104,7 @@ KSQWiFiEnumerator::onFindWiFi() {
 
 /******************************************************************************/
 void
-KSQWiFiEnumerator::updateList(KSQWiFiNetworks& list) {
+KSQWiFiEnumerator::updateList(KSQWiFiNetworks &list) {
     const bool isSame = list.keys() == m_wifiList.keys();
     m_wifiList = list;
 

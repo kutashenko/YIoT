@@ -33,7 +33,7 @@ pushd "${SCRIPT_FOLDER}/../../"
             -DANDROID_BUILD_ABI_x86_64=OFF \
             ../..
 
-        make -j10 ble-provision-app
+        make -j10 yiot
     popd
 
     mkdir "${BUILD_DIR}/armv8"
@@ -50,7 +50,7 @@ pushd "${SCRIPT_FOLDER}/../../"
             -DANDROID_BUILD_ABI_x86_64=OFF \
             -DCMAKE_TOOLCHAIN_FILE=/home/roman/Android/Sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake \
             ../..
-        make -j10 ble-provision-app
+        make -j10 yiot
     popd
 
     mkdir "${BUILD_DIR}/x86"
@@ -67,7 +67,7 @@ pushd "${SCRIPT_FOLDER}/../../"
             -DANDROID_BUILD_ABI_x86=ON \
             -DANDROID_BUILD_ABI_x86_64=OFF \
             ../..
-        make -j10 ble-provision-app
+        make -j10 yiot
     popd
 
     mkdir "${BUILD_DIR}/x86_64"
@@ -84,7 +84,7 @@ pushd "${SCRIPT_FOLDER}/../../"
             -DANDROID_BUILD_ABI_x86=OFF \
             -DANDROID_BUILD_ABI_x86_64=ON \
             ../..
-        make -j10 ble-provision-app
+        make -j10 yiot
     popd
 
     if [ -d "${BUILD_DIR}/all" ]; then

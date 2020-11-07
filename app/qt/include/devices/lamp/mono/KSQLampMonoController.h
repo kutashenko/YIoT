@@ -27,11 +27,10 @@
 #include <virgil/iot/qt/netif/VSQNetifBLE.h>
 
 class KSQLampMonoController : public QObject {
-Q_OBJECT
-Q_PROPERTY(QString state READ state WRITE setState NOTIFY fireStateChanged)
+    Q_OBJECT
+    Q_PROPERTY(QString state READ state WRITE setState NOTIFY fireStateChanged)
 
 public:
-
     KSQLampMonoController();
     virtual ~KSQLampMonoController() = default;
 

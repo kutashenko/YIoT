@@ -23,14 +23,11 @@
 const QString KSQLampMonoController::kStateUnknown = "unknown";
 const QString KSQLampMonoController::kStateOn = "on";
 const QString KSQLampMonoController::kStateOff = "off";
-const QStringList KSQLampMonoController::kStates =
-        QStringList()
-        << KSQLampMonoController::kStateUnknown
-        << KSQLampMonoController::kStateOn
-        << KSQLampMonoController::kStateOff;
+const QStringList KSQLampMonoController::kStates = QStringList() << KSQLampMonoController::kStateUnknown
+                                                                 << KSQLampMonoController::kStateOn
+                                                                 << KSQLampMonoController::kStateOff;
 /******************************************************************************/
-KSQLampMonoController::KSQLampMonoController() :
-      m_state(kStateUnknown) {
+KSQLampMonoController::KSQLampMonoController() : m_state(kStateUnknown) {
 }
 
 /******************************************************************************/

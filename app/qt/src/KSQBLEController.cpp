@@ -28,20 +28,11 @@ KSQBLEController::KSQBLEController() {
     m_bleEnumerator.startDiscovery();
 
     // Connect signals and slots
-    connect(m_netifBLE.data(),
-            &VSQNetifBLE::fireDeviceReady,
-            this,
-            &KSQBLEController::onConnected);
+    connect(m_netifBLE.data(), &VSQNetifBLE::fireDeviceReady, this, &KSQBLEController::onConnected);
 
-    connect(m_netifBLE.data(),
-            &VSQNetifBLE::fireDeviceDisconnected,
-            this,
-            &KSQBLEController::onDisconnected);
+    connect(m_netifBLE.data(), &VSQNetifBLE::fireDeviceDisconnected, this, &KSQBLEController::onDisconnected);
 
-    connect(m_netifBLE.data(),
-            &VSQNetifBLE::fireDeviceError,
-            this,
-            &KSQBLEController::onDeviceError);
+    connect(m_netifBLE.data(), &VSQNetifBLE::fireDeviceError, this, &KSQBLEController::onDeviceError);
 
     connect(&VSQIoTKitFacade::instance().snapCfgClient(),
             &VSQSnapCfgClient::fireConfigurationDone,
@@ -104,7 +95,7 @@ KSQBLEController::onConfigurationDone(bool) {
 
 /******************************************************************************/
 bool
-KSQBLEController::configureWiFi(const QString & deviceName, const QString & ssid, const QString & password) {
+KSQBLEController::configureWiFi(const QString &deviceName, const QString &ssid, const QString &password) {
     qDebug() << "deviceName: " << deviceName;
     qDebug() << "ssid      : " << ssid;
     qDebug() << "password  : " << password;
