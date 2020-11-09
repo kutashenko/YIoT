@@ -33,6 +33,6 @@ Form {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: { form.visible = false }
+        onClicked: { showMain() }
     }
 }

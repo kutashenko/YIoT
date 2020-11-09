@@ -169,6 +169,10 @@ ApplicationWindow {
         w.state = "deviceControl"
     }
 
+    function showMain() {
+        w.state = "main"
+    }
+
     function swipeShow(idx) {
         w.state = "main"
         swipeView.currentIndex = idx

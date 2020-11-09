@@ -66,7 +66,7 @@ private slots:
     onDeviceError();
 
     void
-    onConfigurationDone(bool);
+    onConfigurationDone();
 
 private:
     VSQNetifBLEEnumerator m_bleEnumerator;

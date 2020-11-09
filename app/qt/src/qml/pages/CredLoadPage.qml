@@ -100,7 +100,7 @@ Page {
         },
         State {
             name: "receive"
-            PropertyChanges { target: infoText; text: qsTr("Wait answer") }
+            PropertyChanges { target: infoText; text: qsTr("Waiting for an answer") }
             PropertyChanges { target: infoText; color: Theme.brandColor }
             PropertyChanges { target: animatedImage; visible: true }
             PropertyChanges { target: actionButton; text: qsTr("Stop") }
@@ -137,24 +137,24 @@ Page {
 
         onFireConnected: {
             state = "send"
-            console.log(">>> onFireConnected")
         }
 
         onFireDataSent: {
             state = "receive"
-            console.log(">>> onFireDataSent")
         }
 
         onFireDataReceived: {
             state = "disconnect"
-            console.log(">>> onFireDataReceived")
         }
 
         onFireDisconnected: {
             if (state === "disconnect") {
                 state = "done"
-                console.log(">>> onFireDisconnected")
             }
+        }
+
+        onFireError: {
+            state = "error"
         }
     }
 }

@@ -38,6 +38,11 @@ KSQBLEController::KSQBLEController() {
             &VSQSnapCfgClient::fireConfigurationDone,
             this,
             &KSQBLEController::onConfigurationDone);
+
+    connect(&VSQIoTKitFacade::instance().snapCfgClient(),
+            &VSQSnapCfgClient::fireConfigurationError,
+            this,
+            &KSQBLEController::onDeviceError);
 }
 
 /******************************************************************************/
@@ -83,12 +88,13 @@ KSQBLEController::onDisconnected() {
 /******************************************************************************/
 void
 KSQBLEController::onDeviceError() {
+    m_netifBLE->close();
     emit fireError(tr("unknown"));
 }
 
 /******************************************************************************/
 void
-KSQBLEController::onConfigurationDone(bool) {
+KSQBLEController::onConfigurationDone() {
     m_netifBLE->close();
     emit fireDataReceived();
 }
