@@ -26,7 +26,8 @@ import "../theme"
 
 ListView {
     id: wifiList
-    anchors.fill: parent
+    Layout.fillHeight: true
+    Layout.fillWidth: true
 
     spacing: 1
     model: wifiEnum

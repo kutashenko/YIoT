@@ -67,7 +67,7 @@ Page {
             }
 
             Image {
-                property string img: ""
+                property string img: "unknown"
                 id: stateImage
 
                 Layout.fillHeight: true
@@ -99,6 +99,7 @@ Page {
         }
     }
 
+    state: typeof controller === "undefined" ? "unknown" : controller.state
     states: [
         State {
             name: "unknown"
@@ -116,17 +117,4 @@ Page {
             PropertyChanges { target: stateImage; img: "off" }
         }
     ]
-
-    onVisibleChanged: {
-        state = controller.state
-    }
-
-    Connections {
-        target: controller
-
-        onFireStateChanged: {
-            state = controller.state
-        }
-    }
-
 }

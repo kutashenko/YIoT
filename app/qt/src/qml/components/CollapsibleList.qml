@@ -46,7 +46,7 @@ Item {
             Rectangle {
                 id: categoryItem
                 color: "transparent"
-                height: categoryText.height + 10
+                height: 50
                 width: w
 
                 RowLayout {

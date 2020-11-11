@@ -42,8 +42,8 @@ Page {
         anchors.fill: parent
         anchors.margins: 30
         fillMode: Image.PreserveAspectFit
-        verticalAlignment: Image.AlignCenter
-        horizontalAlignment: Image.AlignCenter
+        verticalAlignment: Image.AlignVCenter
+        horizontalAlignment: Image.AlignHCenter
         source: "qrc:/qml/resources/icons/test-qr.png"
     }
 }

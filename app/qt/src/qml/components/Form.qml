@@ -11,7 +11,7 @@ Item {
 
     ColumnLayout {
         id: formContainer
-        anchors.fill: stretched ? parent : 0
+        anchors.fill: stretched ? parent : undefined
 
         anchors {
             verticalCenter: parent.verticalCenter

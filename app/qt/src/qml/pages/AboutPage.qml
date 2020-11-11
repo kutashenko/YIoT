@@ -25,11 +25,13 @@ import QtQuick.Layouts 1.12
 import "../theme"
 import "../components"
 
-Form {
-    id: form
-    stretched: true
+Item {
+    anchors.fill: parent
 
-    FormVendor {}
+    Form {
+        id: form
+        FormVendor {}
+    }
 
     MouseArea {
         anchors.fill: parent

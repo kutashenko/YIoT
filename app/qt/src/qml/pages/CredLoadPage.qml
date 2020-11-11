@@ -135,25 +135,25 @@ Page {
     Connections {
         target: bleController
 
-        onFireConnected: {
+        function onFireConnected() {
             state = "send"
         }
 
-        onFireDataSent: {
+        function onFireDataSent() {
             state = "receive"
         }
 
-        onFireDataReceived: {
+        function onFireDataReceived() {
             state = "disconnect"
         }
 
-        onFireDisconnected: {
+        function onFireDisconnected() {
             if (state === "disconnect") {
                 state = "done"
             }
         }
 
-        onFireError: {
+        function onFireError() {
             state = "error"
         }
     }
