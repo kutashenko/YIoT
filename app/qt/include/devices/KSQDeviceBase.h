@@ -28,10 +28,12 @@
 class KSQDeviceBase : public QObject {
     Q_OBJECT
 
+    Q_PROPERTY(QString deviceType READ deviceType)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY fireNameChanged)
     Q_PROPERTY(QString macAddr READ macAddr)
     Q_PROPERTY(bool active READ active NOTIFY fireActiveChanged)
 public:
+    KSQDeviceBase() { }
     KSQDeviceBase(VSQMac mac, QString name, QString img = "") {
         m_lastUpdate = QDateTime::currentDateTime();
         m_image = img;
@@ -47,6 +49,9 @@ public:
         m_mac = d.m_mac;
         m_active = d.m_active;
     }
+
+    Q_INVOKABLE QString
+    deviceType() const { return _deviceType(); }
 
     Q_INVOKABLE QString
     name() const { return m_name; }
@@ -86,6 +91,9 @@ protected:
             emit fireActiveChanged(m_active);
         }
     }
+
+    virtual QString
+    _deviceType() const = 0;
 
 signals:
     void fireNameChanged(QString);

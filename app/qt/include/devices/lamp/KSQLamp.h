@@ -31,12 +31,16 @@ class KSQLamp : public KSQDeviceBase {
     Q_OBJECT
     Q_PROPERTY(QString state READ state WRITE setState NOTIFY fireStateChanged)
 public:
+    KSQLamp() : KSQDeviceBase() { }
     KSQLamp(VSQMac mac, QString name, QString img = "");
     KSQLamp(const KSQLamp& l);
     virtual ~KSQLamp() = default;
 
     Q_INVOKABLE QString
     state() const;
+
+    virtual QString
+    _deviceType() const final { return "lampMono"; }
 
 signals:
     void fireStateChanged(QString);
@@ -53,5 +57,8 @@ private:
 
     QString m_state;
 };
+
+Q_DECLARE_METATYPE(KSQLamp)
+Q_DECLARE_METATYPE(KSQLamp*)
 
 #endif // YIOT_LAMP_H

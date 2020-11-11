@@ -225,4 +225,14 @@ ApplicationWindow {
     function showPopupInform(message) {
         // TODO: Add
     }
+
+    function activateDeviceView(deviceType, deviceName, deviceController) {
+        if (deviceType === "lampMono") {
+            lampMonoPage.deviceName = deviceName
+            lampMonoPage.controller = deviceController
+            showLampMono()
+        } else {
+            console.error("Unknown Device Type")
+        }
+    }
 }

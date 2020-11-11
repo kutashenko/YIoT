@@ -141,7 +141,7 @@ Item {
                         hoverEnabled: true
                         anchors.rightMargin: 0
                         onClicked: {
-//                            subModel.collapsed = !subModel.collapsed
+                            activateDeviceView(deviceType, name, deviceController)
                         }
 
                         onEntered: {

@@ -51,6 +51,9 @@ KSQLampController::data(const QModelIndex &index, int role) const {
         case Element::Name:
             return l->name();
 
+        case Element::Type:
+            return l->deviceType();
+
         case Element::Mac:
             return l->macAddr();
 
@@ -59,6 +62,11 @@ KSQLampController::data(const QModelIndex &index, int role) const {
 
         case Element::State:
             return l->state();
+
+        case Element::Device:
+            QVariant res;
+            res.setValue(const_cast<KSQLamp*>(&(*l)));
+            return res;
         }
     }
 
@@ -70,9 +78,11 @@ QHash<int, QByteArray>
 KSQLampController::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[Name] = "name";
+    roles[Type] = "deviceType";
     roles[Mac] = "mac";
     roles[Active] = "active";
     roles[State] = "state";
+    roles[Device] = "deviceController";
     return roles;
 }
 

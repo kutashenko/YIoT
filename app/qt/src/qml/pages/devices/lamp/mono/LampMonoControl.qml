@@ -26,6 +26,9 @@ import "../../../../theme"
 import "../../../../components"
 
 Page {
+    property var controller
+    property alias deviceName: header.title
+
     id: p
 
     background: Rectangle {
@@ -33,6 +36,7 @@ Page {
     }
 
     header: Header {
+        id: header
         title: qsTr("Lamp")
         backAction: function() { showDevices() }
     }
@@ -75,10 +79,10 @@ Page {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (monoLampController.state !== "on") {
-                            monoLampController.state = "on"
+                        if (controller.state !== "on") {
+                            controller.state = "on"
                         } else {
-                            monoLampController.state = "off"
+                            controller.state = "off"
                         }
                     }
                 }
@@ -114,14 +118,14 @@ Page {
     ]
 
     onVisibleChanged: {
-        state = monoLampController.state
+        state = controller.state
     }
 
     Connections {
-        target: monoLampController
+        target: controller
 
         onFireStateChanged: {
-            state = monoLampController.state
+            state = controller.state
         }
     }
 

@@ -34,7 +34,7 @@
 class KSQLampController : public KSQControllerBase {
 Q_OBJECT
 public:
-    enum Element { Name = Qt::UserRole, Mac, Active, State, ElementMax };
+    enum Element { Name = Qt::UserRole, Type, Mac, Active, State, Device, ElementMax };
 
     KSQLampController();
     virtual ~KSQLampController() = default;
