@@ -90,6 +90,7 @@ target_sources(iotkit-qt-lib
         ${INC_SNAP}/VSQSnapINFOClientQml.h
         ${INC_SNAP}/VSQSnapSnifferQml.h
         ${INC_SNAP}/VSQSnapCFGClient.h
+        ${INC_SNAP}/VSQSnapLampClient.h
 
         #   Sources
         ${IOTKIT_QT_PATH}/default-impl/netif/udp-broadcast/src/VSQUdpBroadcast.cpp
@@ -108,6 +109,7 @@ target_sources(iotkit-qt-lib
         ${SRC_SNAP}/VSQSnapCFGClient.cpp
         ${SRC_SNAP}/VSQSnapINFOClientQml.cpp
         ${SRC_SNAP}/VSQSnapSnifferQml.cpp
+        ${SRC_SNAP}/VSQSnapLampClient.cpp
         )
 
 

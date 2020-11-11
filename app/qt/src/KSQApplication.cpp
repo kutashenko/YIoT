@@ -25,6 +25,8 @@
 #include <ui/VSQUiHelper.h>
 #include <virgil/iot/logger/logger.h>
 
+#include <devices/lamp/KSQLampController.h>
+
 #ifdef Q_OS_ANDROID
 #include "android/KSQAndroid.h"
 #endif // Q_OS_ANDROID
@@ -36,8 +38,8 @@ KSQApplication::run() {
     VSQUiHelper uiHelper;
 
     // Prepare IoTKit data
-    auto features = VSQFeatures() << VSQFeatures::SNAP_CFG_CLIENT;
-    auto impl = VSQImplementations() << m_bleController.netif();
+    auto features = VSQFeatures() << VSQFeatures::SNAP_CFG_CLIENT << VSQFeatures::SNAP_LAMP_CLIENT;
+    auto impl = VSQImplementations() << /*!!! UDP !!! <<*/ m_bleController.netif();
     auto roles = VSQDeviceRoles() << VirgilIoTKit::VS_SNAP_DEV_CONTROL;
     auto appConfig = VSQAppConfig() << VSQManufactureId() << VSQDeviceType() << VSQDeviceSerial()
                                     << VirgilIoTKit::VS_LOGLEV_DEBUG << roles;
@@ -48,15 +50,18 @@ KSQApplication::run() {
         return -1;
     }
 
+    // Initialize devices controllers
+    m_deviceControllers << new KSQLampController();
+
+
     // Initialize QML
     QQmlContext *context = engine.rootContext();
     context->setContextProperty("UiHelper", &uiHelper);
     context->setContextProperty("app", this);
-    context->setContextProperty("activeDevEnum", &m_activeDevicesEnumerator);
     context->setContextProperty("bleController", &m_bleController);
     context->setContextProperty("bleEnum", m_bleController.model());
     context->setContextProperty("wifiEnum", &m_wifiEnumerator);
-    context->setContextProperty("monoLampController", &m_lampMonoController);
+    context->setContextProperty("deviceControllers", &m_deviceControllers);
     qmlRegisterSingletonType(QUrl("qrc:/qml/theme/Theme.qml"), "Theme", 1, 0, "Theme");
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     engine.load(url);

@@ -18,58 +18,47 @@
 //   01 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#include <KSQActiveDevicesEnumerator.h>
-
-#include <thread>
+#include <devices/lamp/KSQLampController.h>
 
 /******************************************************************************/
-KSQActiveDevicesEnumerator::KSQActiveDevicesEnumerator() {
-    m_devicesList["Lamp"] = KSActiveDeviceInfo("bulb");
-    m_devicesList["Wash machine"] = KSActiveDeviceInfo("wash-machine");
-    m_devicesList["Car"] = KSActiveDeviceInfo("car");
-    m_devicesList["Door lock"] = KSActiveDeviceInfo("lock");
-    m_devicesList["PC"] = KSActiveDeviceInfo("pc");
-}
-
-/******************************************************************************/
-KSQActiveDevicesEnumerator::~KSQActiveDevicesEnumerator() {
-    stop();
-}
-
-/******************************************************************************/
-void
-KSQActiveDevicesEnumerator::start() {
-}
-
-/******************************************************************************/
-void
-KSQActiveDevicesEnumerator::stop() {
+KSQLampController::KSQLampController() {
+    m_lamps.insert(KSQLamp(broadcastMac, "lamp 1"));
+    m_lamps.insert(KSQLamp(broadcastMac, "lamp 2"));
+    m_lamps.insert(KSQLamp(broadcastMac, "lamp 3"));
+    m_lamps.insert(KSQLamp(broadcastMac, "lamp 4"));
+    m_lamps.insert(KSQLamp(broadcastMac, "lamp 5"));
 }
 
 /******************************************************************************/
 int
-KSQActiveDevicesEnumerator::rowCount(const QModelIndex &parent) const {
-    return m_devicesList.count();
+KSQLampController::rowCount(const QModelIndex &parent) const {
+    return m_lamps.size();
 }
 
 /******************************************************************************/
 int
-KSQActiveDevicesEnumerator::columnCount(const QModelIndex &paren) const {
+KSQLampController::columnCount(const QModelIndex &parent) const {
     return 1;
 }
 
 /******************************************************************************/
 QVariant
-KSQActiveDevicesEnumerator::data(const QModelIndex &index, int role) const {
-    if (index.row() < m_devicesList.count()) {
-        auto key = m_devicesList.keys().at(index.row());
+KSQLampController::data(const QModelIndex &index, int role) const {
+    if (index.row() < m_lamps.size()) {
+        auto l = std::next(m_lamps.begin(), index.row());
 
         switch (role) {
         case Element::Name:
-            return key;
+            return l->name();
 
-        case Element::Image:
-            return m_devicesList[key].image;
+        case Element::Mac:
+            return l->macAddr();
+
+        case Element::Active:
+            return l->active();
+
+        case Element::State:
+            return l->state();
         }
     }
 
@@ -78,21 +67,13 @@ KSQActiveDevicesEnumerator::data(const QModelIndex &index, int role) const {
 
 /******************************************************************************/
 QHash<int, QByteArray>
-KSQActiveDevicesEnumerator::roleNames() const {
+KSQLampController::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[Name] = "name";
-    roles[Image] = "image";
+    roles[Mac] = "mac";
+    roles[Active] = "active";
+    roles[State] = "state";
     return roles;
-}
-
-/******************************************************************************/
-QString
-KSQActiveDevicesEnumerator::get(int index) const {
-    if (index >= 0 && index < m_devicesList.count()) {
-        return m_devicesList.keys().at(index);
-    }
-
-    return "";
 }
 
 /******************************************************************************/

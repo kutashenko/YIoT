@@ -15,25 +15,43 @@
 //
 //
 //
-//   04 August 2020
+//   01 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_ACTIVE_DEVICE_H
-#define PROVISION_QT_ACTIVE_DEVICE_H
+#ifndef YIOT_LAMP_H
+#define YIOT_LAMP_H
+
 
 #include <QtCore>
+#include <virgil/iot/protocols/snap/lamp/lamp-structs.h>
 
-struct KSActiveDeviceInfo {
-    QDateTime lastUpdate;
-    QString image;
+#include <devices/KSQDeviceBase.h>
 
-    KSActiveDeviceInfo(QString img = "") {
-        lastUpdate = QDateTime::currentDateTime();
-        image = img;
-    }
+class KSQLamp : public KSQDeviceBase {
+    Q_OBJECT
+    Q_PROPERTY(QString state READ state WRITE setState NOTIFY fireStateChanged)
+public:
+    KSQLamp(VSQMac mac, QString name, QString img = "");
+    KSQLamp(const KSQLamp& l);
+    virtual ~KSQLamp() = default;
+
+    Q_INVOKABLE QString
+    state() const;
+
+signals:
+    void fireStateChanged(QString);
+
+public slots:
+    Q_INVOKABLE void
+    setState(QString state);
+
+private:
+    static const QString kStateUnknown;
+    static const QString kStateOn;
+    static const QString kStateOff;
+    static const QStringList kStates;
+
+    QString m_state;
 };
 
-typedef QMap<QString, KSActiveDeviceInfo> KSQActiveDevices;
-
-
-#endif // PROVISION_QT_ACTIVE_DEVICE_H
+#endif // YIOT_LAMP_H

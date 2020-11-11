@@ -18,27 +18,35 @@
 //   01 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#include <devices/lamp/mono/KSQLampMonoController.h>
+#include <devices/lamp/KSQLampController.h>
 
-const QString KSQLampMonoController::kStateUnknown = "unknown";
-const QString KSQLampMonoController::kStateOn = "on";
-const QString KSQLampMonoController::kStateOff = "off";
-const QStringList KSQLampMonoController::kStates = QStringList() << KSQLampMonoController::kStateUnknown
-                                                                 << KSQLampMonoController::kStateOn
-                                                                 << KSQLampMonoController::kStateOff;
+const QString KSQLamp::kStateUnknown = "unknown";
+const QString KSQLamp::kStateOn = "on";
+const QString KSQLamp::kStateOff = "off";
+const QStringList KSQLamp::kStates = QStringList() << KSQLamp::kStateUnknown
+                                                             << KSQLamp::kStateOn
+                                                             << KSQLamp::kStateOff;
 /******************************************************************************/
-KSQLampMonoController::KSQLampMonoController() : m_state(kStateUnknown) {
+
+KSQLamp::KSQLamp(VSQMac mac, QString name, QString img) :
+ KSQDeviceBase(mac, name, img) {
+    m_state = kStateUnknown;
+}
+
+/******************************************************************************/
+KSQLamp::KSQLamp(const KSQLamp& l) : KSQDeviceBase(l) {
+    m_state = l.m_state;
 }
 
 /******************************************************************************/
 QString
-KSQLampMonoController::state() {
+KSQLamp::state() const {
     return m_state;
 }
 
 /******************************************************************************/
 void
-KSQLampMonoController::setState(QString state) {
+KSQLamp::setState(QString state) {
     if (kStates.contains(state)) {
         m_state = state;
     } else {

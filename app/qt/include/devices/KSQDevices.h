@@ -18,49 +18,54 @@
 //   01 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_ACTIVE_DEVICES_ENUM_H
-#define PROVISION_QT_ACTIVE_DEVICES_ENUM_H
+#ifndef YIOT_DEVICES_H
+#define YIOT_DEVICES_H
 
 #include <QtCore>
+#include <QHash>
 #include <QAbstractTableModel>
 
 #include <virgil/iot/qt/VSQIoTKit.h>
 
-#include <KSActiveDevice.h>
+#include <devices/KSQControllerBase.h>
 
-class KSQActiveDevicesEnumerator : public QAbstractTableModel {
-    Q_OBJECT
+class KSQDevices : public QAbstractTableModel {
+Q_OBJECT
 public:
-    enum Element { Name = Qt::UserRole, Image, ElementMax };
+    enum Element { Name = Qt::UserRole, Image, SubModel, ElementMax };
 
-    KSQActiveDevicesEnumerator();
-    virtual ~KSQActiveDevicesEnumerator();
+    KSQDevices() = default;
+    virtual ~KSQDevices() = default;
 
     /**
      * QAbstractTableModel implementation
      */
     int
     rowCount(const QModelIndex &parent = QModelIndex()) const override;
+
     int
     columnCount(const QModelIndex &parent = QModelIndex()) const override;
+
     QVariant
     data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
     QHash<int, QByteArray>
     roleNames() const override;
 
-    Q_INVOKABLE
-    QString
-    get(int index) const;
+    KSQDevices &
+    operator<<(KSQControllerBase *controller) {
+        QSharedPointer<KSQControllerBase> e(controller);
+        m_elements.push_back(e);
+        return *this;
+    }
 
 public slots:
-    void
-    start();
 
-    void
-    stop();
+private slots:
 
 private:
-    KSQActiveDevices m_devicesList;
+    QList <QSharedPointer<KSQControllerBase>> m_elements;
+
 };
 
-#endif // PROVISION_QT_ACTIVE_DEVICES_ENUM_H
+#endif // YIOT_DEVICES_H

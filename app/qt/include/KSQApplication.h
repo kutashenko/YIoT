@@ -24,11 +24,10 @@
 #include <QtCore>
 #include <QGuiApplication>
 
-#include <KSQActiveDevicesEnumerator.h>
 #include <KSQWiFiEnumerator.h>
 #include <KSQBLEController.h>
 
-#include <devices/lamp/mono/KSQLampMonoController.h>
+#include <devices/KSQDevices.h>
 
 #include <virgil/iot/qt/VSQIoTKit.h>
 #include <virgil/iot/qt/netif/VSQUdpBroadcast.h>
@@ -51,11 +50,10 @@ public:
     applicationDisplayName() const;
 
 private:
-    KSQActiveDevicesEnumerator m_activeDevicesEnumerator;
     KSQWiFiEnumerator m_wifiEnumerator;
     KSQBLEController m_bleController;
 
-    KSQLampMonoController m_lampMonoController;
+    KSQDevices m_deviceControllers;
 };
 
 #endif // PROVISION_QT_APP_H

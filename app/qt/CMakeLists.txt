@@ -210,11 +210,16 @@ target_sources(${KS_TARGET_NAME}
         # Headers
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQApplication.h
         ${CMAKE_CURRENT_LIST_DIR}/include/ui/VSQUiHelper.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/KSQActiveDevicesEnumerator.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQWiFiEnumerator.h
         ${CMAKE_CURRENT_LIST_DIR}/include/KSQBLEController.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/KSActiveDevice.h
-        ${CMAKE_CURRENT_LIST_DIR}/include/devices/lamp/mono/KSQLampMonoController.h
+
+        ${CMAKE_CURRENT_LIST_DIR}/include/devices/KSQDevices.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/devices/KSQControllerBase.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/devices/KSQDeviceBase.h
+
+        ${CMAKE_CURRENT_LIST_DIR}/include/devices/lamp/KSQLamp.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/devices/lamp/KSQLampController.h
+
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<STREQUAL:"${KS_PLATFORM}","android">:${CMAKE_CURRENT_LIST_DIR}/include/android/KSQAndroid.h>
@@ -222,12 +227,16 @@ target_sources(${KS_TARGET_NAME}
         # Sources
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQApplication.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/ui/VSQUiHelper.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/src/KSQActiveDevicesEnumerator.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQWiFiEnumerator.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/KSQBLEController.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/iotkit-hal.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/src/devices/lamp/mono/KSQLampMonoController.cpp
+
+        ${CMAKE_CURRENT_LIST_DIR}/src/devices/KSQDevices.cpp
+
+        ${CMAKE_CURRENT_LIST_DIR}/src/devices/lamp/KSQLamp.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/devices/lamp/KSQLampController.cpp
+
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/src/macos/KSMacWiFi.mm>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/src/win/KSWinWiFi.cpp>
         $<$<STREQUAL:"${KS_PLATFORM}","android">:${CMAKE_CURRENT_LIST_DIR}/src/android/KSQAndroid.cpp>

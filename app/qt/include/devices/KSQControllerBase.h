@@ -15,42 +15,48 @@
 //
 //
 //
-//   04 August 2020
+//   01 August 2020
 //   Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 
-#ifndef PROVISION_QT_LAMP_MONO_CONTROLLER_H
-#define PROVISION_QT_LAMP_MONO_CONTROLLER_H
+#ifndef YIOT_DEVICE_CONTROLLER_BASE_H
+#define YIOT_DEVICE_CONTROLLER_BASE_H
 
 #include <QtCore>
+#include <QHash>
+#include <QAbstractTableModel>
 
-#include <virgil/iot/qt/netif/VSQNetifBLEEnumerator.h>
-#include <virgil/iot/qt/netif/VSQNetifBLE.h>
+#include <virgil/iot/qt/VSQIoTKit.h>
 
-class KSQLampMonoController : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QString state READ state WRITE setState NOTIFY fireStateChanged)
-
+class KSQControllerBase : public QAbstractTableModel {
+Q_OBJECT
+    Q_PROPERTY(bool collapsed READ collapsed WRITE setCollapsed NOTIFY fireCollapsedChanged)
 public:
-    KSQLampMonoController();
-    virtual ~KSQLampMonoController() = default;
 
-    Q_INVOKABLE QString
-    state();
+    KSQControllerBase() = default;
+    virtual ~KSQControllerBase() = default;
+
+    virtual QString
+    name() const = 0;
+
+    virtual QString
+    image() const = 0;
+
+    Q_INVOKABLE void
+    setCollapsed(bool c) {
+        if (m_collapsed != c) {
+            m_collapsed = c;
+            emit fireCollapsedChanged(m_collapsed);
+        }
+    }
+
+    Q_INVOKABLE bool
+    collapsed() { return m_collapsed; }
 
 signals:
-    void fireStateChanged(QString);
-
-public slots:
-    Q_INVOKABLE void
-    setState(QString state);
+    void fireCollapsedChanged(bool);
 
 private:
-    static const QString kStateUnknown;
-    static const QString kStateOn;
-    static const QString kStateOff;
-    static const QStringList kStates;
-
-    QString m_state;
+    bool m_collapsed = true;
 };
 
-#endif // PROVISION_QT_LAMP_MONO_CONTROLLER_H
+#endif // YIOT_DEVICE_CONTROLLER_BASE_H
