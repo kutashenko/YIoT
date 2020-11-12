@@ -20,13 +20,134 @@
 
 #include <devices/lamp/KSQLampController.h>
 
+#include <virgil/iot/qt/protocols/snap/VSQSnapLampClient.h>
+#include <virgil/iot/qt/protocols/snap/VSQSnapINFOClient.h>
+
 /******************************************************************************/
 KSQLampController::KSQLampController() {
-    m_lamps.insert(KSQLamp(broadcastMac, "lamp 1"));
-    m_lamps.insert(KSQLamp(broadcastMac, "lamp 2"));
-    m_lamps.insert(KSQLamp(broadcastMac, "lamp 3"));
-    m_lamps.insert(KSQLamp(broadcastMac, "lamp 4"));
-    m_lamps.insert(KSQLamp(broadcastMac, "lamp 5"));
+    // SNAP::INFO service
+    connect(&VSQSnapInfoClient::instance(), &VSQSnapInfoClient::fireNewDevice,
+            this, &KSQLampController::onDeviceInfoUpdate, Qt::QueuedConnection);
+
+    connect(&VSQSnapInfoClient::instance(), &VSQSnapInfoClient::fireDeviceInfo,
+            this, &KSQLampController::onDeviceInfoUpdate, Qt::QueuedConnection);
+
+    // SNAP::LAMP service
+    connect(&VSQSnapLampClient::instance(), &VSQSnapLampClient::fireStateUpdate,
+            this, &KSQLampController::onLampStateUpdate, Qt::QueuedConnection);
+
+    connect(&VSQSnapLampClient::instance(), &VSQSnapLampClient::fireStateError,
+            this, &KSQLampController::onLampError, Qt::QueuedConnection);
+
+
+    // Test data
+#if 1
+    auto t = new QTimer();
+    connect(t, &QTimer::timeout, [t, this]() {
+        static int n = 0;
+        if (n++ >= 10) {
+            t->deleteLater();
+            return;
+        }
+
+        vs_mac_addr_t mac;
+        mac.bytes[0] = 0;
+        mac.bytes[1] = 1;
+        mac.bytes[2] = 2;
+        mac.bytes[3] = 3;
+        mac.bytes[4] = 4;
+        mac.bytes[4] = n;
+
+        vs_snap_lamp_state_t state = {0};
+        state.is_on = n % 2;
+        onLampStateUpdate(mac, state);
+
+        VSQDeviceInfo deviceInfo;
+        deviceInfo.m_deviceType = VSQDeviceType();
+        deviceInfo.m_deviceRoles = VSQDeviceRoles();
+        deviceInfo.m_tlVer = VSQFileVersion();
+        deviceInfo.m_fwVer = VSQFileVersion();
+        deviceInfo.m_manufactureId = VSQManufactureId();
+        onDeviceInfoUpdate(deviceInfo);
+    });
+    t->start(1000);
+#endif
+    // ~Test data
+}
+
+/******************************************************************************/
+void
+KSQLampController::onDeviceInfoUpdate(const VSQDeviceInfo &deviceInfo) {
+    auto lamp = findLamp(deviceInfo.m_mac);
+    if (lamp) {
+        if (deviceInfo.m_hasGeneralInfo) {
+            lamp->setDeviceID(deviceInfo.m_deviceRoles);
+            lamp->setManufacture(deviceInfo.m_manufactureId);
+            lamp->setDeviceID(deviceInfo.m_deviceType);
+            lamp->setFwVersion(deviceInfo.m_fwVer);
+            lamp->setTlVersion(deviceInfo.m_tlVer);
+        }
+
+        if (deviceInfo.m_hasStatistics) {
+            lamp->setSentBytes(QString("%1").arg(deviceInfo.m_sent));
+            lamp->setReceivedBytes(QString("%1").arg(deviceInfo.m_received));
+        }
+    }
+}
+
+/******************************************************************************/
+void
+KSQLampController::onLampStateUpdate(const vs_mac_addr_t mac,
+                                     const vs_snap_lamp_state_t state) {
+    auto lamp = findLamp(mac);
+    if (!lamp) {
+        // Add lamp
+        auto newLamp = QSharedPointer<KSQLamp>::create(VSQMac(mac), "test");
+        connect(newLamp.get(), &KSQLamp::fireSetDeviceParams,
+                this, &KSQLampController::onSetDeviceParams);
+        m_lamps.push_back(newLamp);
+    }
+
+    lamp = findLamp(mac);
+    if (!lamp) {
+        qDebug() << "Lamp adding error: " << VSQMac(mac).description();
+        return;
+    }
+
+    lamp->setState(state.is_on ? KSQLamp::kStateOn : KSQLamp::kStateOff);
+}
+
+/******************************************************************************/
+void
+KSQLampController::onLampError(const vs_mac_addr_t mac) {
+    auto lamp = findLamp(mac);
+    if (lamp) {
+        qDebug() << "Lamp error: " << VSQMac(mac).description();
+    }
+}
+
+/******************************************************************************/
+void
+KSQLampController::onSetDeviceParams(const KSQLamp &lamp) {
+    vs_snap_lamp_state_t state;
+
+    memset(&state, 0, sizeof(state));
+
+    state.is_on = lamp.state() == KSQLamp::kStateOn;
+
+    VSQSnapLampClient::instance().setState(lamp.qMacAddr(), state);
+}
+
+/******************************************************************************/
+QSharedPointer<KSQLamp>
+KSQLampController::findLamp(const vs_mac_addr_t &mac) {
+    VSQMac qMac(mac);
+    for (auto el: m_lamps) {
+        if (el->qMacAddr() == qMac) {
+            return el;
+        }
+    }
+    return QSharedPointer<KSQLamp> (nullptr);
 }
 
 /******************************************************************************/
@@ -45,7 +166,7 @@ KSQLampController::columnCount(const QModelIndex &parent) const {
 QVariant
 KSQLampController::data(const QModelIndex &index, int role) const {
     if (index.row() < m_lamps.size()) {
-        auto l = std::next(m_lamps.begin(), index.row());
+        auto l = *std::next(m_lamps.begin(), index.row());
 
         switch (role) {
         case Element::Name:

@@ -42,19 +42,20 @@ public:
     virtual QString
     _deviceType() const final { return "lampMono"; }
 
+    static const QString kStateUnknown;
+    static const QString kStateOn;
+    static const QString kStateOff;
+    static const QStringList kStates;
+
 signals:
     void fireStateChanged(QString);
+    void fireSetDeviceParams(const KSQLamp &lamp);
 
 public slots:
     Q_INVOKABLE void
     setState(QString state);
 
 private:
-    static const QString kStateUnknown;
-    static const QString kStateOn;
-    static const QString kStateOff;
-    static const QStringList kStates;
-
     QString m_state;
 };
 

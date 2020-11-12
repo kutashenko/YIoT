@@ -63,9 +63,27 @@ public slots:
 signals:
 
 private slots:
+    // SNAP::INFO
+    void
+    onDeviceInfoUpdate(const VSQDeviceInfo &deviceInfo);
+
+    // SNAP::LAMP
+    void
+    onLampStateUpdate(const vs_mac_addr_t mac, const vs_snap_lamp_state_t state);
+
+    void
+    onLampError(const vs_mac_addr_t mac);
+
+    // UI
+    void
+    onSetDeviceParams(const KSQLamp &lamp);
+
+protected:
+    QSharedPointer<KSQLamp>
+    findLamp(const vs_mac_addr_t &mac);
 
 private:
-    std::set <KSQLamp> m_lamps;
+    std::list<QSharedPointer<KSQLamp>> m_lamps;
 };
 
 #endif // YIOT_LAMP_CONTROLLER_H

@@ -53,6 +53,7 @@ KSQLamp::setState(QString state) {
         m_state = kStateUnknown;
     }
     emit fireStateChanged(m_state);
+    emit fireSetDeviceParams(*this);
 }
 
 /******************************************************************************/
