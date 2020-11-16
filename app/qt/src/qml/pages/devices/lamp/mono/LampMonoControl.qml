@@ -80,9 +80,9 @@ Page {
                     anchors.fill: parent
                     onClicked: {
                         if (controller.state !== "on") {
-                            controller.state = "on"
+                            controller.setStateToHardware("on")
                         } else {
-                            controller.state = "off"
+                            controller.setStateToHardware("off")
                         }
                     }
                 }

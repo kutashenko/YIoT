@@ -87,6 +87,7 @@
         <file>qml/components/MainTabButton.qml</file>
         <file>qml/components/SettingsStorage.qml</file>
         <file>qml/components/CollapsibleList.qml</file>
+        <file>qml/components/devices/lamp/LampControls.qml</file>
 
         <file>qml/pages/LeftSideMenu.qml</file>
         <file>qml/pages/settings/SettingsMenuPage.qml</file>

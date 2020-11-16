@@ -79,7 +79,7 @@ private slots:
     onSetDeviceParams(const KSQLamp &lamp);
 
 protected:
-    QSharedPointer<KSQLamp>
+    std::pair <int, QSharedPointer<KSQLamp>>
     findLamp(const vs_mac_addr_t &mac);
 
 private:

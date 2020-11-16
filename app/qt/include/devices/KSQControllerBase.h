@@ -55,6 +55,9 @@ public:
 signals:
     void fireCollapsedChanged(bool);
 
+    void fireAboutToActivate();
+    void fireActivated();
+
 private:
     bool m_collapsed = true;
 };

@@ -53,6 +53,12 @@ KSQLamp::setState(QString state) {
         m_state = kStateUnknown;
     }
     emit fireStateChanged(m_state);
+}
+
+/******************************************************************************/
+Q_INVOKABLE void
+KSQLamp::setStateToHardware(QString state) {
+    setState(state);
     emit fireSetDeviceParams(*this);
 }
 

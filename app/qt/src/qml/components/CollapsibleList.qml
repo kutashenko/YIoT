@@ -23,6 +23,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 import "../theme"
+import "../components/devices/lamp"
 
 Item {
     property alias model: list.model
@@ -123,36 +124,78 @@ Item {
                 delegate: Rectangle {
                     id: deviceItem
                     color: "transparent"
-                    height: itemText.height + 10
+                    height: 40
                     width: w
 
-                    Text {
+                    Label {
                         id: itemText
-                        anchors.verticalCenter: parent.verticalCenter
-                        x: 30
+                        z: 1
+                        anchors.leftMargin: 30
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: w - 100
+                        verticalAlignment: Qt.AlignVCenter
                         font.pointSize: UiHelper.fixFontSz(14)
                         text: name
                         color: Theme.primaryTextColor
                     }
 
+                    Loader {
+                        id: loader
+                        source: "qrc:/qml/components/devices/lamp/LampControls.qml"
+                        onLoaded: {
+                            z = 1
+                            anchors.left = itemText.right
+                            anchors.right = parent.right
+                            item.state = "hidden"
+                            item.width = 0
+                            item.onContainsMouseChanged.connect(function() {
+                                checkActivity()
+                            })
+                        }
+                    }
+
                     MouseArea {
+                        id: mainMouseArea
+                        z: 0
                         enabled: true
                         anchors.fill: parent
                         hoverEnabled: true
-                        anchors.rightMargin: 0
                         onClicked: {
                             activateDeviceView(deviceType, name, deviceController)
                         }
 
                         onEntered: {
                             list.currentIndex = index
-                            deviceItem.color = Theme.contrastBackgroundColor
+                            checkActivity()
                         }
 
                         onExited: {
-                            deviceItem.color = "transparent"
+                            checkActivity()
                         }
                     }
+
+                    function timerObj() {
+                        return Qt.createQmlObject("import QtQuick 2.0; Timer {}", list);
+                    }
+
+                    function delay(delayTime, cb) {
+                        var timer = new timerObj()
+                        timer.interval = delayTime
+                        timer.repeat = false
+                        timer.triggered.connect(cb)
+                        timer.start()
+                    }
+
+                    function checkActivity() {
+                        delay(5, function() {
+                            var v = loader.item.containsMouse || mainMouseArea.containsMouse
+                            loader.item.state = v ? "visible" : "hidden"
+                            deviceItem.color = v ? Theme.contrastBackgroundColor : "transparent"
+                        })
+                    }
+
                 }
             }
         }

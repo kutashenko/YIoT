@@ -53,15 +53,13 @@ public:
     roleNames() const override;
 
     KSQDevices &
-    operator<<(KSQControllerBase *controller) {
-        QSharedPointer<KSQControllerBase> e(controller);
-        m_elements.push_back(e);
-        return *this;
-    }
+    operator<<(KSQControllerBase *controller);
 
 public slots:
 
 private slots:
+    void
+    onGroupActivated();
 
 private:
     QList <QSharedPointer<KSQControllerBase>> m_elements;

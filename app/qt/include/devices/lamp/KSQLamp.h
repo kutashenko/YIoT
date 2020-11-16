@@ -55,6 +55,9 @@ public slots:
     Q_INVOKABLE void
     setState(QString state);
 
+    Q_INVOKABLE void
+    setStateToHardware(QString state);
+
 private:
     QString m_state;
 };

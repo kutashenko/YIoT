@@ -20,6 +20,26 @@
 
 #include <devices/KSQDevices.h>
 
+void fireAboutToActivate();
+void fireActivated();
+
+/******************************************************************************/
+KSQDevices &
+KSQDevices::operator<<(KSQControllerBase *controller) {
+    connect(controller, &KSQControllerBase::fireActivated, this, &KSQDevices::onGroupActivated);
+    QSharedPointer<KSQControllerBase> e(controller);
+    m_elements.push_back(e);
+    return *this;
+}
+
+/******************************************************************************/
+void
+KSQDevices::onGroupActivated() {
+    // TODO: Use correct insertion
+    beginResetModel();
+    endResetModel();
+}
+
 /******************************************************************************/
 int
 KSQDevices::rowCount(const QModelIndex &parent) const {

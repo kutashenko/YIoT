@@ -5,6 +5,8 @@ Button {
 
     id: button
 
+    property alias containsMouse: button.hovered
+
     property string image: "Grid"
     property string imageSource: ""
 
