@@ -24,6 +24,7 @@ import QtQuick.Layouts 1.12
 
 import "../theme"
 import "../components"
+import "../components/CollapsibleList"
 
 Page {
 

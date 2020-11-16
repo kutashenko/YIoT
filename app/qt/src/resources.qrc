@@ -86,7 +86,9 @@
         <file>qml/components/FormPrimaryButton.qml</file>
         <file>qml/components/MainTabButton.qml</file>
         <file>qml/components/SettingsStorage.qml</file>
-        <file>qml/components/CollapsibleList.qml</file>
+        <file>qml/components/CollapsibleList/CollapsibleList.qml</file>
+        <file>qml/components/CollapsibleList/CollapsibleListCategory.qml</file>
+        <file>qml/components/CollapsibleList/CollapsibleListSubItem.qml</file>
         <file>qml/components/devices/lamp/LampControls.qml</file>
 
         <file>qml/pages/LeftSideMenu.qml</file>
