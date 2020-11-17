@@ -26,6 +26,7 @@
 #include <virgil/iot/logger/logger.h>
 
 #include <devices/lamp/KSQLampController.h>
+#include <devices/pc/KSQPCController.h>
 
 #ifdef Q_OS_ANDROID
 #include "android/KSQAndroid.h"
@@ -51,7 +52,9 @@ KSQApplication::run() {
     }
 
     // Initialize devices controllers
-    m_deviceControllers << new KSQLampController();
+    m_deviceControllers
+            << new KSQLampController()
+            << new KSQPCController();
 
 
     // Initialize QML

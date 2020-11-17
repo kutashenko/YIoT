@@ -219,6 +219,8 @@ target_sources(${KS_TARGET_NAME}
 
         ${CMAKE_CURRENT_LIST_DIR}/include/devices/lamp/KSQLamp.h
         ${CMAKE_CURRENT_LIST_DIR}/include/devices/lamp/KSQLampController.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/devices/pc/KSQPC.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/devices/pc/KSQPCController.h
 
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
@@ -236,6 +238,8 @@ target_sources(${KS_TARGET_NAME}
 
         ${CMAKE_CURRENT_LIST_DIR}/src/devices/lamp/KSQLamp.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/devices/lamp/KSQLampController.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/devices/pc/KSQPC.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/devices/pc/KSQPCController.cpp
 
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/src/macos/KSMacWiFi.mm>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/src/win/KSWinWiFi.cpp>

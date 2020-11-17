@@ -169,6 +169,10 @@ ApplicationWindow {
         w.state = "deviceControl"
     }
 
+    function showPC() {
+        w.state = "deviceControl"
+    }
+
     function showMain() {
         w.state = "main"
     }

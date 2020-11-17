@@ -64,7 +64,9 @@ Page {
 
     function deviceCategoryActions(deviceType) {
         if (deviceType === "lamps") {
-            return "qrc:/qml/components/devices/lamp/LampCategoryControls.qml"
+            return "qrc:/qml/components/devices/GeneralCategoryControls.qml"
+        }  else if (deviceType === "pc") {
+            return "qrc:/qml/components/devices/GeneralCategoryControls.qml"
         }
 
         console.error("Unknown Device Type")
@@ -74,6 +76,8 @@ Page {
     function deviceActions(deviceType) {
         if (deviceType === "lampMono") {
             return "qrc:/qml/components/devices/lamp/LampControls.qml"
+        } else if (deviceType === "pc") {
+            return "qrc:/qml/components/devices/GeneralDeviceControls.qml"
         }
 
         console.error("Unknown Device Type")
@@ -85,14 +89,18 @@ Page {
             lampMonoPage.deviceName = deviceName
             lampMonoPage.controller = deviceController
             showLampMono()
-        } else {
-            console.error("Unknown Device Type")
+        } else if (deviceType === "pc") {
+            showPC()
         }
+
+        console.error("Unknown Device Type")
     }
 
     function deviceStateImage(model) {
         if (model.deviceType === "lampMono") {
             return "devices/lamp/mono/%1".arg(model.state)
+        } else if (model.deviceType === "pc") {
+            return "devices/pc/rpi"
         }
 
         console.error("Unknown Device Type")

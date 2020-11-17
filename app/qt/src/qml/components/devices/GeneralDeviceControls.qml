@@ -22,14 +22,12 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-import "../../../theme"
-import "../../../components"
+import "../../theme"
+import "../../components"
 
 RowLayout {
-    property bool containsMouse: btnInfo.containsMouse || btnCollapser.containsMouse
-    property int wSz: 100
-
-    signal showInfo()
+    property bool containsMouse: btnInfo.containsMouse
+    property int wSz: 50
 
     id: actionsBlock
     visible: false
@@ -39,18 +37,7 @@ RowLayout {
     ImageButton {
         id: btnInfo
         image: "dark/info"
-        onClicked: {
-            console.log("Show information about current category")
-            showInfo()
-        }
-    }
-
-    ImageButton {
-        id: btnCollapser
-        image: collapsed ? "dark/down" : "dark/up"
-        onClicked: {
-            collapsed = !collapsed
-        }
+        onClicked: { showDeviceInfo(modelData.deviceController) }
     }
 
     Item {

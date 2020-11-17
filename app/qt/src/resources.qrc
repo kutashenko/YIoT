@@ -49,6 +49,7 @@
         <file>qml/resources/icons/dark/devices/lamp/mono/unknown.png</file>
         <file>qml/resources/icons/dark/devices/lamp/mono/on.png</file>
         <file>qml/resources/icons/dark/devices/lamp/mono/off.png</file>
+        <file>qml/resources/icons/dark/devices/pc/rpi.png</file>
 
         <file>qml/resources/icons/test-qr.png</file>
 
@@ -85,8 +86,9 @@
         <file>qml/components/devices/DeviceInfoPopup.qml</file>
         <file>qml/components/devices/AllDevicesList.qml</file>
         <file>qml/components/devices/DevicesListItem.qml</file>
+        <file>qml/components/devices/GeneralCategoryControls.qml</file>
+        <file>qml/components/devices/GeneralDeviceControls.qml</file>
         <file>qml/components/devices/lamp/LampControls.qml</file>
-        <file>qml/components/devices/lamp/LampCategoryControls.qml</file>
 
         <file>qml/pages/LeftSideMenu.qml</file>
         <file>qml/pages/settings/SettingsMenuPage.qml</file>
