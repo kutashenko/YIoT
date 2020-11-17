@@ -69,6 +69,9 @@ KSQDevices::data(const QModelIndex &index, int role) const {
                 case Element::Name:
                     return el->name();
 
+                case Element::Type:
+                    return el->type();
+
                 case Element::Image:
                     return el->image();
 
@@ -89,6 +92,7 @@ QHash<int, QByteArray>
 KSQDevices::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[Name] = "name";
+    roles[Type] = "categoryType";
     roles[Image] = "image";
     roles[SubModel] = "subModel";
     return roles;

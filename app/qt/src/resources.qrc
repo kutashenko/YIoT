@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/resources/Plus.png</file>
-        <file>qml/resources/Settings.png</file>
         <file>qml/resources/icons/Logo-Big@3x.png</file>
         <file>qml/resources/icons/Plus.png</file>
         <file>qml/resources/icons/Lock@2x.png</file>
@@ -12,10 +10,8 @@
         <file>qml/resources/icons/Key.png</file>
         <file>qml/resources/icons/Logo-Big@2x.png</file>
         <file>qml/resources/icons/Lock.png</file>
-        <file>qml/resources/icons/Grid@2x.png</file>
         <file>qml/resources/icons/Plus@2x.png</file>
         <file>qml/resources/icons/Search_Big@2x.png</file>
-        <file>qml/resources/icons/Grid.png</file>
         <file>qml/resources/icons/Search.png</file>
         <file>qml/resources/icons/Menu.png</file>
         <file>qml/resources/icons/Logo.png</file>
@@ -29,11 +25,7 @@
         <file>qml/resources/icons/More.png</file>
         <file>qml/resources/icons/Close@2x.png</file>
         <file>qml/resources/icons/Close.png</file>
-        <file>qml/resources/icons/Bulb.png</file>
-        <file>qml/resources/icons/Device.png</file>
-        <file>qml/resources/icons/DeviceSetup.png</file>
         <file>qml/resources/icons/Settings.png</file>
-        <file>qml/resources/icons/Temp.png</file>
 
         <file>qml/resources/icons/dark/bt.png</file>
         <file>qml/resources/icons/dark/wifi.png</file>
@@ -51,6 +43,9 @@
         <file>qml/resources/icons/dark/secure-enclave.png</file>
         <file>qml/resources/icons/dark/wash-machine.png</file>
         <file>qml/resources/icons/dark/upload.gif</file>
+        <file>qml/resources/icons/dark/info.png</file>
+        <file>qml/resources/icons/dark/up.png</file>
+        <file>qml/resources/icons/dark/down.png</file>
         <file>qml/resources/icons/dark/devices/lamp/mono/unknown.png</file>
         <file>qml/resources/icons/dark/devices/lamp/mono/on.png</file>
         <file>qml/resources/icons/dark/devices/lamp/mono/off.png</file>
@@ -86,10 +81,10 @@
         <file>qml/components/FormPrimaryButton.qml</file>
         <file>qml/components/MainTabButton.qml</file>
         <file>qml/components/SettingsStorage.qml</file>
-        <file>qml/components/CollapsibleList/CollapsibleList.qml</file>
-        <file>qml/components/CollapsibleList/CollapsibleListCategory.qml</file>
-        <file>qml/components/CollapsibleList/CollapsibleListSubItem.qml</file>
+        <file>qml/components/devices/AllDevicesList.qml</file>
+        <file>qml/components/devices/DevicesListItem.qml</file>
         <file>qml/components/devices/lamp/LampControls.qml</file>
+        <file>qml/components/devices/lamp/LampCategoryControls.qml</file>
 
         <file>qml/pages/LeftSideMenu.qml</file>
         <file>qml/pages/settings/SettingsMenuPage.qml</file>

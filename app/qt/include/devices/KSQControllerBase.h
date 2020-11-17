@@ -39,6 +39,9 @@ public:
     name() const = 0;
 
     virtual QString
+    type() const = 0;
+
+    virtual QString
     image() const = 0;
 
     Q_INVOKABLE void

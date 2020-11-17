@@ -23,7 +23,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 import "../../theme"
-import "../../components/CollapsibleList"
+import "../../components/devices"
 import "../../components/devices/lamp"
 
 Item {
@@ -33,21 +33,47 @@ Item {
     anchors.fill: parent
     anchors.topMargin: 1
 
+    // Sub elements
     Component {
         id: subItemDelegateComponent
-        CollapsibleListSubItem {
-            commonWidth: w
+        Column {
+            property int commonWidth: w
+            property alias model: subItemRepeater.model
+            Repeater {
+                id: subItemRepeater
+                delegate: DevicesListItem {
+                    topLevel: false
+                    controlElementUrl: deviceActions(deviceType)
+                }
+            }
         }
     }
 
+    // Main (category) elements
     Component {
         id: categoryDelegate
-        CollapsibleListCategory {
-            commonWidth: w
-            subItemColumnDelegate: subItemDelegateComponent
+        Column {
+            property int commonWidth: w
+
+            width: commonWidth
+
+            DevicesListItem {
+                showControlsPermanent: true
+                controlElementUrl: deviceCategoryActions(categoryType)
+            }
+
+            Loader {
+                id: subItemLoader
+
+                visible: !subModel.collapsed
+                property variant subItemModel : subModel
+                sourceComponent: subModel.collapsed ? null : subItemDelegateComponent
+                onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
+            }
         }
     }
 
+    // List container
     ListView {
         id: list
         anchors.fill: parent

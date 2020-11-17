@@ -26,32 +26,31 @@ import "../../../theme"
 import "../../../components"
 
 RowLayout {
-    property bool containsMouse: stateSwitch.hovered || btnProvision.containsMouse
-    property int wSz: 120
+    property bool containsMouse: btnInfo.containsMouse || btnCollapser.containsMouse
+    property int wSz: 100
+
+    signal showInfo()
 
     id: actionsBlock
     visible: false
     anchors.right: parent.right
     width: 0
 
-    Switch {
-        id: stateSwitch
-        checked: modelData.deviceController.state != "on"
-
+    ImageButton {
+        id: btnInfo
+        image: "dark/info"
         onClicked: {
-            if (modelData.state !== "on") {
-                modelData.deviceController.setStateToHardware("on")
-            } else {
-                modelData.deviceController.setStateToHardware("off")
-            }
+            console.log("Show information about current category")
+            showInfo()
         }
-
     }
 
     ImageButton {
-        id: btnProvision
-        image: "dark/info"
-        onClicked: { startProvision(name) }
+        id: btnCollapser
+        image: collapsed ? "dark/down" : "dark/up"
+        onClicked: {
+            collapsed = !collapsed
+        }
     }
 
     Item {

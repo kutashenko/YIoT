@@ -41,6 +41,8 @@ public:
 
     virtual QString name() const final { return tr("Lamps"); }
 
+    virtual QString type() const final { return "lamps"; }
+
     virtual QString image() const final { return tr("bulb"); }
 
     /**

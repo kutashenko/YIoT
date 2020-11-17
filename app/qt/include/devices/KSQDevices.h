@@ -32,7 +32,7 @@
 class KSQDevices : public QAbstractTableModel {
 Q_OBJECT
 public:
-    enum Element { Name = Qt::UserRole, Image, SubModel, ElementMax };
+    enum Element { Name = Qt::UserRole, Type, Image, SubModel, ElementMax };
 
     KSQDevices() = default;
     virtual ~KSQDevices() = default;

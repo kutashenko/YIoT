@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.12
 
 import "../theme"
 import "../components"
-import "../components/CollapsibleList"
+import "../components/devices"
 
 Page {
 
@@ -39,112 +39,45 @@ Page {
         showSettingsButton: true
     }
 
-    CollapsibleList {
+    AllDevicesList {
         id: list
         model: deviceControllers
     }
 
-//    ListView {
-//        id: list
-//        anchors.fill: parent
-//        anchors.topMargin: 1
-//
-//        spacing: 1
-//        model: activeDevEnum
-//
-//        delegate: Rectangle {
-//            id: base
-//            width: parent.width
-//            height: 45
-//            color: "transparent"
-//
-//            RowLayout {
-//                id: listDelegate
-//                anchors.fill: parent
-//                clip: true
-//
-//                Image {
-//                    id: icon
-//                    source: "qrc:/qml/resources/icons/dark/%1.png".arg(image)
-//                    Layout.maximumHeight: listDelegate.height * 0.7
-//                    Layout.maximumWidth: Layout.maximumHeight
-//                    Layout.leftMargin: 5
-//                    fillMode: Image.PreserveAspectFit
-//                    Layout.alignment: Qt.AlignLeft
-//                }
-//
-//                Text {
-//                    id: nameText
-//                    text: name
-//                    color: Theme.primaryTextColor
-//                    verticalAlignment: Text.AlignVCenter
-//                    font.pointSize: UiHelper.fixFontSz(14)
-//
-//                    Layout.alignment: Qt.AlignLeft
-//                    Layout.fillHeight: true
-//                    Layout.fillWidth: true
-//                    Layout.rightMargin: 5
-//                }
-//
-////                RowLayout {
-////                    id: actionsBlock
-////                    Layout.rightMargin: 10
-////
-////                    ImageButton {
-////                        id: btnInfo
-////                        image: "Search"
-////                        z: 100
-////
-////                        onClicked: {
-////                            console.log("Click: Info")
-////                        }
-////                    }
-////
-////                    ImageButton {
-////                        id: btnProvision
-////                        image: "Plus"
-////
-////                        onClicked: {
-////                            showPopupError(qsTr("Need to set WiFi credentials"), showWiFiSettings)
-////                        }
-////                    }
-////
-////                    states: [
-////                            State { when: list.currentIndex == index;
-////                                PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 80    }
-////                            },
-////                            State { when: list.currentIndex != index;
-////                                PropertyChanges {   target: actionsBlock; Layout.maximumWidth: 0    }
-////                            }]
-////
-////                    transitions: Transition {
-////                        NumberAnimation { property: "Layout.maximumWidth"; duration: 100}
-////                    }
-////                }
-//            }
-//
-//            MouseArea {
-//                enabled: true
-//                anchors.fill: parent
-//                hoverEnabled: true
-//                anchors.rightMargin: 0
-//                onClicked: {
-//                    showLampMono()
-//                }
-//
-//                onEntered: {
-//                    list.currentIndex = index
-//                    base.color = Theme.contrastBackgroundColor
-//                }
-//
-//                onExited: {
-//                    base.color = "transparent"
-//                }
-//            }
-//        }
-//
-//        Component.onCompleted: {
-//
-//        }
-//    }
+    function deviceCategoryActions(deviceType) {
+        if (deviceType === "lamps") {
+            return "qrc:/qml/components/devices/lamp/LampCategoryControls.qml"
+        }
+
+        console.error("Unknown Device Type")
+        return ""
+    }
+
+    function deviceActions(deviceType) {
+        if (deviceType === "lampMono") {
+            return "qrc:/qml/components/devices/lamp/LampControls.qml"
+        }
+
+        console.error("Unknown Device Type")
+        return ""
+    }
+
+    function activateDeviceView(deviceType, deviceName, deviceController) {
+        if (deviceType === "lampMono") {
+            lampMonoPage.deviceName = deviceName
+            lampMonoPage.controller = deviceController
+            showLampMono()
+        } else {
+            console.error("Unknown Device Type")
+        }
+    }
+
+    function deviceStateImage(model) {
+        if (model.deviceType === "lampMono") {
+            return "devices/lamp/mono/%1".arg(model.state)
+        }
+
+        console.error("Unknown Device Type")
+        return ""
+    }
 }

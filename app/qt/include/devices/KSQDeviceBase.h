@@ -179,6 +179,8 @@ signals:
     void fireSentBytesChanged();
     void fireReceivedBytesChanged();
 
+    void fireDeviceStateChanged();
+
 private:
     bool m_active;
     QDateTime m_lastUpdate;
