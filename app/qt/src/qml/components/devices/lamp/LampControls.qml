@@ -26,7 +26,7 @@ import "../../../theme"
 import "../../../components"
 
 RowLayout {
-    property bool containsMouse: stateSwitch.hovered || btnProvision.containsMouse
+    property bool containsMouse: stateSwitch.hovered || btnInfo.containsMouse
     property int wSz: 120
 
     id: actionsBlock
@@ -49,9 +49,9 @@ RowLayout {
     }
 
     ImageButton {
-        id: btnProvision
+        id: btnInfo
         image: "dark/info"
-        onClicked: { startProvision(name) }
+        onClicked: { showDeviceInfo(modelData.deviceController) }
     }
 
     Item {

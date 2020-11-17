@@ -39,9 +39,27 @@ Page {
         showSettingsButton: true
     }
 
+    DeviceInfoPopup {
+        id: deviceInfo
+    }
+
     AllDevicesList {
         id: list
         model: deviceControllers
+    }
+
+    function showDeviceInfo(model) {
+        deviceInfo.mName = model.name
+        deviceInfo.mAddr = model.macAddr
+        deviceInfo.mID = model.deviceID
+        deviceInfo.mManufacturer = model.manufacture
+        deviceInfo.mType = model.deviceType
+        deviceInfo.mRoles = model.roles
+        deviceInfo.mFwVer = model.fwVersion
+        deviceInfo.mTlVer = model.tlVersion
+        deviceInfo.mSent = model.sentBytes
+        deviceInfo.mReceived = model.receivedBytes
+        deviceInfo.open()
     }
 
     function deviceCategoryActions(deviceType) {

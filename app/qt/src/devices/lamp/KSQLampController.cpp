@@ -56,18 +56,23 @@ KSQLampController::KSQLampController() {
         mac.bytes[2] = 2;
         mac.bytes[3] = 3;
         mac.bytes[4] = 4;
-        mac.bytes[4] = n;
+        mac.bytes[5] = n;
 
         vs_snap_lamp_state_t state = {0};
         state.is_on = n % 2;
         onLampStateUpdate(mac, state);
 
         VSQDeviceInfo deviceInfo;
+        deviceInfo.m_mac = mac;
+        deviceInfo.m_hasGeneralInfo = true;
         deviceInfo.m_deviceType = VSQDeviceType();
-        deviceInfo.m_deviceRoles = VSQDeviceRoles();
+        deviceInfo.m_deviceRoles = VSQDeviceRoles() << VS_SNAP_DEV_THING;
         deviceInfo.m_tlVer = VSQFileVersion();
         deviceInfo.m_fwVer = VSQFileVersion();
         deviceInfo.m_manufactureId = VSQManufactureId();
+        deviceInfo.m_hasStatistics = true;
+        deviceInfo.m_sent = 123134;
+        deviceInfo.m_received = 456234;
         onDeviceInfoUpdate(deviceInfo);
     });
     t->start(1000);
