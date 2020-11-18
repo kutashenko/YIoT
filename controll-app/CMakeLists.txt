@@ -198,7 +198,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cmake/iotkit-qt)
 set(BUILD_TEST_APPLICATION CACHE BOOL OFF FORCE)
 set(BUILD_TRANSLATIONS CACHE BOOL OFF FORCE)
 set(QTKEYCHAIN_STATIC CACHE BOOL ON FORCE)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../ext/qtkeychain qtkeychain)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../ext/qtkeychain qtkeychain)
 
 # ---------------------------------------------------------------------------
 #	Header/Source files

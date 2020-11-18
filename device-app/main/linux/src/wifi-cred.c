@@ -19,7 +19,10 @@
 
 #include "wifi-cred.h"
 
+//-----------------------------------------------------------------------------
 vs_status_e
 ks_snap_cfg_wifi_cb(const vs_cfg_wifi_configuration_t *configuration) {
     return VS_CODE_ERR_NOT_IMPLEMENTED;
 }
+
+//-----------------------------------------------------------------------------

@@ -22,7 +22,7 @@
 #include <virgil/iot/qt/protocols/snap/VSQSnapLampClient.h>
 #include <virgil/iot/qt/protocols/snap/VSQSnapINFOClient.h>
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 KSQLampController::KSQLampController() {
     // SNAP::INFO service
     connect(&VSQSnapInfoClient::instance(), &VSQSnapInfoClient::fireNewDevice,
@@ -79,7 +79,7 @@ KSQLampController::KSQLampController() {
     // ~Test data
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQLampController::onDeviceInfoUpdate(const VSQDeviceInfo &deviceInfo) {
     auto res = findLamp(deviceInfo.m_mac);
@@ -103,7 +103,7 @@ KSQLampController::onDeviceInfoUpdate(const VSQDeviceInfo &deviceInfo) {
     }
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQLampController::onLampStateUpdate(const vs_mac_addr_t mac,
                                      const vs_snap_lamp_state_t state) {
@@ -146,7 +146,7 @@ KSQLampController::onLampStateUpdate(const vs_mac_addr_t mac,
     emit dataChanged(_idx, _idx);
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQLampController::onLampError(const vs_mac_addr_t mac) {
     auto res = findLamp(mac);
@@ -156,7 +156,7 @@ KSQLampController::onLampError(const vs_mac_addr_t mac) {
     }
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQLampController::onSetDeviceParams(const KSQLamp &lamp) {
     vs_snap_lamp_state_t state;
@@ -168,7 +168,7 @@ KSQLampController::onSetDeviceParams(const KSQLamp &lamp) {
     VSQSnapLampClient::instance().setState(lamp.qMacAddr(), state);
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 std::pair <int, QSharedPointer<KSQLamp>>
 KSQLampController::findLamp(const vs_mac_addr_t &mac) {
     VSQMac qMac(mac);
@@ -182,19 +182,19 @@ KSQLampController::findLamp(const vs_mac_addr_t &mac) {
     return std::make_pair(-1, QSharedPointer<KSQLamp> (nullptr));
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 int
 KSQLampController::rowCount(const QModelIndex &parent) const {
     return m_lamps.size();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 int
 KSQLampController::columnCount(const QModelIndex &parent) const {
     return 1;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QVariant
 KSQLampController::data(const QModelIndex &index, int role) const {
     if (index.row() < m_lamps.size()) {
@@ -226,7 +226,7 @@ KSQLampController::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QHash<int, QByteArray>
 KSQLampController::roleNames() const {
     QHash<int, QByteArray> roles;
@@ -239,4 +239,4 @@ KSQLampController::roleNames() const {
     return roles;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------

@@ -19,10 +19,9 @@
 
 #include <devices/pc/KSQPCController.h>
 
-//#include <virgil/iot/qt/protocols/snap/VSQSnapLampClient.h>
 #include <virgil/iot/qt/protocols/snap/VSQSnapINFOClient.h>
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 KSQPCController::KSQPCController() {
     // SNAP::INFO service
     connect(&VSQSnapInfoClient::instance(), &VSQSnapInfoClient::fireNewDevice,
@@ -67,7 +66,7 @@ KSQPCController::KSQPCController() {
     // ~Test data
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQPCController::onDeviceInfoUpdate(const VSQDeviceInfo &deviceInfo) {
     auto res = findPC(deviceInfo.m_mac);
@@ -115,12 +114,12 @@ KSQPCController::onDeviceInfoUpdate(const VSQDeviceInfo &deviceInfo) {
     }
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQPCController::onSetDeviceParams(const KSQPC &pc) {
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 std::pair <int, QSharedPointer<KSQPC>>
 KSQPCController::findPC(const vs_mac_addr_t &mac) {
     VSQMac qMac(mac);
@@ -134,19 +133,19 @@ KSQPCController::findPC(const vs_mac_addr_t &mac) {
     return std::make_pair(-1, QSharedPointer<KSQPC> (nullptr));
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 int
 KSQPCController::rowCount(const QModelIndex &parent) const {
     return m_pcs.size();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 int
 KSQPCController::columnCount(const QModelIndex &parent) const {
     return 1;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QVariant
 KSQPCController::data(const QModelIndex &index, int role) const {
     if (index.row() < m_pcs.size()) {
@@ -175,7 +174,7 @@ KSQPCController::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QHash<int, QByteArray>
 KSQPCController::roleNames() const {
     QHash<int, QByteArray> roles;
@@ -187,4 +186,4 @@ KSQPCController::roleNames() const {
     return roles;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------

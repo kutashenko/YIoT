@@ -75,7 +75,7 @@ start_wifi(void);
 
 vs_snap_cfg_server_service_t cfg_server_cb = {vs_snap_cfg_config, NULL, NULL, NULL};
 
-//******************************************************************************
+//-----------------------------------------------------------------------------
 void
 app_main(void) {
     xTaskCreate(_initializer_exec_task, "_initializer_task", 20 * 4096, NULL, 5, NULL);
@@ -83,7 +83,7 @@ app_main(void) {
         ;
 }
 
-//******************************************************************************
+//-----------------------------------------------------------------------------
 static void
 _initializer_exec_task(void *pvParameters) {
 
@@ -236,7 +236,7 @@ terminate:
 #endif
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 start_wifi(void) {
     // Start WiFi
@@ -248,7 +248,7 @@ start_wifi(void) {
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 vs_snap_cfg_config(const vs_cfg_wifi_configuration_t *configuration) {
     CHECK_NOT_ZERO_RET(configuration, VS_CODE_ERR_INCORRECT_ARGUMENT);
@@ -276,7 +276,7 @@ vs_snap_cfg_config(const vs_cfg_wifi_configuration_t *configuration) {
     return start_wifi();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static void
 wifi_status_cb(bool ready) {
     if (!ready) {
@@ -293,4 +293,4 @@ wifi_status_cb(bool ready) {
     vs_packets_queue_enable_heart_beat(true);
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------

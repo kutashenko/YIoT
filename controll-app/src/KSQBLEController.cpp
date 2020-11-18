@@ -21,7 +21,7 @@
 
 #include <virgil/iot/qt/VSQIoTKit.h>
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 KSQBLEController::KSQBLEController() {
     m_netifBLE = QSharedPointer<VSQNetifBLE>::create();
     m_bleEnumerator.startDiscovery();
@@ -44,24 +44,24 @@ KSQBLEController::KSQBLEController() {
             &KSQBLEController::onDeviceError);
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 KSQBLEController::~KSQBLEController() {
     m_netifBLE->close();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QSharedPointer<VSQNetifBLE>
 KSQBLEController::netif() {
     return m_netifBLE;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 VSQNetifBLEEnumerator *
 KSQBLEController::model() {
     return &m_bleEnumerator;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQBLEController::onConnected(bool success) {
     if (!success) {
@@ -78,27 +78,27 @@ KSQBLEController::onConnected(bool success) {
     }
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQBLEController::onDisconnected() {
     emit fireDisconnected();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQBLEController::onDeviceError() {
     m_netifBLE->close();
     emit fireError(tr("unknown"));
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQBLEController::onConfigurationDone() {
     m_netifBLE->close();
     emit fireDataReceived();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 bool
 KSQBLEController::configureWiFi(const QString &deviceName, const QString &ssid, const QString &password) {
     qDebug() << "deviceName: " << deviceName;
@@ -115,4 +115,4 @@ KSQBLEController::configureWiFi(const QString &deviceName, const QString &ssid, 
     return m_netifBLE->open(ble);
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------

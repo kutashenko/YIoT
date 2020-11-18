@@ -19,7 +19,7 @@
 
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
-project(ble-provision-service VERSION 0.1.0 LANGUAGES C CXX)
+project(yiot-device-app-linux VERSION 0.1.0 LANGUAGES C CXX)
 
 # ---------------------------------------------------------------------------
 #   C++
@@ -58,13 +58,13 @@ set(BUILD_SHARED_LIBS CACHE BOOL OFF FORCE)
 # ---------------------------------------------------------------------------
 #	Linux BLE provisioning application
 # ---------------------------------------------------------------------------
-add_executable(ks-device)
+add_executable(yiot-device-app-linux)
 
 
 # ---------------------------------------------------------------------------
 #	Header/Source files
 # ---------------------------------------------------------------------------
-target_sources(ks-device
+target_sources(yiot-device-app-linux
         PRIVATE
         # Headers
         ${CMAKE_CURRENT_LIST_DIR}/include/iotkit-impl/init.h
@@ -85,7 +85,7 @@ target_sources(ks-device
 # ---------------------------------------------------------------------------
 #	Definitions
 # ---------------------------------------------------------------------------
-target_compile_definitions(ks-device
+target_compile_definitions(yiot-device-app-linux
         PRIVATE
         $<$<BOOL:${SECURE_PROVISION}>:SECURE_PROVISION=1>
         )
@@ -94,7 +94,7 @@ target_compile_definitions(ks-device
 # ---------------------------------------------------------------------------
 #   Include directories
 # ---------------------------------------------------------------------------
-target_include_directories(ks-device
+target_include_directories(yiot-device-app-linux
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
         )
@@ -103,7 +103,7 @@ target_include_directories(ks-device
 # ---------------------------------------------------------------------------
 #	Compile options
 # ---------------------------------------------------------------------------
-target_compile_options(ks-device
+target_compile_options(yiot-device-app-linux
         PRIVATE
         -Wno-multichar
         )
@@ -112,7 +112,7 @@ target_compile_options(ks-device
 # ---------------------------------------------------------------------------
 #	Link libraries
 # ---------------------------------------------------------------------------
-target_link_libraries(ks-device
+target_link_libraries(yiot-device-app-linux
         PRIVATE
 
         # IoTKit
@@ -132,13 +132,13 @@ target_link_libraries(ks-device
 #   Format code
 # ---------------------------------------------------------------------------
 if (COMMAND add_clangformat)
-    add_clangformat(ks-device)
+    add_clangformat(yiot-device-app-linux)
 endif ()
 
 
 #------------------------------------------------------------------------------
 #   Install
 # ---------------------------------------------------------------------------
-install(TARGETS ks-device
+install(TARGETS yiot-device-app-linux
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         )

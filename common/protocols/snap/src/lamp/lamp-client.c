@@ -33,7 +33,7 @@
 static vs_snap_service_t _lamp_client = {0};
 static vs_snap_lamp_client_service_t _impl = {0};
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 vs_status_e
 vs_snap_lamp_get_state(const vs_netif_t *netif,
                        const vs_mac_addr_t *mac) {
@@ -51,7 +51,7 @@ vs_snap_lamp_get_state(const vs_netif_t *netif,
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 vs_status_e
 vs_snap_lamp_set_state(const vs_netif_t *netif,
                        const vs_mac_addr_t *mac,
@@ -75,7 +75,7 @@ vs_snap_lamp_set_state(const vs_netif_t *netif,
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 _lamp_response_processor(vs_snap_element_t element_id, bool is_ack, const uint8_t *response, const uint16_t response_sz) {
 
@@ -96,7 +96,7 @@ _lamp_response_processor(vs_snap_element_t element_id, bool is_ack, const uint8_
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 _lamp_client_response_processor(const struct vs_netif_t *netif,
                                vs_snap_element_t element_id,
@@ -118,7 +118,7 @@ _lamp_client_response_processor(const struct vs_netif_t *netif,
     }
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 const vs_snap_service_t *
 vs_snap_lamp_client(vs_snap_lamp_client_service_t impl) {
 
@@ -134,6 +134,6 @@ vs_snap_lamp_client(vs_snap_lamp_client_service_t impl) {
     return &_lamp_client;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 
 #endif // LAMP_CLIENT

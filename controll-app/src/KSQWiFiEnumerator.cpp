@@ -31,7 +31,7 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 KSQWiFiEnumerator::KSQWiFiEnumerator() {
 #if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
     m_timer.setSingleShot(false);
@@ -44,12 +44,12 @@ KSQWiFiEnumerator::KSQWiFiEnumerator() {
     QTimer::singleShot(200, [this]() { start(); });
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 KSQWiFiEnumerator::~KSQWiFiEnumerator() {
     stop();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQWiFiEnumerator::start() {
 #if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
@@ -60,7 +60,7 @@ KSQWiFiEnumerator::start() {
     onFindWiFi();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQWiFiEnumerator::stop() {
 #if defined(Q_OS_MACOS)
@@ -68,7 +68,7 @@ KSQWiFiEnumerator::stop() {
 #endif
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 #if !defined(Q_OS_MACOS) && !defined(Q_OS_WIN32)
 KSQWiFiNetworks
 KSQWiFiEnumerator::wifi_enum() {
@@ -90,7 +90,7 @@ KSQWiFiEnumerator::wifi_enum() {
 }
 #endif
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQWiFiEnumerator::onFindWiFi() {
     std::thread t([this]() {
@@ -101,7 +101,7 @@ KSQWiFiEnumerator::onFindWiFi() {
     t.detach();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQWiFiEnumerator::updateList(KSQWiFiNetworks &list) {
     const bool isSame = list.keys() == m_wifiList.keys();
@@ -122,19 +122,19 @@ KSQWiFiEnumerator::updateList(KSQWiFiNetworks &list) {
     qDebug() << m_wifiList.keys();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 int
 KSQWiFiEnumerator::rowCount(const QModelIndex &parent) const {
     return m_wifiList.count();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 int
 KSQWiFiEnumerator::columnCount(const QModelIndex &paren) const {
     return 1;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QVariant
 KSQWiFiEnumerator::data(const QModelIndex &index, int role) const {
     if (index.row() < m_wifiList.count()) {
@@ -152,7 +152,7 @@ KSQWiFiEnumerator::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QHash<int, QByteArray>
 KSQWiFiEnumerator::roleNames() const {
     QHash<int, QByteArray> roles;
@@ -161,7 +161,7 @@ KSQWiFiEnumerator::roleNames() const {
     return roles;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 
 #if 1
 #pragma GCC diagnostic pop

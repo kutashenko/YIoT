@@ -25,25 +25,25 @@ const QString KSQLamp::kStateOff = "off";
 const QStringList KSQLamp::kStates = QStringList() << KSQLamp::kStateUnknown
                                                              << KSQLamp::kStateOn
                                                              << KSQLamp::kStateOff;
-/******************************************************************************/
 
+//-----------------------------------------------------------------------------
 KSQLamp::KSQLamp(VSQMac mac, QString name, QString img) :
  KSQDeviceBase(mac, name, img) {
     m_state = kStateUnknown;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 KSQLamp::KSQLamp(const KSQLamp& l) : KSQDeviceBase(l) {
     m_state = l.m_state;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QString
 KSQLamp::state() const {
     return m_state;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQLamp::setState(QString state) {
     if (kStates.contains(state)) {
@@ -55,11 +55,11 @@ KSQLamp::setState(QString state) {
     emit fireDeviceStateChanged();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 Q_INVOKABLE void
 KSQLamp::setStateToHardware(QString state) {
     setState(state);
     emit fireSetDeviceParams(*this);
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------

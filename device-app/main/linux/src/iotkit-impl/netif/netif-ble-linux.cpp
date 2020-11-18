@@ -61,7 +61,7 @@ static vs_netif_process_cb_t _netif_ble_process_cb = 0;
 class TxCharacteristic;
 static std::shared_ptr<TxCharacteristic> _tx_char;
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 _ble_init(struct vs_netif_t *netif, const vs_netif_rx_cb_t rx_cb, const vs_netif_process_cb_t process_cb);
 
@@ -81,7 +81,7 @@ static vs_netif_t _netif_ble = {.user_data = NULL,
                                 .mac_addr = _ble_mac,
                                 .packet_buf_filled = 0};
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 class RxCharacteristic : public GattCharacteristicBuilder<GenericCharacteristic> {
 public:
     RxCharacteristic(std::shared_ptr<GattService1> service, std::string uuid)
@@ -122,7 +122,7 @@ protected:
     }
 };
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 class TxCharacteristic : public GattCharacteristicBuilder<GenericCharacteristic> {
 public:
     TxCharacteristic(std::shared_ptr<GattService1> service, std::string uuid)
@@ -137,7 +137,7 @@ public:
     }
 };
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static void
 _ble_thread_func() {
     constexpr const char *APP_PATH = "/com/kutashenko/provision";
@@ -257,7 +257,7 @@ _ble_thread_func() {
     _cv_stop.wait(lck, []() -> bool { return _need_stop; });
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 _ble_connect() {
     if (_ble_thread) {
@@ -276,7 +276,7 @@ _ble_connect() {
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 _ble_tx(struct vs_netif_t *netif, const uint8_t *data, const uint16_t data_sz) {
     (void)netif;
@@ -290,7 +290,7 @@ _ble_tx(struct vs_netif_t *netif, const uint8_t *data, const uint16_t data_sz) {
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 _ble_init(struct vs_netif_t *netif, const vs_netif_rx_cb_t rx_cb, const vs_netif_process_cb_t process_cb) {
     assert(rx_cb);
@@ -303,7 +303,7 @@ _ble_init(struct vs_netif_t *netif, const vs_netif_rx_cb_t rx_cb, const vs_netif
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 _ble_deinit(struct vs_netif_t *netif) {
     (void)netif;
@@ -318,7 +318,7 @@ _ble_deinit(struct vs_netif_t *netif) {
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 static vs_status_e
 _ble_mac(const struct vs_netif_t *netif, struct vs_mac_addr_t *mac_addr) {
     (void)netif;
@@ -326,10 +326,10 @@ _ble_mac(const struct vs_netif_t *netif, struct vs_mac_addr_t *mac_addr) {
     return VS_CODE_OK;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 vs_netif_t *
 ks_netif_ble(void) {
     return &_netif_ble;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------

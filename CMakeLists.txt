@@ -27,7 +27,7 @@ set(KS_TARGET_VERSION "0.0.2")
 # ---------------------------------------------------------------------------
 # Define project
 # ---------------------------------------------------------------------------
-project(ble-provision VERSION ${KS_TARGET_VERSION} LANGUAGES C CXX)
+project(yiot VERSION ${KS_TARGET_VERSION} LANGUAGES C CXX)
 
 # ---------------------------------------------------------------------------
 # Include Cmake helpers
@@ -114,7 +114,7 @@ add_subdirectory(${IOTKIT_PATH}/demo/nix/common)
 #	Device provisioning service
 # ---------------------------------------------------------------------------
 if (BUILD_DEVICE_ENABLE)
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/device)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/device-app)
 endif()
 
 # ---------------------------------------------------------------------------

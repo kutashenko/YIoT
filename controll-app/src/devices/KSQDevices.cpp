@@ -22,7 +22,7 @@
 void fireAboutToActivate();
 void fireActivated();
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 KSQDevices &
 KSQDevices::operator<<(KSQControllerBase *controller) {
     connect(controller, &KSQControllerBase::fireActivated, this, &KSQDevices::onGroupActivated);
@@ -31,7 +31,7 @@ KSQDevices::operator<<(KSQControllerBase *controller) {
     return *this;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 void
 KSQDevices::onGroupActivated() {
     // TODO: Use correct insertion
@@ -39,7 +39,7 @@ KSQDevices::onGroupActivated() {
     endResetModel();
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 int
 KSQDevices::rowCount(const QModelIndex &parent) const {
     int cnt = 0;
@@ -51,13 +51,13 @@ KSQDevices::rowCount(const QModelIndex &parent) const {
     return cnt;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 int
 KSQDevices::columnCount(const QModelIndex &parent) const {
     return 1;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QVariant
 KSQDevices::data(const QModelIndex &index, int role) const {
     int cnt = 0;
@@ -86,7 +86,7 @@ KSQDevices::data(const QModelIndex &index, int role) const {
     return cnt;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
 QHash<int, QByteArray>
 KSQDevices::roleNames() const {
     QHash<int, QByteArray> roles;
@@ -97,4 +97,4 @@ KSQDevices::roleNames() const {
     return roles;
 }
 
-/******************************************************************************/
+//-----------------------------------------------------------------------------
