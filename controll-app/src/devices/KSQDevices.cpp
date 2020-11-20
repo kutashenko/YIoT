@@ -19,8 +19,10 @@
 
 #include <devices/KSQDevices.h>
 
-void fireAboutToActivate();
-void fireActivated();
+void
+fireAboutToActivate();
+void
+fireActivated();
 
 //-----------------------------------------------------------------------------
 KSQDevices &
@@ -43,7 +45,7 @@ KSQDevices::onGroupActivated() {
 int
 KSQDevices::rowCount(const QModelIndex &parent) const {
     int cnt = 0;
-    for (const auto &el: m_elements) {
+    for (const auto &el : m_elements) {
         if (el->rowCount()) {
             ++cnt;
         }
@@ -61,7 +63,7 @@ KSQDevices::columnCount(const QModelIndex &parent) const {
 QVariant
 KSQDevices::data(const QModelIndex &index, int role) const {
     int cnt = 0;
-    for (const auto &el: m_elements) {
+    for (const auto &el : m_elements) {
         if (el->rowCount()) {
             if (index.row() == cnt) {
                 switch (role) {

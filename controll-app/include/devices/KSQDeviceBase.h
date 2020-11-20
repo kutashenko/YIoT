@@ -40,7 +40,8 @@ class KSQDeviceBase : public QObject {
     Q_PROPERTY(bool active READ active NOTIFY fireActiveChanged)
 
 public:
-    KSQDeviceBase() { }
+    KSQDeviceBase() {
+    }
     KSQDeviceBase(VSQMac mac, QString name, QString img = "") {
         m_lastUpdate = QDateTime::currentDateTime();
         m_image = img;
@@ -49,7 +50,7 @@ public:
         m_active = true;
     }
 
-    KSQDeviceBase(const KSQDeviceBase& d) {
+    KSQDeviceBase(const KSQDeviceBase &d) {
         m_lastUpdate = d.m_lastUpdate;
         m_image = d.m_image;
         m_name = d.m_name;
@@ -58,13 +59,19 @@ public:
     }
 
     Q_INVOKABLE QString
-    deviceType() const { return _deviceType(); }
+    deviceType() const {
+        return _deviceType();
+    }
 
     Q_INVOKABLE QString
-    macAddr() const { return m_mac; }
+    macAddr() const {
+        return m_mac;
+    }
 
     VSQMac
-    qMacAddr() const { return m_mac; }
+    qMacAddr() const {
+        return m_mac;
+    }
 
     Q_INVOKABLE void
     setName(QString name) {
@@ -131,17 +138,45 @@ public:
         }
     }
 
-    QString name() const { return m_name; }
-    QString roles() const  { return m_roles; }
-    QString manufacture() const  { return m_manufacture; }
-    QString deviceID() const  { return m_deviceID; }
-    QString fwVersion() const  { return m_fwVersion; }
-    QString tlVersion() const  { return m_tlVer; }
-    QString sentBytes() const  { return m_sentBytes; }
-    QString receivedBytes() const  { return m_receivedBytes; }
-    bool active() const  { return m_active; }
+    QString
+    name() const {
+        return m_name;
+    }
+    QString
+    roles() const {
+        return m_roles;
+    }
+    QString
+    manufacture() const {
+        return m_manufacture;
+    }
+    QString
+    deviceID() const {
+        return m_deviceID;
+    }
+    QString
+    fwVersion() const {
+        return m_fwVersion;
+    }
+    QString
+    tlVersion() const {
+        return m_tlVer;
+    }
+    QString
+    sentBytes() const {
+        return m_sentBytes;
+    }
+    QString
+    receivedBytes() const {
+        return m_receivedBytes;
+    }
+    bool
+    active() const {
+        return m_active;
+    }
 
-    bool operator<(const KSQDeviceBase& rhs) const {
+    bool
+    operator<(const KSQDeviceBase &rhs) const {
         return m_name < rhs.m_name;
     }
 
@@ -166,19 +201,30 @@ protected:
     _deviceType() const = 0;
 
 signals:
-    void fireNameChanged();
-    void fireSendNameUpdate();
-    void fireActiveChanged();
+    void
+    fireNameChanged();
+    void
+    fireSendNameUpdate();
+    void
+    fireActiveChanged();
 
-    void fireRolesChanged();
-    void fireManufactureChanged();
-    void fireDeviceIDChanged();
-    void fireFwVersionChanged();
-    void fireTlVerChanged();
-    void fireSentBytesChanged();
-    void fireReceivedBytesChanged();
+    void
+    fireRolesChanged();
+    void
+    fireManufactureChanged();
+    void
+    fireDeviceIDChanged();
+    void
+    fireFwVersionChanged();
+    void
+    fireTlVerChanged();
+    void
+    fireSentBytesChanged();
+    void
+    fireReceivedBytesChanged();
 
-    void fireDeviceStateChanged();
+    void
+    fireDeviceStateChanged();
 
 private:
     bool m_active;

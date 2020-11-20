@@ -25,18 +25,30 @@
 //-----------------------------------------------------------------------------
 KSQLampController::KSQLampController() {
     // SNAP::INFO service
-    connect(&VSQSnapInfoClient::instance(), &VSQSnapInfoClient::fireNewDevice,
-            this, &KSQLampController::onDeviceInfoUpdate, Qt::QueuedConnection);
+    connect(&VSQSnapInfoClient::instance(),
+            &VSQSnapInfoClient::fireNewDevice,
+            this,
+            &KSQLampController::onDeviceInfoUpdate,
+            Qt::QueuedConnection);
 
-    connect(&VSQSnapInfoClient::instance(), &VSQSnapInfoClient::fireDeviceInfo,
-            this, &KSQLampController::onDeviceInfoUpdate, Qt::QueuedConnection);
+    connect(&VSQSnapInfoClient::instance(),
+            &VSQSnapInfoClient::fireDeviceInfo,
+            this,
+            &KSQLampController::onDeviceInfoUpdate,
+            Qt::QueuedConnection);
 
     // SNAP::LAMP service
-    connect(&VSQSnapLampClient::instance(), &VSQSnapLampClient::fireStateUpdate,
-            this, &KSQLampController::onLampStateUpdate, Qt::QueuedConnection);
+    connect(&VSQSnapLampClient::instance(),
+            &VSQSnapLampClient::fireStateUpdate,
+            this,
+            &KSQLampController::onLampStateUpdate,
+            Qt::QueuedConnection);
 
-    connect(&VSQSnapLampClient::instance(), &VSQSnapLampClient::fireStateError,
-            this, &KSQLampController::onLampError, Qt::QueuedConnection);
+    connect(&VSQSnapLampClient::instance(),
+            &VSQSnapLampClient::fireStateError,
+            this,
+            &KSQLampController::onLampError,
+            Qt::QueuedConnection);
 
 
     // Test data
@@ -105,8 +117,7 @@ KSQLampController::onDeviceInfoUpdate(const VSQDeviceInfo &deviceInfo) {
 
 //-----------------------------------------------------------------------------
 void
-KSQLampController::onLampStateUpdate(const vs_mac_addr_t mac,
-                                     const vs_snap_lamp_state_t state) {
+KSQLampController::onLampStateUpdate(const vs_mac_addr_t mac, const vs_snap_lamp_state_t state) {
     auto res = findLamp(mac);
     auto lamp = res.second;
     if (!lamp) {
@@ -120,10 +131,8 @@ KSQLampController::onLampStateUpdate(const vs_mac_addr_t mac,
 
         beginInsertRows(QModelIndex(), m_lamps.size(), m_lamps.size());
 
-        auto newLamp = QSharedPointer<KSQLamp>::create(VSQMac(mac),
-                                                       QString("test-%1").arg(m_lamps.size()));
-        connect(newLamp.get(), &KSQLamp::fireSetDeviceParams,
-                this, &KSQLampController::onSetDeviceParams);
+        auto newLamp = QSharedPointer<KSQLamp>::create(VSQMac(mac), QString("test-%1").arg(m_lamps.size()));
+        connect(newLamp.get(), &KSQLamp::fireSetDeviceParams, this, &KSQLampController::onSetDeviceParams);
         m_lamps.push_back(newLamp);
 
         endInsertRows();
@@ -169,17 +178,17 @@ KSQLampController::onSetDeviceParams(const KSQLamp &lamp) {
 }
 
 //-----------------------------------------------------------------------------
-std::pair <int, QSharedPointer<KSQLamp>>
+std::pair<int, QSharedPointer<KSQLamp>>
 KSQLampController::findLamp(const vs_mac_addr_t &mac) {
     VSQMac qMac(mac);
     int pos = 0;
-    for (auto el: m_lamps) {
+    for (auto el : m_lamps) {
         if (el->qMacAddr() == qMac) {
             return std::make_pair(pos, el);
         }
         ++pos;
     }
-    return std::make_pair(-1, QSharedPointer<KSQLamp> (nullptr));
+    return std::make_pair(-1, QSharedPointer<KSQLamp>(nullptr));
 }
 
 //-----------------------------------------------------------------------------
@@ -218,7 +227,7 @@ KSQLampController::data(const QModelIndex &index, int role) const {
 
         case Element::Device:
             QVariant res;
-            res.setValue(const_cast<KSQLamp*>(&(*l)));
+            res.setValue(const_cast<KSQLamp *>(&(*l)));
             return res;
         }
     }

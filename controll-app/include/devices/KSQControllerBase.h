@@ -27,10 +27,9 @@
 #include <virgil/iot/qt/VSQIoTKit.h>
 
 class KSQControllerBase : public QAbstractTableModel {
-Q_OBJECT
+    Q_OBJECT
     Q_PROPERTY(bool collapsed READ collapsed WRITE setCollapsed NOTIFY fireCollapsedChanged)
 public:
-
     KSQControllerBase() = default;
     virtual ~KSQControllerBase() = default;
 
@@ -52,13 +51,18 @@ public:
     }
 
     Q_INVOKABLE bool
-    collapsed() { return m_collapsed; }
+    collapsed() {
+        return m_collapsed;
+    }
 
 signals:
-    void fireCollapsedChanged(bool);
+    void
+    fireCollapsedChanged(bool);
 
-    void fireAboutToActivate();
-    void fireActivated();
+    void
+    fireAboutToActivate();
+    void
+    fireActivated();
 
 private:
     bool m_collapsed = true;

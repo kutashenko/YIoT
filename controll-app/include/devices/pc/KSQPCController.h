@@ -31,22 +31,31 @@
 #include <devices/pc/KSQPC.h>
 
 class KSQPCController : public KSQControllerBase {
-Q_OBJECT
+    Q_OBJECT
 public:
     enum Element { Name = Qt::UserRole, Type, Mac, Active, Device, ElementMax };
 
     KSQPCController();
     virtual ~KSQPCController() = default;
 
-    virtual QString name() const final { return tr("PC"); }
+    virtual QString
+    name() const final {
+        return tr("PC");
+    }
 
-    virtual QString type() const final { return "pc"; }
+    virtual QString
+    type() const final {
+        return "pc";
+    }
 
-    virtual QString image() const final { return tr("pc"); }
+    virtual QString
+    image() const final {
+        return tr("pc");
+    }
 
     /**
-    * QAbstractTableModel implementation
-    */
+     * QAbstractTableModel implementation
+     */
     int
     rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -73,7 +82,7 @@ private slots:
     onSetDeviceParams(const KSQPC &pc);
 
 protected:
-    std::pair <int, QSharedPointer<KSQPC>>
+    std::pair<int, QSharedPointer<KSQPC>>
     findPC(const vs_mac_addr_t &mac);
 
 private:

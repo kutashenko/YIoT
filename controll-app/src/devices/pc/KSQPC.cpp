@@ -20,12 +20,11 @@
 #include <devices/pc/KSQPC.h>
 
 //-----------------------------------------------------------------------------
-KSQPC::KSQPC(VSQMac mac, QString name, QString img) :
- KSQDeviceBase(mac, name, img) {
+KSQPC::KSQPC(VSQMac mac, QString name, QString img) : KSQDeviceBase(mac, name, img) {
 }
 
 //-----------------------------------------------------------------------------
-KSQPC::KSQPC(const KSQPC& l) : KSQDeviceBase(l) {
+KSQPC::KSQPC(const KSQPC &l) : KSQDeviceBase(l) {
 }
 
 //-----------------------------------------------------------------------------

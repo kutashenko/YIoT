@@ -24,11 +24,17 @@
 //-----------------------------------------------------------------------------
 KSQPCController::KSQPCController() {
     // SNAP::INFO service
-    connect(&VSQSnapInfoClient::instance(), &VSQSnapInfoClient::fireNewDevice,
-            this, &KSQPCController::onDeviceInfoUpdate, Qt::QueuedConnection);
+    connect(&VSQSnapInfoClient::instance(),
+            &VSQSnapInfoClient::fireNewDevice,
+            this,
+            &KSQPCController::onDeviceInfoUpdate,
+            Qt::QueuedConnection);
 
-    connect(&VSQSnapInfoClient::instance(), &VSQSnapInfoClient::fireDeviceInfo,
-            this, &KSQPCController::onDeviceInfoUpdate, Qt::QueuedConnection);
+    connect(&VSQSnapInfoClient::instance(),
+            &VSQSnapInfoClient::fireDeviceInfo,
+            this,
+            &KSQPCController::onDeviceInfoUpdate,
+            Qt::QueuedConnection);
 
     // Test data
 #if 1
@@ -82,8 +88,7 @@ KSQPCController::onDeviceInfoUpdate(const VSQDeviceInfo &deviceInfo) {
 
         beginInsertRows(QModelIndex(), m_pcs.size(), m_pcs.size());
 
-        auto newLamp = QSharedPointer<KSQPC>::create(VSQMac(deviceInfo.m_mac),
-                                                       QString("test-%1").arg(m_pcs.size()));
+        auto newLamp = QSharedPointer<KSQPC>::create(VSQMac(deviceInfo.m_mac), QString("test-%1").arg(m_pcs.size()));
         m_pcs.push_back(newLamp);
 
         endInsertRows();
@@ -120,17 +125,17 @@ KSQPCController::onSetDeviceParams(const KSQPC &pc) {
 }
 
 //-----------------------------------------------------------------------------
-std::pair <int, QSharedPointer<KSQPC>>
+std::pair<int, QSharedPointer<KSQPC>>
 KSQPCController::findPC(const vs_mac_addr_t &mac) {
     VSQMac qMac(mac);
     int pos = 0;
-    for (auto el: m_pcs) {
+    for (auto el : m_pcs) {
         if (el->qMacAddr() == qMac) {
             return std::make_pair(pos, el);
         }
         ++pos;
     }
-    return std::make_pair(-1, QSharedPointer<KSQPC> (nullptr));
+    return std::make_pair(-1, QSharedPointer<KSQPC>(nullptr));
 }
 
 //-----------------------------------------------------------------------------
@@ -166,7 +171,7 @@ KSQPCController::data(const QModelIndex &index, int role) const {
 
         case Element::Device:
             QVariant res;
-            res.setValue(const_cast<KSQPC*>(&(*l)));
+            res.setValue(const_cast<KSQPC *>(&(*l)));
             return res;
         }
     }

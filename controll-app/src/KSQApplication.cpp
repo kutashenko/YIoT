@@ -52,9 +52,7 @@ KSQApplication::run() {
     }
 
     // Initialize devices controllers
-    m_deviceControllers
-            << new KSQLampController()
-            << new KSQPCController();
+    m_deviceControllers << new KSQLampController() << new KSQPCController();
 
     // Initialize QML
     QQmlContext *context = engine.rootContext();

@@ -29,7 +29,7 @@
 #include <devices/KSQControllerBase.h>
 
 class KSQDevices : public QAbstractTableModel {
-Q_OBJECT
+    Q_OBJECT
 public:
     enum Element { Name = Qt::UserRole, Type, Image, SubModel, ElementMax };
 
@@ -61,8 +61,7 @@ private slots:
     onGroupActivated();
 
 private:
-    QList <QSharedPointer<KSQControllerBase>> m_elements;
-
+    QList<QSharedPointer<KSQControllerBase>> m_elements;
 };
 
 #endif // YIOT_DEVICES_H

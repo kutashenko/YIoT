@@ -22,18 +22,15 @@
 const QString KSQLamp::kStateUnknown = "unknown";
 const QString KSQLamp::kStateOn = "on";
 const QString KSQLamp::kStateOff = "off";
-const QStringList KSQLamp::kStates = QStringList() << KSQLamp::kStateUnknown
-                                                             << KSQLamp::kStateOn
-                                                             << KSQLamp::kStateOff;
+const QStringList KSQLamp::kStates = QStringList() << KSQLamp::kStateUnknown << KSQLamp::kStateOn << KSQLamp::kStateOff;
 
 //-----------------------------------------------------------------------------
-KSQLamp::KSQLamp(VSQMac mac, QString name, QString img) :
- KSQDeviceBase(mac, name, img) {
+KSQLamp::KSQLamp(VSQMac mac, QString name, QString img) : KSQDeviceBase(mac, name, img) {
     m_state = kStateUnknown;
 }
 
 //-----------------------------------------------------------------------------
-KSQLamp::KSQLamp(const KSQLamp& l) : KSQDeviceBase(l) {
+KSQLamp::KSQLamp(const KSQLamp &l) : KSQDeviceBase(l) {
     m_state = l.m_state;
 }
 

@@ -31,22 +31,31 @@
 #include <devices/lamp/KSQLamp.h>
 
 class KSQLampController : public KSQControllerBase {
-Q_OBJECT
+    Q_OBJECT
 public:
     enum Element { Name = Qt::UserRole, Type, Mac, Active, State, Device, ElementMax };
 
     KSQLampController();
     virtual ~KSQLampController() = default;
 
-    virtual QString name() const final { return tr("Lamps"); }
+    virtual QString
+    name() const final {
+        return tr("Lamps");
+    }
 
-    virtual QString type() const final { return "lamps"; }
+    virtual QString
+    type() const final {
+        return "lamps";
+    }
 
-    virtual QString image() const final { return tr("bulb"); }
+    virtual QString
+    image() const final {
+        return tr("bulb");
+    }
 
     /**
-    * QAbstractTableModel implementation
-    */
+     * QAbstractTableModel implementation
+     */
     int
     rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -80,7 +89,7 @@ private slots:
     onSetDeviceParams(const KSQLamp &lamp);
 
 protected:
-    std::pair <int, QSharedPointer<KSQLamp>>
+    std::pair<int, QSharedPointer<KSQLamp>>
     findLamp(const vs_mac_addr_t &mac);
 
 private:
