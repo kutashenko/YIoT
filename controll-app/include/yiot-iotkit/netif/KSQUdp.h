@@ -43,7 +43,6 @@
 class KSQUdp final : public VSQNetifBase {
     Q_OBJECT
 public:
-
     KSQUdp(quint16 port = 4100);
 
     KSQUdp(KSQUdp const &) = delete;

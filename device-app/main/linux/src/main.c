@@ -121,7 +121,7 @@ main(int argc, char *argv[]) {
     //
 
     // Send broadcast notification about self start
-    vs_snap_info_start_notification(vs_snap_netif_routing());
+    // vs_snap_info_start_notification(vs_snap_netif_routing());
 
     // Sleep until CTRL_C
     vs_app_sleep_until_stop();

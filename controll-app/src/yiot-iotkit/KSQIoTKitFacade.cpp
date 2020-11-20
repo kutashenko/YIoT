@@ -54,7 +54,7 @@ bool
 KSQIoTKitFacade::init(const KSQFeatures &features, const VSQImplementations &impl, const VSQAppConfig &appConfig) {
 
     // Register types
-    qRegisterMetaType<VirgilIoTKit::vs_netif_t*>("VirgilIoTKit::vs_netif_t*");
+    qRegisterMetaType<VirgilIoTKit::vs_netif_t *>("VirgilIoTKit::vs_netif_t*");
     qRegisterMetaType<VSQDeviceInfo>("VSQDeviceInfo");
     qRegisterMetaType<QAbstractSocket::SocketState>();
 
@@ -101,7 +101,7 @@ KSQIoTKitFacade::initSnap() {
 
     // Add additional network interfaces
     bool isDefault = true;
-    foreach (auto &netif,  m_impl.netifs()) {
+    foreach (auto &netif, m_impl.netifs()) {
         if (isDefault) {
             isDefault = false;
             continue;
@@ -146,10 +146,12 @@ KSQIoTKitFacade::onNetifProcess(struct VirgilIoTKit::vs_netif_t *netif, QByteArr
 /******************************************************************************/
 vs_status_e
 KSQIoTKitFacade::netifProcessCb(struct vs_netif_t *netif, const uint8_t *data, const uint16_t data_sz) {
-    QMetaObject::invokeMethod(&instance(), "onNetifProcess", Qt::QueuedConnection,
-                            Q_ARG(VirgilIoTKit::vs_netif_t*, netif),
-                            Q_ARG(QByteArray, QByteArray::fromRawData(reinterpret_cast<const char *>(data), data_sz))
-                            );
+    QMetaObject::invokeMethod(
+            &instance(),
+            "onNetifProcess",
+            Qt::QueuedConnection,
+            Q_ARG(VirgilIoTKit::vs_netif_t *, netif),
+            Q_ARG(QByteArray, QByteArray::fromRawData(reinterpret_cast<const char *>(data), data_sz)));
     return VS_CODE_OK;
 }
 

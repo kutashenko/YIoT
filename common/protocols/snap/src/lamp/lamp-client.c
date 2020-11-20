@@ -35,8 +35,7 @@ static vs_snap_lamp_client_service_t _impl = {0};
 
 //-----------------------------------------------------------------------------
 vs_status_e
-vs_snap_lamp_get_state(const vs_netif_t *netif,
-                       const vs_mac_addr_t *mac) {
+vs_snap_lamp_get_state(const vs_netif_t *netif, const vs_mac_addr_t *mac) {
     const vs_mac_addr_t *dst_mac;
     vs_status_e ret_code;
 
@@ -44,18 +43,15 @@ vs_snap_lamp_get_state(const vs_netif_t *netif,
     dst_mac = mac ? mac : vs_snap_broadcast_mac();
 
     // Send request
-    STATUS_CHECK_RET(
-            vs_snap_send_request(netif, dst_mac, VS_LAMP_SERVICE_ID, VS_LAMP_GLST, NULL, 0),
-            "Cannot send request");
+    STATUS_CHECK_RET(vs_snap_send_request(netif, dst_mac, VS_LAMP_SERVICE_ID, VS_LAMP_GLST, NULL, 0),
+                     "Cannot send request");
 
     return VS_CODE_OK;
 }
 
 //-----------------------------------------------------------------------------
 vs_status_e
-vs_snap_lamp_set_state(const vs_netif_t *netif,
-                       const vs_mac_addr_t *mac,
-                       const vs_snap_lamp_state_t *state) {
+vs_snap_lamp_set_state(const vs_netif_t *netif, const vs_mac_addr_t *mac, const vs_snap_lamp_state_t *state) {
     const vs_mac_addr_t *dst_mac;
     vs_status_e ret_code;
 
@@ -77,7 +73,10 @@ vs_snap_lamp_set_state(const vs_netif_t *netif,
 
 //-----------------------------------------------------------------------------
 static vs_status_e
-_lamp_response_processor(vs_snap_element_t element_id, bool is_ack, const uint8_t *response, const uint16_t response_sz) {
+_lamp_response_processor(vs_snap_element_t element_id,
+                         bool is_ack,
+                         const uint8_t *response,
+                         const uint16_t response_sz) {
 
     vs_status_e res = is_ack ? VS_CODE_OK : VS_CODE_ERR_SNAP_UNKNOWN;
     vs_snap_lamp_state_t *state = NULL;
@@ -99,10 +98,10 @@ _lamp_response_processor(vs_snap_element_t element_id, bool is_ack, const uint8_
 //-----------------------------------------------------------------------------
 static vs_status_e
 _lamp_client_response_processor(const struct vs_netif_t *netif,
-                               vs_snap_element_t element_id,
-                               bool is_ack,
-                               const uint8_t *response,
-                               const uint16_t response_sz) {
+                                vs_snap_element_t element_id,
+                                bool is_ack,
+                                const uint8_t *response,
+                                const uint16_t response_sz) {
     (void)netif;
 
     switch (element_id) {

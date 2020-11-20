@@ -61,8 +61,14 @@ public:
 
     using VSQSnapSnifferPtr = QSharedPointer<VSQSnapSnifferQml>;
 
-    VSQSnapSnifferPtr snapSniffer()    { return m_snapSniffer; }
-    VSQSnapCfgClient & snapCfgClient()    { return VSQSnapCfgClient::instance(); }
+    VSQSnapSnifferPtr
+    snapSniffer() {
+        return m_snapSniffer;
+    }
+    VSQSnapCfgClient &
+    snapCfgClient() {
+        return VSQSnapCfgClient::instance();
+    }
 
     virtual ~KSQIoTKitFacade();
 
@@ -87,7 +93,8 @@ private:
     void
     registerService(VSQSnapServiceBase &service);
 
-    static VirgilIoTKit::vs_status_e netifProcessCb(struct VirgilIoTKit::vs_netif_t *netif, const uint8_t *data, const uint16_t data_sz);
+    static VirgilIoTKit::vs_status_e
+    netifProcessCb(struct VirgilIoTKit::vs_netif_t *netif, const uint8_t *data, const uint16_t data_sz);
 };
 
 #endif // YIOT_IOTKIT_QT_FACADE_H

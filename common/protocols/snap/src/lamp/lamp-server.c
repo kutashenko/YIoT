@@ -34,9 +34,7 @@ static vs_snap_lamp_server_service_t _impl = {0};
 
 //-----------------------------------------------------------------------------
 static vs_status_e
-_fill_current_state(uint8_t *response,
-                    const uint16_t response_buf_sz,
-                    uint16_t *response_sz) {
+_fill_current_state(uint8_t *response, const uint16_t response_buf_sz, uint16_t *response_sz) {
     vs_status_e res;
     CHECK_RET(response_buf_sz >= sizeof(vs_snap_lamp_state_t), VS_CODE_ERR_TOO_SMALL_BUFFER, "Small buffer");
     if (_impl.get_data) {
@@ -56,22 +54,22 @@ _fill_current_state(uint8_t *response,
 //-----------------------------------------------------------------------------
 static vs_status_e
 _get_lamp_state_request_processor(const uint8_t *request,
-                             const uint16_t request_sz,
-                             uint8_t *response,
-                             const uint16_t response_buf_sz,
-                             uint16_t *response_sz) {
+                                  const uint16_t request_sz,
+                                  uint8_t *response,
+                                  const uint16_t response_buf_sz,
+                                  uint16_t *response_sz) {
     return _fill_current_state(response, response_buf_sz, response_sz);
 }
 
 //-----------------------------------------------------------------------------
 static vs_status_e
 _lamp_request_processor(const struct vs_netif_t *netif,
-                       vs_snap_element_t element_id,
-                       const uint8_t *request,
-                       const uint16_t request_sz,
-                       uint8_t *response,
-                       const uint16_t response_buf_sz,
-                       uint16_t *response_sz) {
+                        vs_snap_element_t element_id,
+                        const uint8_t *request,
+                        const uint16_t request_sz,
+                        uint8_t *response,
+                        const uint16_t response_buf_sz,
+                        uint16_t *response_sz) {
     (void)netif;
 
     *response_sz = 0;

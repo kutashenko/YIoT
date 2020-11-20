@@ -206,7 +206,7 @@ KSQLampController::columnCount(const QModelIndex &parent) const {
 //-----------------------------------------------------------------------------
 QVariant
 KSQLampController::data(const QModelIndex &index, int role) const {
-    if (index.row() < m_lamps.size()) {
+    if (index.row() < static_cast<int>(m_lamps.size())) {
         auto l = *std::next(m_lamps.begin(), index.row());
 
         switch (role) {

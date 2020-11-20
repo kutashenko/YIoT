@@ -29,17 +29,13 @@
 
 using namespace VirgilIoTKit;
 
-class KSQSnapLampClient final :
-        public QObject,
-        public VSQSingleton<KSQSnapLampClient>,
-        public VSQSnapServiceBase {
+class KSQSnapLampClient final : public QObject, public VSQSingleton<KSQSnapLampClient>, public VSQSnapServiceBase {
 
     Q_OBJECT
 
     friend VSQSingleton<KSQSnapLampClient>;
 
 public:
-
     const VirgilIoTKit::vs_snap_service_t *
     serviceInterface() override {
         return m_snapService;
@@ -77,8 +73,8 @@ private:
     KSQSnapLampClient();
     virtual ~KSQSnapLampClient() = default;
 
-    static vs_status_e onUpdateState(vs_status_e res, const vs_mac_addr_t *mac, const vs_snap_lamp_state_t *data);
-
+    static vs_status_e
+    onUpdateState(vs_status_e res, const vs_mac_addr_t *mac, const vs_snap_lamp_state_t *data);
 };
 
 #endif // _YIOT_QT_SNAP_LAMP_CLIENT_SERVICE_H_

@@ -22,7 +22,11 @@
 //-----------------------------------------------------------------------------
 vs_status_e
 ks_snap_cfg_wifi_cb(const vs_cfg_wifi_configuration_t *configuration) {
-    return VS_CODE_ERR_NOT_IMPLEMENTED;
+    CHECK_NOT_ZERO_RET(configuration, VS_CODE_ERR_NULLPTR_ARGUMENT);
+
+    printf("ssid: %s\n", configuration->ssid);
+    printf("pass: %s\n", configuration->pass);
+    return VS_CODE_OK;
 }
 
 //-----------------------------------------------------------------------------
