@@ -1,25 +1,25 @@
 //  ────────────────────────────────────────────────────────────
-//                  ───╔╗──╔╗─╔══╗──────╔════╗───
-//                  ───║╚╗╔╝║─╚╣╠╝──────║╔╗╔╗║───
-//                  ───╚╗╚╝╔╝──║║──╔══╗─╚╝║║╚╝───
-//                  ────╚╗╔╝───║║──║╔╗║───║║─────
-//                  ─────║║───╔╣╠╗─║╚╝║───║║─────
-//                  ─────╚╝───╚══╝─╚══╝───╚╝─────
-//  ──╔╗╔═╗────────────────────╔╗─────────────────────╔╗────────
-//  ──║║║╔╝───────────────────╔╝╚╗────────────────────║║────────
-//  ──║╚╝╝──╔══╗─╔══╗─╔══╗──╔╗╚╗╔╝──╔══╗─╔╗─╔╗╔╗─╔══╗─║║──╔══╗──
-//  ──║╔╗║──║║═╣─║║═╣─║╔╗║──╠╣─║║───║─═╣─╠╣─║╚╝║─║╔╗║─║║──║║═╣──
-//  ──║║║╚╗─║║═╣─║║═╣─║╚╝║──║║─║╚╗──╠═─║─║║─║║║║─║╚╝║─║╚╗─║║═╣──
-//  ──╚╝╚═╝─╚══╝─╚══╝─║╔═╝──╚╝─╚═╝──╚══╝─╚╝─╚╩╩╝─║╔═╝─╚═╝─╚══╝──
-//  ──────────────────║║─────────────────────────║║─────────────
-//  ──────────────────╚╝─────────────────────────╚╝─────────────
+//                     ╔╗  ╔╗ ╔══╗      ╔════╗
+//                     ║╚╗╔╝║ ╚╣╠╝      ║╔╗╔╗║
+//                     ╚╗╚╝╔╝  ║║  ╔══╗ ╚╝║║╚╝
+//                      ╚╗╔╝   ║║  ║╔╗║   ║║
+//                       ║║   ╔╣╠╗ ║╚╝║   ║║
+//                       ╚╝   ╚══╝ ╚══╝   ╚╝
+//    ╔╗╔═╗                    ╔╗                     ╔╗
+//    ║║║╔╝                   ╔╝╚╗                    ║║
+//    ║╚╝╝  ╔══╗ ╔══╗ ╔══╗  ╔╗╚╗╔╝  ╔══╗ ╔╗ ╔╗╔╗ ╔══╗ ║║  ╔══╗
+//    ║╔╗║  ║║═╣ ║║═╣ ║╔╗║  ╠╣ ║║   ║ ═╣ ╠╣ ║╚╝║ ║╔╗║ ║║  ║║═╣
+//    ║║║╚╗ ║║═╣ ║║═╣ ║╚╝║  ║║ ║╚╗  ╠═ ║ ║║ ║║║║ ║╚╝║ ║╚╗ ║║═╣
+//    ╚╝╚═╝ ╚══╝ ╚══╝ ║╔═╝  ╚╝ ╚═╝  ╚══╝ ╚╝ ╚╩╩╝ ║╔═╝ ╚═╝ ╚══╝
+//                    ║║                         ║║
+//                    ╚╝                         ╚╝
 //
 //    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 //  ────────────────────────────────────────────────────────────
 
 #include <devices/lamp/KSQLampController.h>
 
-#include <virgil/iot/qt/protocols/snap/VSQSnapLampClient.h>
+#include <yiot-iotkit/snap/KSQSnapLampClient.h>
 #include <virgil/iot/qt/protocols/snap/VSQSnapINFOClient.h>
 
 //-----------------------------------------------------------------------------
@@ -38,14 +38,14 @@ KSQLampController::KSQLampController() {
             Qt::QueuedConnection);
 
     // SNAP::LAMP service
-    connect(&VSQSnapLampClient::instance(),
-            &VSQSnapLampClient::fireStateUpdate,
+    connect(&KSQSnapLampClient::instance(),
+            &KSQSnapLampClient::fireStateUpdate,
             this,
             &KSQLampController::onLampStateUpdate,
             Qt::QueuedConnection);
 
-    connect(&VSQSnapLampClient::instance(),
-            &VSQSnapLampClient::fireStateError,
+    connect(&KSQSnapLampClient::instance(),
+            &KSQSnapLampClient::fireStateError,
             this,
             &KSQLampController::onLampError,
             Qt::QueuedConnection);
@@ -174,7 +174,7 @@ KSQLampController::onSetDeviceParams(const KSQLamp &lamp) {
 
     state.is_on = lamp.state() == KSQLamp::kStateOn;
 
-    VSQSnapLampClient::instance().setState(lamp.qMacAddr(), state);
+    KSQSnapLampClient::instance().setState(lamp.qMacAddr(), state);
 }
 
 //-----------------------------------------------------------------------------

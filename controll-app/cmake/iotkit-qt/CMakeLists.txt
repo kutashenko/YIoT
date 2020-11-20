@@ -49,7 +49,6 @@ set(DEFAULT_IMPL_NETIF_PATH "${DEFAULT_IMPL_PATH}/netif")
 
 set(INC_HELPERS "${FACADE_PATH}/include/virgil/iot/qt/helpers")
 set(INC_SNAP "${FACADE_PATH}/include/virgil/iot/qt/protocols/snap")
-set(INC_UDP_NETIF "${DEFAULT_IMPL_NETIF_PATH}/udp-broadcast/include/virgil/iot/qt/netif")
 set(INC_BLE_NETIF "${DEFAULT_IMPL_NETIF_PATH}/ble/include/virgil/iot/qt/netif")
 
 set(SRC_HELPERS "${FACADE_PATH}/src/helpers")
@@ -67,17 +66,14 @@ target_sources(iotkit-qt-lib
         PRIVATE
 
         #   Headers
-        ${INC_UDP_NETIF}/VSQUdpBroadcast.h
         ${INC_BLE_NETIF}/VSQNetifBLE.h
         ${INC_BLE_NETIF}/VSQNetifBLEEnumerator.h
         ${INC_HELPERS}/VSQAppConfig.h
         ${INC_HELPERS}/VSQDeviceRoles.h
         ${INC_HELPERS}/VSQDeviceSerial.h
         ${INC_HELPERS}/VSQDeviceType.h
-        ${INC_HELPERS}/VSQFeatures.h
         ${INC_HELPERS}/VSQFileVersion.h
         ${INC_HELPERS}/VSQImplementations.h
-        ${INC_HELPERS}/VSQIoTKitFacade.h
         ${INC_HELPERS}/VSQMac.h
         ${INC_HELPERS}/VSQManufactureId.h
         ${INC_HELPERS}/VSQSingleton.h
@@ -91,7 +87,6 @@ target_sources(iotkit-qt-lib
         ${INC_SNAP}/VSQSnapCFGClient.h
 
         #   Sources
-        ${IOTKIT_QT_PATH}/default-impl/netif/udp-broadcast/src/VSQUdpBroadcast.cpp
         ${IOTKIT_QT_PATH}/default-impl/netif/ble/src/VSQNetifBLE.cpp
         ${IOTKIT_QT_PATH}/default-impl/netif/ble/src/VSQNetifBLEEnumerator.cpp
         ${IOTKIT_QT_PATH}/default-impl/hal.cpp
@@ -99,7 +94,6 @@ target_sources(iotkit-qt-lib
         ${SRC_HELPERS}/VSQDeviceSerial.cpp
         ${SRC_HELPERS}/VSQDeviceType.cpp
         ${SRC_HELPERS}/VSQFileVersion.cpp
-        ${SRC_HELPERS}/VSQIoTKitFacade.cpp
         ${SRC_HELPERS}/VSQMac.cpp
         ${SRC_HELPERS}/VSQManufactureId.cpp
         ${SRC_SNAP}/VSQNetifBase.cpp
@@ -128,7 +122,6 @@ target_include_directories(iotkit-qt-lib
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
         $<BUILD_INTERFACE:${FACADE_PATH}/include>
         $<BUILD_INTERFACE:${DEFAULT_IMPL_NETIF_PATH}/ble/include>
-        $<BUILD_INTERFACE:${DEFAULT_IMPL_NETIF_PATH}/udp-broadcast/include>
         )
 
 
@@ -159,6 +152,9 @@ target_link_libraries(iotkit-qt-lib
         vs-module-logger
         vs-module-provision
         vs-module-snap-control
+
+        #   IoTKit extensions
+        yiot-snap-control
 
         #   Platform specific
         $<$<BOOL:${WIN32}>:ws2_32>

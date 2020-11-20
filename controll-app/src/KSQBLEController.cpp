@@ -1,18 +1,18 @@
 //  ────────────────────────────────────────────────────────────
-//                  ───╔╗──╔╗─╔══╗──────╔════╗───
-//                  ───║╚╗╔╝║─╚╣╠╝──────║╔╗╔╗║───
-//                  ───╚╗╚╝╔╝──║║──╔══╗─╚╝║║╚╝───
-//                  ────╚╗╔╝───║║──║╔╗║───║║─────
-//                  ─────║║───╔╣╠╗─║╚╝║───║║─────
-//                  ─────╚╝───╚══╝─╚══╝───╚╝─────
-//  ──╔╗╔═╗────────────────────╔╗─────────────────────╔╗────────
-//  ──║║║╔╝───────────────────╔╝╚╗────────────────────║║────────
-//  ──║╚╝╝──╔══╗─╔══╗─╔══╗──╔╗╚╗╔╝──╔══╗─╔╗─╔╗╔╗─╔══╗─║║──╔══╗──
-//  ──║╔╗║──║║═╣─║║═╣─║╔╗║──╠╣─║║───║─═╣─╠╣─║╚╝║─║╔╗║─║║──║║═╣──
-//  ──║║║╚╗─║║═╣─║║═╣─║╚╝║──║║─║╚╗──╠═─║─║║─║║║║─║╚╝║─║╚╗─║║═╣──
-//  ──╚╝╚═╝─╚══╝─╚══╝─║╔═╝──╚╝─╚═╝──╚══╝─╚╝─╚╩╩╝─║╔═╝─╚═╝─╚══╝──
-//  ──────────────────║║─────────────────────────║║─────────────
-//  ──────────────────╚╝─────────────────────────╚╝─────────────
+//                     ╔╗  ╔╗ ╔══╗      ╔════╗
+//                     ║╚╗╔╝║ ╚╣╠╝      ║╔╗╔╗║
+//                     ╚╗╚╝╔╝  ║║  ╔══╗ ╚╝║║╚╝
+//                      ╚╗╔╝   ║║  ║╔╗║   ║║
+//                       ║║   ╔╣╠╗ ║╚╝║   ║║
+//                       ╚╝   ╚══╝ ╚══╝   ╚╝
+//    ╔╗╔═╗                    ╔╗                     ╔╗
+//    ║║║╔╝                   ╔╝╚╗                    ║║
+//    ║╚╝╝  ╔══╗ ╔══╗ ╔══╗  ╔╗╚╗╔╝  ╔══╗ ╔╗ ╔╗╔╗ ╔══╗ ║║  ╔══╗
+//    ║╔╗║  ║║═╣ ║║═╣ ║╔╗║  ╠╣ ║║   ║ ═╣ ╠╣ ║╚╝║ ║╔╗║ ║║  ║║═╣
+//    ║║║╚╗ ║║═╣ ║║═╣ ║╚╝║  ║║ ║╚╗  ╠═ ║ ║║ ║║║║ ║╚╝║ ║╚╗ ║║═╣
+//    ╚╝╚═╝ ╚══╝ ╚══╝ ║╔═╝  ╚╝ ╚═╝  ╚══╝ ╚╝ ╚╩╩╝ ║╔═╝ ╚═╝ ╚══╝
+//                    ║║                         ║║
+//                    ╚╝                         ╚╝
 //
 //    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 //  ────────────────────────────────────────────────────────────
@@ -20,6 +20,8 @@
 #include <KSQBLEController.h>
 
 #include <virgil/iot/qt/VSQIoTKit.h>
+
+#include <yiot-iotkit/KSQIoTKitFacade.h>
 
 //-----------------------------------------------------------------------------
 KSQBLEController::KSQBLEController() {
@@ -33,12 +35,12 @@ KSQBLEController::KSQBLEController() {
 
     connect(m_netifBLE.data(), &VSQNetifBLE::fireDeviceError, this, &KSQBLEController::onDeviceError);
 
-    connect(&VSQIoTKitFacade::instance().snapCfgClient(),
+    connect(&KSQIoTKitFacade::instance().snapCfgClient(),
             &VSQSnapCfgClient::fireConfigurationDone,
             this,
             &KSQBLEController::onConfigurationDone);
 
-    connect(&VSQIoTKitFacade::instance().snapCfgClient(),
+    connect(&KSQIoTKitFacade::instance().snapCfgClient(),
             &VSQSnapCfgClient::fireConfigurationError,
             this,
             &KSQBLEController::onDeviceError);
@@ -73,7 +75,7 @@ KSQBLEController::onConnected(bool success) {
 
     if (m_needWiFiConfig) {
         m_needWiFiConfig = false;
-        VSQIoTKitFacade::instance().snapCfgClient().onConfigureDevices();
+        KSQIoTKitFacade::instance().snapCfgClient().onConfigureDevices();
         emit fireDataSent();
     }
 }
@@ -110,7 +112,7 @@ KSQBLEController::configureWiFi(const QString &deviceName, const QString &ssid, 
         return false;
     }
 
-    VSQIoTKitFacade::instance().snapCfgClient().onSetConfigData(ssid, password);
+    KSQIoTKitFacade::instance().snapCfgClient().onSetConfigData(ssid, password);
     m_needWiFiConfig = true;
     return m_netifBLE->open(ble);
 }

@@ -1,18 +1,18 @@
 #  ────────────────────────────────────────────────────────────
-#                  ───╔╗──╔╗─╔══╗──────╔════╗───
-#                  ───║╚╗╔╝║─╚╣╠╝──────║╔╗╔╗║───
-#                  ───╚╗╚╝╔╝──║║──╔══╗─╚╝║║╚╝───
-#                  ────╚╗╔╝───║║──║╔╗║───║║─────
-#                  ─────║║───╔╣╠╗─║╚╝║───║║─────
-#                  ─────╚╝───╚══╝─╚══╝───╚╝─────
-#  ──╔╗╔═╗────────────────────╔╗─────────────────────╔╗────────
-#  ──║║║╔╝───────────────────╔╝╚╗────────────────────║║────────
-#  ──║╚╝╝──╔══╗─╔══╗─╔══╗──╔╗╚╗╔╝──╔══╗─╔╗─╔╗╔╗─╔══╗─║║──╔══╗──
-#  ──║╔╗║──║║═╣─║║═╣─║╔╗║──╠╣─║║───║─═╣─╠╣─║╚╝║─║╔╗║─║║──║║═╣──
-#  ──║║║╚╗─║║═╣─║║═╣─║╚╝║──║║─║╚╗──╠═─║─║║─║║║║─║╚╝║─║╚╗─║║═╣──
-#  ──╚╝╚═╝─╚══╝─╚══╝─║╔═╝──╚╝─╚═╝──╚══╝─╚╝─╚╩╩╝─║╔═╝─╚═╝─╚══╝──
-#  ──────────────────║║─────────────────────────║║─────────────
-#  ──────────────────╚╝─────────────────────────╚╝─────────────
+#                     ╔╗  ╔╗ ╔══╗      ╔════╗
+#                     ║╚╗╔╝║ ╚╣╠╝      ║╔╗╔╗║
+#                     ╚╗╚╝╔╝  ║║  ╔══╗ ╚╝║║╚╝
+#                      ╚╗╔╝   ║║  ║╔╗║   ║║
+#                       ║║   ╔╣╠╗ ║╚╝║   ║║
+#                       ╚╝   ╚══╝ ╚══╝   ╚╝
+#    ╔╗╔═╗                    ╔╗                     ╔╗
+#    ║║║╔╝                   ╔╝╚╗                    ║║
+#    ║╚╝╝  ╔══╗ ╔══╗ ╔══╗  ╔╗╚╗╔╝  ╔══╗ ╔╗ ╔╗╔╗ ╔══╗ ║║  ╔══╗
+#    ║╔╗║  ║║═╣ ║║═╣ ║╔╗║  ╠╣ ║║   ║ ═╣ ╠╣ ║╚╝║ ║╔╗║ ║║  ║║═╣
+#    ║║║╚╗ ║║═╣ ║║═╣ ║╚╝║  ║║ ║╚╗  ╠═ ║ ║║ ║║║║ ║╚╝║ ║╚╗ ║║═╣
+#    ╚╝╚═╝ ╚══╝ ╚══╝ ║╔═╝  ╚╝ ╚═╝  ╚══╝ ╚╝ ╚╩╩╝ ║╔═╝ ╚═╝ ╚══╝
+#                    ║║                         ║║
+#                    ╚╝                         ╚╝
 #
 #    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 #  ────────────────────────────────────────────────────────────
@@ -33,13 +33,9 @@ project(yiot VERSION ${KS_TARGET_VERSION} LANGUAGES C CXX)
 # Include Cmake helpers
 # ---------------------------------------------------------------------------
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-set (IOTKIT_PATH "${CMAKE_CURRENT_LIST_DIR}/ext/iotkit")
-set (CMAKE_MODULE_PATH "${IOTKIT_PATH}/sdk/cmake" ${CMAKE_MODULE_PATH})
 
-include(TransitiveToolchainArgs)
 include(vsplatforms)
 include(varpadding)
-include(helpers)
 #include(clangformat)
 
 # ---------------------------------------------------------------------------
@@ -90,35 +86,19 @@ endif()
 
 
 # ---------------------------------------------------------------------------
-#	IoTKit
+#	Common libraries
 # ---------------------------------------------------------------------------
-
-#   Configure
-set(IOTKIT_PATH "${CMAKE_CURRENT_LIST_DIR}/ext/iotkit")
-#TODO: Fix it !
-set(VIRGIL_IOT_CONFIG_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/device/control-app/linux/include/config)
-#set(GO_DISABLE CACHE BOOL ON FORCE)
-option(ENABLE_TESTING OFF)
-option(ENABLE_HEAVY_TESTS OFF)
-option(VIRGIL_IOT_CLOUD OFF)
-option(VIRGIL_IOT_HIGH_LEVEL OFF)
-option(VIRGIL_IOT_THREADSAFE ON)
-option(VIRGIL_IOT_DEFAULT_CLOUD_CURL_HTTP OFF)
-option(VIRGIL_IOT_DEFAULT_CLOUD_MESSAGE_BIN_AWS OFF)
-
-#   Add
-add_subdirectory(${IOTKIT_PATH}/sdk)
-add_subdirectory(${IOTKIT_PATH}/demo/nix/common)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/common)
 
 # ---------------------------------------------------------------------------
-#	Device provisioning service
+#	Device Applications
 # ---------------------------------------------------------------------------
 if (BUILD_DEVICE_ENABLE)
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/device-app)
 endif()
 
 # ---------------------------------------------------------------------------
-#	Linux BLE provisioning Application (Desktop and mobile)
+#	Cross-platform control applications
 # ---------------------------------------------------------------------------
 if (BUILD_APP_ENABLE)
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/controll-app)

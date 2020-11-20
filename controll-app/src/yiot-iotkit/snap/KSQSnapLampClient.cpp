@@ -17,80 +17,44 @@
 //    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 //  ────────────────────────────────────────────────────────────
 
-#ifndef _YIOT_QT_SNAP_LAMP_CLIENT_SERVICE_H_
-#define _YIOT_QT_SNAP_LAMP_CLIENT_SERVICE_H_
+#include <virgil/iot/qt/VSQIoTKit.h>
+#include <cstring>
 
-#include <QtCore>
-
-#include <virgil/iot/protocols/snap/lamp/lamp-structs.h>
-#include <virgil/iot/protocols/snap/lamp/lamp-client.h>
-#include <virgil/iot/qt/helpers/VSQSingleton.h>
-#include <virgil/iot/qt/protocols/snap/VSQSnapServiceBase.h>
+#include <yiot-iotkit/snap/KSQSnapLampClient.h>
 
 using namespace VirgilIoTKit;
 
-class VSQSnapLampClient final :
-        public QObject,
-        public VSQSingleton<VSQSnapLampClient>,
-        public VSQSnapServiceBase {
+/******************************************************************************/
+KSQSnapLampClient::KSQSnapLampClient() {
+    vs_snap_lamp_client_service_t impl;
+    memset(&impl, 0, sizeof(impl));
+    impl.device_state_update = &KSQSnapLampClient::onUpdateState;
+    m_snapService = vs_snap_lamp_client(impl);
+}
 
-    Q_OBJECT
-
-    friend VSQSingleton<VSQSnapLampClient>;
-
-public:
-
-    /** Get service interface
-     *
-     * \return Service interface
-     */
-    const VirgilIoTKit::vs_snap_service_t *
-    serviceInterface() override {
-        return m_snapService;
+/******************************************************************************/
+vs_status_e
+KSQSnapLampClient::onUpdateState(vs_status_e res, const vs_mac_addr_t *mac, const vs_snap_lamp_state_t *data) {
+    if (VS_CODE_OK == res) {
+        emit KSQSnapLampClient::instance().fireStateUpdate(*mac, *data);
+    } else {
+        emit KSQSnapLampClient::instance().fireStateError(*mac);
     }
 
-    /** Get service feature
-     *
-     * \return Service feature
-     */
-    VSQFeatures::EFeature
-    serviceFeature() const override {
-        return VSQFeatures::SNAP_LAMP_CLIENT;
-    }
+    return VS_CODE_OK;
+}
 
-    /** Get service name
-     *
-     * \return Service name
-     */
-    const QString &
-    serviceName() const override {
-        static QString name{"LAMP Client"};
-        return name;
-    }
+/******************************************************************************/
+void
+KSQSnapLampClient::requestState(const vs_mac_addr_t &mac) {
+    vs_snap_lamp_get_state(vs_snap_netif_routing(), &mac);
+}
 
-signals:
-    void
-    fireStateUpdate(const vs_mac_addr_t mac, const vs_snap_lamp_state_t state);
+/******************************************************************************/
+void
+KSQSnapLampClient::setState(const vs_mac_addr_t &mac, const vs_snap_lamp_state_t &state) {
+    qDebug() << ">>> setState: " << (state.is_on ? "ON" : "OFF");
+    vs_snap_lamp_set_state(vs_snap_netif_routing(), &mac, &state);
+}
 
-    void
-    fireStateError(const vs_mac_addr_t mac);
-
-public slots:
-    void
-    requestState(const vs_mac_addr_t &mac);
-
-    void
-    setState(const vs_mac_addr_t &mac, const vs_snap_lamp_state_t &state);
-
-
-private:
-    const VirgilIoTKit::vs_snap_service_t *m_snapService;
-
-    VSQSnapLampClient();
-    virtual ~VSQSnapLampClient() = default;
-
-    static vs_status_e onUpdateState(vs_status_e res, const vs_mac_addr_t *mac, const vs_snap_lamp_state_t *data);
-
-};
-
-#endif // _YIOT_QT_SNAP_LAMP_CLIENT_SERVICE_H_
+/******************************************************************************/

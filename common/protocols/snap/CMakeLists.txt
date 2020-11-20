@@ -1,18 +1,18 @@
 #  ────────────────────────────────────────────────────────────
-#                  ───╔╗──╔╗─╔══╗──────╔════╗───
-#                  ───║╚╗╔╝║─╚╣╠╝──────║╔╗╔╗║───
-#                  ───╚╗╚╝╔╝──║║──╔══╗─╚╝║║╚╝───
-#                  ────╚╗╔╝───║║──║╔╗║───║║─────
-#                  ─────║║───╔╣╠╗─║╚╝║───║║─────
-#                  ─────╚╝───╚══╝─╚══╝───╚╝─────
-#  ──╔╗╔═╗────────────────────╔╗─────────────────────╔╗────────
-#  ──║║║╔╝───────────────────╔╝╚╗────────────────────║║────────
-#  ──║╚╝╝──╔══╗─╔══╗─╔══╗──╔╗╚╗╔╝──╔══╗─╔╗─╔╗╔╗─╔══╗─║║──╔══╗──
-#  ──║╔╗║──║║═╣─║║═╣─║╔╗║──╠╣─║║───║─═╣─╠╣─║╚╝║─║╔╗║─║║──║║═╣──
-#  ──║║║╚╗─║║═╣─║║═╣─║╚╝║──║║─║╚╗──╠═─║─║║─║║║║─║╚╝║─║╚╗─║║═╣──
-#  ──╚╝╚═╝─╚══╝─╚══╝─║╔═╝──╚╝─╚═╝──╚══╝─╚╝─╚╩╩╝─║╔═╝─╚═╝─╚══╝──
-#  ──────────────────║║─────────────────────────║║─────────────
-#  ──────────────────╚╝─────────────────────────╚╝─────────────
+#                     ╔╗  ╔╗ ╔══╗      ╔════╗
+#                     ║╚╗╔╝║ ╚╣╠╝      ║╔╗╔╗║
+#                     ╚╗╚╝╔╝  ║║  ╔══╗ ╚╝║║╚╝
+#                      ╚╗╔╝   ║║  ║╔╗║   ║║
+#                       ║║   ╔╣╠╗ ║╚╝║   ║║
+#                       ╚╝   ╚══╝ ╚══╝   ╚╝
+#    ╔╗╔═╗                    ╔╗                     ╔╗
+#    ║║║╔╝                   ╔╝╚╗                    ║║
+#    ║╚╝╝  ╔══╗ ╔══╗ ╔══╗  ╔╗╚╗╔╝  ╔══╗ ╔╗ ╔╗╔╗ ╔══╗ ║║  ╔══╗
+#    ║╔╗║  ║║═╣ ║║═╣ ║╔╗║  ╠╣ ║║   ║ ═╣ ╠╣ ║╚╝║ ║╔╗║ ║║  ║║═╣
+#    ║║║╚╗ ║║═╣ ║║═╣ ║╚╝║  ║║ ║╚╗  ╠═ ║ ║║ ║║║║ ║╚╝║ ║╚╗ ║║═╣
+#    ╚╝╚═╝ ╚══╝ ╚══╝ ║╔═╝  ╚╝ ╚═╝  ╚══╝ ╚╝ ╚╩╩╝ ║╔═╝ ╚═╝ ╚══╝
+#                    ║║                         ║║
+#                    ╚╝                         ╚╝
 #
 #    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 #  ────────────────────────────────────────────────────────────
@@ -34,11 +34,11 @@ function(add_snap _targetname _definitions)
     target_sources(${_targetname}
             PRIVATE
 
-            ${CMAKE_CURRENT_LIST_DIR}/include/lamp/lamp-server.h
-            ${CMAKE_CURRENT_LIST_DIR}/include/lamp/lamp-client.h
+            ${CMAKE_CURRENT_LIST_DIR}/include/common/protocols/snap/lamp/lamp-server.h
+            ${CMAKE_CURRENT_LIST_DIR}/include/common/protocols/snap/lamp/lamp-client.h
 
-            ${CMAKE_CURRENT_LIST_DIR}/src/services/lamp/lamp-server.c
-            ${CMAKE_CURRENT_LIST_DIR}/src/services/lamp/lamp-client.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/lamp/lamp-server.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/lamp/lamp-client.c
             )
 
     #
@@ -51,6 +51,7 @@ function(add_snap _targetname _definitions)
 
             PRIVATE
             $<BUILD_INTERFACE:${VIRGIL_IOT_CONFIG_DIRECTORY}>
+            $<BUILD_INTERFACE:${IOTKIT_PATH}/sdk/modules/protocols/snap/include>
             )
     install(TARGETS ${_targetname}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

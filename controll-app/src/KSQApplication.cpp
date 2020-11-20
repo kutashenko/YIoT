@@ -1,18 +1,18 @@
 //  ────────────────────────────────────────────────────────────
-//                  ───╔╗──╔╗─╔══╗──────╔════╗───
-//                  ───║╚╗╔╝║─╚╣╠╝──────║╔╗╔╗║───
-//                  ───╚╗╚╝╔╝──║║──╔══╗─╚╝║║╚╝───
-//                  ────╚╗╔╝───║║──║╔╗║───║║─────
-//                  ─────║║───╔╣╠╗─║╚╝║───║║─────
-//                  ─────╚╝───╚══╝─╚══╝───╚╝─────
-//  ──╔╗╔═╗────────────────────╔╗─────────────────────╔╗────────
-//  ──║║║╔╝───────────────────╔╝╚╗────────────────────║║────────
-//  ──║╚╝╝──╔══╗─╔══╗─╔══╗──╔╗╚╗╔╝──╔══╗─╔╗─╔╗╔╗─╔══╗─║║──╔══╗──
-//  ──║╔╗║──║║═╣─║║═╣─║╔╗║──╠╣─║║───║─═╣─╠╣─║╚╝║─║╔╗║─║║──║║═╣──
-//  ──║║║╚╗─║║═╣─║║═╣─║╚╝║──║║─║╚╗──╠═─║─║║─║║║║─║╚╝║─║╚╗─║║═╣──
-//  ──╚╝╚═╝─╚══╝─╚══╝─║╔═╝──╚╝─╚═╝──╚══╝─╚╝─╚╩╩╝─║╔═╝─╚═╝─╚══╝──
-//  ──────────────────║║─────────────────────────║║─────────────
-//  ──────────────────╚╝─────────────────────────╚╝─────────────
+//                     ╔╗  ╔╗ ╔══╗      ╔════╗
+//                     ║╚╗╔╝║ ╚╣╠╝      ║╔╗╔╗║
+//                     ╚╗╚╝╔╝  ║║  ╔══╗ ╚╝║║╚╝
+//                      ╚╗╔╝   ║║  ║╔╗║   ║║
+//                       ║║   ╔╣╠╗ ║╚╝║   ║║
+//                       ╚╝   ╚══╝ ╚══╝   ╚╝
+//    ╔╗╔═╗                    ╔╗                     ╔╗
+//    ║║║╔╝                   ╔╝╚╗                    ║║
+//    ║╚╝╝  ╔══╗ ╔══╗ ╔══╗  ╔╗╚╗╔╝  ╔══╗ ╔╗ ╔╗╔╗ ╔══╗ ║║  ╔══╗
+//    ║╔╗║  ║║═╣ ║║═╣ ║╔╗║  ╠╣ ║║   ║ ═╣ ╠╣ ║╚╝║ ║╔╗║ ║║  ║║═╣
+//    ║║║╚╗ ║║═╣ ║║═╣ ║╚╝║  ║║ ║╚╗  ╠═ ║ ║║ ║║║║ ║╚╝║ ║╚╗ ║║═╣
+//    ╚╝╚═╝ ╚══╝ ╚══╝ ║╔═╝  ╚╝ ╚═╝  ╚══╝ ╚╝ ╚╩╩╝ ║╔═╝ ╚═╝ ╚══╝
+//                    ║║                         ║║
+//                    ╚╝                         ╚╝
 //
 //    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 //  ────────────────────────────────────────────────────────────
@@ -23,6 +23,8 @@
 #include <KSQApplication.h>
 #include <ui/VSQUiHelper.h>
 #include <virgil/iot/logger/logger.h>
+
+#include <yiot-iotkit/KSQIoTKitFacade.h>
 
 #include <devices/lamp/KSQLampController.h>
 #include <devices/pc/KSQPCController.h>
@@ -36,17 +38,17 @@ int
 KSQApplication::run() {
     QQmlApplicationEngine engine;
     VSQUiHelper uiHelper;
-    m_netifUdp = QSharedPointer<VSQUdpBroadcast>::create();
+    m_netifUdp = QSharedPointer<KSQUdp>::create();
 
     // Prepare IoTKit data
-    auto features = VSQFeatures() << VSQFeatures::SNAP_CFG_CLIENT << VSQFeatures::SNAP_LAMP_CLIENT;
+    auto features = KSQFeatures() << KSQFeatures::SNAP_CFG_CLIENT << KSQFeatures::SNAP_LAMP_CLIENT;
     auto impl = VSQImplementations() << m_netifUdp << m_bleController.netif();
     auto roles = VSQDeviceRoles() << VirgilIoTKit::VS_SNAP_DEV_CONTROL;
     auto appConfig = VSQAppConfig() << VSQManufactureId() << VSQDeviceType() << VSQDeviceSerial()
                                     << VirgilIoTKit::VS_LOGLEV_DEBUG << roles;
 
     // Initialize IoTKit
-    if (!VSQIoTKitFacade::instance().init(features, impl, appConfig)) {
+    if (!KSQIoTKitFacade::instance().init(features, impl, appConfig)) {
         VS_LOG_CRITICAL("Unable to initialize IoTKIT");
         return -1;
     }

@@ -1,18 +1,18 @@
 #  ────────────────────────────────────────────────────────────
-#                  ───╔╗──╔╗─╔══╗──────╔════╗───
-#                  ───║╚╗╔╝║─╚╣╠╝──────║╔╗╔╗║───
-#                  ───╚╗╚╝╔╝──║║──╔══╗─╚╝║║╚╝───
-#                  ────╚╗╔╝───║║──║╔╗║───║║─────
-#                  ─────║║───╔╣╠╗─║╚╝║───║║─────
-#                  ─────╚╝───╚══╝─╚══╝───╚╝─────
-#  ──╔╗╔═╗────────────────────╔╗─────────────────────╔╗────────
-#  ──║║║╔╝───────────────────╔╝╚╗────────────────────║║────────
-#  ──║╚╝╝──╔══╗─╔══╗─╔══╗──╔╗╚╗╔╝──╔══╗─╔╗─╔╗╔╗─╔══╗─║║──╔══╗──
-#  ──║╔╗║──║║═╣─║║═╣─║╔╗║──╠╣─║║───║─═╣─╠╣─║╚╝║─║╔╗║─║║──║║═╣──
-#  ──║║║╚╗─║║═╣─║║═╣─║╚╝║──║║─║╚╗──╠═─║─║║─║║║║─║╚╝║─║╚╗─║║═╣──
-#  ──╚╝╚═╝─╚══╝─╚══╝─║╔═╝──╚╝─╚═╝──╚══╝─╚╝─╚╩╩╝─║╔═╝─╚═╝─╚══╝──
-#  ──────────────────║║─────────────────────────║║─────────────
-#  ──────────────────╚╝─────────────────────────╚╝─────────────
+#                     ╔╗  ╔╗ ╔══╗      ╔════╗
+#                     ║╚╗╔╝║ ╚╣╠╝      ║╔╗╔╗║
+#                     ╚╗╚╝╔╝  ║║  ╔══╗ ╚╝║║╚╝
+#                      ╚╗╔╝   ║║  ║╔╗║   ║║
+#                       ║║   ╔╣╠╗ ║╚╝║   ║║
+#                       ╚╝   ╚══╝ ╚══╝   ╚╝
+#    ╔╗╔═╗                    ╔╗                     ╔╗
+#    ║║║╔╝                   ╔╝╚╗                    ║║
+#    ║╚╝╝  ╔══╗ ╔══╗ ╔══╗  ╔╗╚╗╔╝  ╔══╗ ╔╗ ╔╗╔╗ ╔══╗ ║║  ╔══╗
+#    ║╔╗║  ║║═╣ ║║═╣ ║╔╗║  ╠╣ ║║   ║ ═╣ ╠╣ ║╚╝║ ║╔╗║ ║║  ║║═╣
+#    ║║║╚╗ ║║═╣ ║║═╣ ║╚╝║  ║║ ║╚╗  ╠═ ║ ║║ ║║║║ ║╚╝║ ║╚╗ ║║═╣
+#    ╚╝╚═╝ ╚══╝ ╚══╝ ║╔═╝  ╚╝ ╚═╝  ╚══╝ ╚╝ ╚╩╩╝ ║╔═╝ ╚═╝ ╚══╝
+#                    ║║                         ║║
+#                    ╚╝                         ╚╝
 #
 #    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 #  ────────────────────────────────────────────────────────────
@@ -142,7 +142,7 @@ elseif(KS_PLATFORM STREQUAL "macos")
     set(MACOSX_DMG_ICON_FILE Installer.icns)
     set(MACOSX_BUNDLE_BACKGROUND_FILE "Background.png")
     set(MACOSX_DEPLOYMENT_TARGET 10.14)
-    set(VS_BUNDLE_PREFIX "io.kutashenko")
+    set(VS_BUNDLE_PREFIX "io.yiot.kutashenko")
     set(MACOSX_BUNDLE_GUI_IDENTIFIER "${VS_BUNDLE_PREFIX}.${PROJECT_NAME}")
     list(APPEND VS_TEMPLATES "${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos/release-notes.html.in=${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos/release-notes.html")
     list(APPEND VS_TEMPLATES "${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos/dmg.json.in=${CMAKE_BINARY_DIR}/dmg.json")
@@ -178,8 +178,6 @@ elseif(KS_PLATFORM STREQUAL "macos")
     #set_target_properties(${KS_TARGET_NAME}
     #        PROPERTIES LINK_FLAGS "-F${PREBUILT_DIR}/${KS_PLATFORM}/sparkle -framework Sparkle -framework CoreFoundation -framework Foundation"
     #        )
-
-
     #    macdeployqt(${KS_TARGET_NAME} "${CMAKE_CURRENT_LIST_DIR}/src/qml")
 
 # Other
@@ -221,6 +219,10 @@ target_sources(${KS_TARGET_NAME}
         ${CMAKE_CURRENT_LIST_DIR}/include/devices/pc/KSQPC.h
         ${CMAKE_CURRENT_LIST_DIR}/include/devices/pc/KSQPCController.h
 
+        ${CMAKE_CURRENT_LIST_DIR}/include/yiot-iotkit/KSQIoTKitFacade.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/yiot-iotkit/netif/KSQUdp.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/yiot-iotkit/snap/KSQSnapLampClient.h
+
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/include/KSWiFi.h>
         $<$<STREQUAL:"${KS_PLATFORM}","android">:${CMAKE_CURRENT_LIST_DIR}/include/android/KSQAndroid.h>
@@ -239,6 +241,10 @@ target_sources(${KS_TARGET_NAME}
         ${CMAKE_CURRENT_LIST_DIR}/src/devices/lamp/KSQLampController.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/devices/pc/KSQPC.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/devices/pc/KSQPCController.cpp
+
+        ${CMAKE_CURRENT_LIST_DIR}/src/yiot-iotkit/KSQIoTKitFacade.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/yiot-iotkit/netif/KSQUdp.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/yiot-iotkit/snap/KSQSnapLampClient.cpp
 
         $<$<STREQUAL:"${KS_PLATFORM}","macos">:${CMAKE_CURRENT_LIST_DIR}/src/macos/KSMacWiFi.mm>
         $<$<STREQUAL:"${KS_PLATFORM}","windows">:${CMAKE_CURRENT_LIST_DIR}/src/win/KSWinWiFi.cpp>
