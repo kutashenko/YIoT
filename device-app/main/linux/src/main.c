@@ -30,8 +30,8 @@
 #include "iotkit-impl/init.h"
 #include "iotkit-impl/netif/netif-ble-linux.h"
 
-#include "device-info.h"
-#include "wifi-cred.h"
+#include "commands/device-info.h"
+#include "commands/wifi-cred.h"
 
 #if SECURE_PROVISION
 #include <virgil/iot/vs-soft-secmodule/vs-soft-secmodule.h>
@@ -121,7 +121,14 @@ main(int argc, char *argv[]) {
     //
 
     // Send broadcast notification about self start
-    // vs_snap_info_start_notification(vs_snap_netif_routing());
+    vs_snap_info_start_notification(vs_snap_default_netif());
+
+    //-----------------------
+    vs_cfg_wifi_configuration_t c;
+    strcpy(c.ssid, "SSID");
+    strcpy(c.pass, "PASSWORD");
+    ks_snap_cfg_wifi_cb(&c);
+    //-----------------------
 
     // Sleep until CTRL_C
     vs_app_sleep_until_stop();

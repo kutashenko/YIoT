@@ -17,16 +17,39 @@
 //    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 //  ────────────────────────────────────────────────────────────
 
-#include "wifi-cred.h"
+#include "helpers/timer.h"
+#include <thread>
 
 //-----------------------------------------------------------------------------
-vs_status_e
-ks_snap_cfg_wifi_cb(const vs_cfg_wifi_configuration_t *configuration) {
-    CHECK_NOT_ZERO_RET(configuration, VS_CODE_ERR_NULLPTR_ARGUMENT);
+KSTimer::KSTimer() : m_running(false) {
+    std::thread([=]() {
+        while (true) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::lock_guard<std::mutex> lock(m_changingMutex);
+            if (m_running && std::chrono::high_resolution_clock::now() - m_start > m_delay) {
+                m_callback();
 
-    printf("ssid: %s\n", configuration->ssid);
-    printf("pass: %s\n", configuration->pass);
-    return VS_CODE_OK;
+                std::lock_guard<std::mutex> lockState(m_stateMutex);
+                m_running = false;
+            }
+        }
+    })
+            .detach();
+}
+
+//-----------------------------------------------------------------------------
+bool
+KSTimer::add(std::chrono::milliseconds delay, std::function<void()> callback) {
+    std::lock_guard<std::mutex> lockState(m_stateMutex);
+    if (m_running) {
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(m_changingMutex);
+    m_callback = callback;
+    m_start = std::chrono::high_resolution_clock::now();
+    m_delay = delay;
+    m_running = true;
 }
 
 //-----------------------------------------------------------------------------

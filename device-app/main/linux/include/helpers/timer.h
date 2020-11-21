@@ -17,25 +17,27 @@
 //    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 //  ────────────────────────────────────────────────────────────
 
-#include "device-info.h"
-#include <string.h>
+#ifndef YIOT_TIMER_H
+#define YIOT_TIMER_H
 
-//-----------------------------------------------------------------------------
-void
-ks_devinfo_manufacturer(vs_device_manufacture_id_t manufacture_id) {
-    memset(manufacture_id, 0, sizeof(vs_device_manufacture_id_t));
-}
+#include <chrono>
+#include <functional>
+#include <mutex>
 
-//-----------------------------------------------------------------------------
-void
-ks_devinfo_device_type(vs_device_type_t device_type) {
-    memset(device_type, 0, sizeof(vs_device_type_t));
-}
+class KSTimer {
+public:
+    KSTimer();
 
-//-----------------------------------------------------------------------------
-void
-ks_devinfo_device_serial(vs_device_serial_t serial) {
-    memset(serial, 0, sizeof(vs_device_serial_t));
-}
+    bool
+    add(std::chrono::milliseconds delay, std::function<void()> callback);
 
-//-----------------------------------------------------------------------------
+private:
+    bool m_running;
+    std::mutex m_stateMutex;
+    std::mutex m_changingMutex;
+    std::chrono::milliseconds m_delay;
+    std::chrono::high_resolution_clock::time_point m_start;
+    std::function<void()> m_callback;
+};
+
+#endif // YIOT_TIMER_H
