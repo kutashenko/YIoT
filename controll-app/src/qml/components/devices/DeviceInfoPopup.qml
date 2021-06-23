@@ -24,7 +24,6 @@ import QtQuick.Layouts 1.12
 import "../../theme"
 import "../../components"
 import "../../components/devices"
-import "../../components/devices/lamp"
 
 Popup {
     property string mName: ""
@@ -83,10 +82,10 @@ Popup {
         InfoText { text: qsTr("TrustList version :"); horizontalAlignment: Text.AlignRight }
         InfoText { text: mTlVer }
 
-        InfoText { text: qsTr("Sent bytes :"); horizontalAlignment: Text.AlignRight }
+        InfoText { text: qsTr("Sent packets :"); horizontalAlignment: Text.AlignRight }
         InfoText { text: mSent }
 
-        InfoText { text: qsTr("Received bytes :"); horizontalAlignment: Text.AlignRight }
+        InfoText { text: qsTr("Received packets :"); horizontalAlignment: Text.AlignRight }
         InfoText { text: mReceived }
     }
 

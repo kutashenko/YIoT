@@ -25,6 +25,9 @@ import "../theme"
 
 ListView {
     id: wifiList
+
+    property string ssid: ""
+
     Layout.fillHeight: true
     Layout.fillWidth: true
 
@@ -57,7 +60,7 @@ ListView {
                 text: name
                 color: Theme.primaryTextColor
                 verticalAlignment: Text.AlignVCenter
-                font.pointSize: UiHelper.fixFontSz(14)
+                font.pointSize: 14
 
                 Layout.alignment: Qt.AlignLeft
                 Layout.fillHeight: true
@@ -69,7 +72,7 @@ ListView {
                 text: rssi
                 color: Theme.primaryTextColor
                 verticalAlignment: Text.AlignVCenter
-                font.pointSize: UiHelper.fixFontSz(14)
+                font.pointSize: 14
 
                 Layout.alignment: Qt.AlignLeft
                 Layout.fillHeight: true
@@ -83,7 +86,8 @@ ListView {
             hoverEnabled: true
             onClicked: {
                 wifiList.currentIndex = index
-                showWiFiPassword(name)
+                ssid = name
+                showWiFiPassPage(ssid)
             }
 
             onEntered: {
@@ -95,9 +99,6 @@ ListView {
                 base.color = colorIfActive(name)
             }
         }
-    }
-
-    Component.onCompleted: {
     }
 
     function colorIfActive(name) {

@@ -22,13 +22,17 @@
 #include <thread>
 
 #ifdef Q_OS_ANDROID
-#include "android/KSQAndroid.h"
+#include "os/android/KSQAndroid.h"
 #endif // Q_OS_ANDROID
 
 #if 1
 // TODO: Remove after fixing of deprecated functionality
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
+#if !defined(WIFI_ENUM_DEBUG)
+#define WIFI_ENUM_DEBUG 0
 #endif
 
 //-----------------------------------------------------------------------------
@@ -69,24 +73,10 @@ KSQWiFiEnumerator::stop() {
 }
 
 //-----------------------------------------------------------------------------
-#if !defined(Q_OS_MACOS) && !defined(Q_OS_WIN32)
+#if defined(Q_OS_ANDROID)
 KSQWiFiNetworks
 KSQWiFiEnumerator::wifi_enum() {
-#ifdef Q_OS_ANDROID
     return KSQAndroid::enumWifi();
-#else
-    KSQWiFiNetworks wifiList;
-    auto netcfgList = m_ncm.allConfigurations();
-    for (auto &x : netcfgList) {
-        qDebug() << x.name() << " : " << x.bearerTypeName() << " : " << x.identifier();
-        if (x.bearerType() == QNetworkConfiguration::BearerWLAN) {
-            if (x.name() != "") {
-                wifiList[x.name()] = KSWiFiInfo();
-            }
-        }
-    }
-    return wifiList;
-#endif
 }
 #endif
 
@@ -119,7 +109,9 @@ KSQWiFiEnumerator::updateList(KSQWiFiNetworks &list) {
     auto bottomRight = createIndex(m_wifiList.count(), 0);
     emit dataChanged(topLeft, bottomRight, roles);
 
+#if WIFI_ENUM_DEBUG
     qDebug() << m_wifiList.keys();
+#endif
 }
 
 //-----------------------------------------------------------------------------

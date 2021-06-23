@@ -34,11 +34,11 @@ function(add_snap _targetname _definitions)
     target_sources(${_targetname}
             PRIVATE
 
-            ${CMAKE_CURRENT_LIST_DIR}/include/common/protocols/snap/lamp/lamp-server.h
-            ${CMAKE_CURRENT_LIST_DIR}/include/common/protocols/snap/lamp/lamp-client.h
+            ${CMAKE_CURRENT_LIST_DIR}/include/common/protocols/snap/user/user-server.h
+            ${CMAKE_CURRENT_LIST_DIR}/include/common/protocols/snap/user/user-client.h
 
-            ${CMAKE_CURRENT_LIST_DIR}/src/lamp/lamp-server.c
-            ${CMAKE_CURRENT_LIST_DIR}/src/lamp/lamp-client.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/user/user-server.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/user/user-client.c
             )
 
     #
@@ -85,6 +85,7 @@ function(add_snap _targetname _definitions)
             PUBLIC
             virgil-iot-status-code
             vs-module-provision
+            vs-module-users
 
             PRIVATE
             macros
@@ -101,11 +102,16 @@ function(add_snap _targetname _definitions)
 endfunction()
 
 #
-#   SNAP For Thing
+#   SNAP For Thing Lamp
 #
-add_snap("yiot-snap-thing" "LAMP_SERVER=1")
+add_snap("yiot-snap-thing-lamp" "LAMP_SERVER=1")
+
+#
+#   SNAP For Thing PC
+#
+add_snap("yiot-snap-thing-pc" "PC_SERVER=1")
 
 #
 #   SNAP For Control
 #
-add_snap("yiot-snap-control" "LAMP_CLIENT=1")
+add_snap("yiot-snap-control" "LAMP_CLIENT=1 PC_CLIENT=1")

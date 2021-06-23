@@ -32,7 +32,7 @@
 #
 #   Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 # ---------------------------------------------------------------------------
 # Set CMAKE_FIND_ROOT_PATH for QT cmake include directory
@@ -132,6 +132,11 @@ if(KS_PLATFORM)
         else()
     	    message(FATAL_ERROR "-- Enviroment variable ANDROID_SDK not set")    
         endif()    
+	
+	execute_process (COMMAND bash -c "cd ${ANDROID_SDK}/build-tools && ls -rd -- */ | head -n 1 | cut -d'/' -f1 | tr -d '\n'" OUTPUT_VARIABLE ANDROID_SDK_BUILD_TOOLS_REVISION)
+        message(STATUS "Android SDK build tool version: [${ANDROID_SDK_BUILD_TOOLS_REVISION}]")
+        set(QT_ANDROID_DEPLOYMENT_DEPENDENCIES "\"sdkBuildToolsRevision\": \"${ANDROID_SDK_BUILD_TOOLS_REVISION}\",")
+        
         
     # -- MacOS
     elseif(KS_PLATFORM STREQUAL "macos")
@@ -148,7 +153,7 @@ if(KS_PLATFORM)
     
     # -- Windows
     elseif(KS_PLATFORM STREQUAL "windows")
-        set(QT_PREFIX_PATH "mingw32")
+        set(QT_PREFIX_PATH "mingw81_64")
         prepare_qt_sdk(CMAKE_PREFIX_PATH CMAKE_FIND_ROOT_PATH QT_QMAKE_EXECUTABLE)
     endif()
 endif()

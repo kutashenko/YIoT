@@ -27,6 +27,8 @@ import "../../components"
 Page {
     id: settingsPage
 
+    property int darkMode: 1
+
     background: Rectangle {
         color: "transparent"
     }
@@ -45,6 +47,22 @@ Page {
         spacing: 1
 
         model: ListModel {
+            //ListElement {
+            //    name: qsTr("Root of trust")
+            //    image: "secure-enclave"
+            //    property var action: function() {
+            //        showRoTSettings()
+            //    }
+            //}
+
+            //ListElement {
+            //    name: qsTr("IoT Networks")
+            //    image: "network"
+            //    property var action: function() {
+            //        showIoTNetworkSettings()
+            //    }
+            //}
+
             ListElement {
                 name: qsTr("WiFi credentials")
                 image: "creds"
@@ -53,11 +71,35 @@ Page {
                 }
             }
 
+            //ListElement {
+            //    name: qsTr("Event settings")
+            //    image: "events"
+            //    property var action: function() {
+            //        showEventsSettings()
+            //    }
+            //}
+
             ListElement {
-                name: qsTr("Event triggers")
-                image: "events"
+                name: qsTr("Theme")
+                image: "themes"
                 property var action: function() {
-                    showEventsSettings()
+                    showThemeList()
+                }
+            }
+
+            ListElement {
+                name: qsTr("Device types and plugins")
+                image: "plugins"
+                property var action: function() {
+                    showExtDevicesList()
+                }
+            }
+
+            ListElement {
+                name: qsTr("Integrations")
+                image: "integrations"
+                property var action: function() {
+                    showIntegrationsList()
                 }
             }
         }
@@ -75,7 +117,7 @@ Page {
 
                 Image {
                     id: icon
-                    source: "qrc:/qml/resources/icons/dark/%1.png".arg(image)
+                    source: (image.indexOf("://") != -1) ? image : "qrc:/qml/resources/icons/%1/%2.png".arg(Theme.state).arg(image)
                     Layout.maximumHeight: listDelegate.height * 0.7
                     Layout.maximumWidth: Layout.maximumHeight
                     fillMode: Image.PreserveAspectFit
@@ -88,7 +130,7 @@ Page {
                     text: name
                     color: Theme.primaryTextColor
                     verticalAlignment: Text.AlignVCenter
-                    font.pointSize: UiHelper.fixFontSz(14)
+                    font.pointSize: 14
 
                     Layout.alignment: Qt.AlignLeft
                     Layout.fillHeight: true

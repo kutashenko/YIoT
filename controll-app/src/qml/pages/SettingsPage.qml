@@ -20,8 +20,9 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-import "./settings"
-import "../components"
+import "qrc:/qml/pages/settings/extensions"
+import "qrc:/qml/pages/settings"
+import "qrc:/qml/components"
 
 Page {
     readonly property int menuIdx: 0
@@ -40,6 +41,14 @@ Page {
         readonly property int wifiNetworksIdx: 1
         readonly property int wifiPassIdx: 2
         readonly property int eventsIdx: 3
+        readonly property int rotIdx: 4
+        readonly property int networksIdx: 5
+        readonly property int themeIdx: 6
+        readonly property int extDevicesIdx: 7
+        readonly property int integrationsIdx: 8
+        readonly property int onePluginIdx: 9
+        readonly property int oneIntegrationIdx: 10
+        readonly property int oneDevicePageIdx: 11
 
         property int backPageIdx: menuIdx
 
@@ -63,6 +72,38 @@ Page {
         EventsSettingsPage {
             id: eventsSettingsPage
         }
+
+        RoTSettingsPage {
+            id: rotSettingsPage
+        }
+
+        NetworksSettingsPage {
+            id: networksSettingsPage
+        }
+        
+        ThemeListPage {
+            id: themeListPage
+        }
+
+        ExtDevicesListPage {
+            id: extDeviccesListPage
+        }
+
+        ExtIntegrationsListPage {
+            id: extIntegrationsListPage
+        }
+
+        ExtPluginPage {
+            id: extPluginPage
+        }
+
+        ExtIntegrationPage {
+            id: extIntegrationPage
+        }
+
+        ExtDevicePage {
+            id: extDevicePage
+        }
     }
 
     onVisibleChanged: {
@@ -84,20 +125,60 @@ Page {
      }
 
     function showWiFiSettings() {
+        wifiPassSettingsPage.prepareLocation("credentials")
         swipeSettingsShow(settingsSwipeView.wifiNetworksIdx)
+    }
+
+    function showRoTSettings() {
+        swipeSettingsShow(settingsSwipeView.rotIdx)
+    }
+
+    function showIoTNetworkSettings() {
+        swipeSettingsShow(settingsSwipeView.networksIdx)
     }
 
     function showWiFiPassword(ssid) {
         console.log("showWiFiPassword: ", ssid)
         wifiPassSettingsPage.prepare(ssid)
-        swipeSettingsShow(settingsSwipeView.wifiPassIdx)
     }
 
     function showEventsSettings() {
         swipeSettingsShow(settingsSwipeView.eventsIdx)
     }
 
+    function showThemeList() {
+        swipeSettingsShow(settingsSwipeView.themeIdx)
+    }
+
+    function showExtDevicesList() {
+        swipeSettingsShow(settingsSwipeView.extDevicesIdx)
+    }
+
+    function showExtDevice(device, backAction) {
+        extDevicePage.device = device
+        extDevicePage.backAction = backAction
+        swipeSettingsShow(settingsSwipeView.oneDevicePageIdx)
+    }
+
+    function showIntegrationsList() {
+        swipeSettingsShow(settingsSwipeView.integrationsIdx)
+    }
+
+    function showPluginPage(plugin, backAction) {
+        extPluginPage.plugin = plugin
+        extPluginPage.backAction = backAction
+        swipeSettingsShow(settingsSwipeView.onePluginIdx)
+    }
+
+    function showIntegrationPage(integration, backAction) {
+        swipeSettingsShow(settingsSwipeView.oneIntegrationIdx)
+        extIntegrationPage.show(integration)
+    }
+
     function backInSettings() {
         swipeSettingsShow(settingsSwipeView.backPageIdx)
+    }
+    function setPassPageLocation(location) {
+        wifiPassSettingsPage.prepareLocation(location)
     }
 }

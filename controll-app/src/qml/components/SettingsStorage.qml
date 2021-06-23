@@ -23,20 +23,26 @@ import QtKeychain 1.0
 import Qt.labs.settings 1.0
 
 Item {
+    signal loaded()
+
     property alias defaultWiFi: s.defaultWiFi
 
     property var wifiCache
+
 
     // Settings storage
     Settings {
         id: s
         property string defaultWiFi: ""
+
+        property bool websockEnabled: false
+        property string websockLink: ""
     }
 
     // KeyChain Writer
     WritePasswordJob {
         id: storeJobObject
-        service: "yiot"
+        service: "YIoT"
         autoDelete: false
         onFinished: {
             console.debug("Store password complete")
@@ -49,7 +55,7 @@ Item {
 
         id: readJobObject
         autoDelete: false
-        service: "yiot"
+        service: "YIoT"
 
         Component.onCompleted: {
             readJobObject.finished.connect(function (returnedPassword) {
@@ -113,6 +119,22 @@ Item {
         s.defaultWiFi = ssid
     }
 
+    function setWebsocketState(state) {
+        s.websockEnabled = state
+    }
+
+    function setWebsocketLink(link) {
+        s.websockLink = link
+    }
+
+    function getWebsocketState() {
+        return s.websockEnabled
+    }
+
+    function getWebsocketLink() {
+        return s.websockLink
+    }
+
     Component.onCompleted: {
         // Prepare WiFi creds cache
         wifiCache = {}
@@ -120,6 +142,7 @@ Item {
         // Load default creds
         loadWiFiCred(s.defaultWiFi, function(s, p) {
             console.log("Loaded default WiFi creds: ", s)
+            loaded()
         })
     }
 }

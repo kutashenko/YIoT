@@ -17,27 +17,37 @@
 #    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 #  ────────────────────────────────────────────────────────────
 
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 # ---------------------------------------------------------------------------
 # Project version
 # ---------------------------------------------------------------------------
-set(KS_TARGET_VERSION "0.0.2")
+set(KS_TARGET_VERSION "0.1.0")
 
 # ---------------------------------------------------------------------------
-# Define project
+#   Options
 # ---------------------------------------------------------------------------
-project(yiot VERSION ${KS_TARGET_VERSION} LANGUAGES C CXX)
+option(BUILD_DEVICE_ENABLE "Enable building of Device app" ON)
+option(BUILD_EMULATORS_ENABLE "Enable building of Device emulators" ON)
+option(BUILD_APP_ENABLE "Enable building of Application" ON)
 
 # ---------------------------------------------------------------------------
 # Include Cmake helpers
 # ---------------------------------------------------------------------------
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-include(vsplatforms)
+if (BUILD_APP_ENABLE)
+    include(vsplatforms)
+endif()
 include(varpadding)
 #include(clangformat)
 
+# ---------------------------------------------------------------------------
+# Define project
+# ---------------------------------------------------------------------------
+
+project(yiot VERSION ${KS_TARGET_VERSION} LANGUAGES C CXX)
+file(WRITE "${CMAKE_BINARY_DIR}/VERSION" "${KS_TARGET_VERSION}")
 # ---------------------------------------------------------------------------
 #   Detecting platform if KS_PLATFORM not specified
 # ---------------------------------------------------------------------------
@@ -54,7 +64,7 @@ if(NOT KS_PLATFORM)
     elseif(IOS)
         message(STATUS "Detected target platform: [IOS]")
         set(KS_PLATFORM "ios")
-    elseif(MINGW32)
+    elseif(WIN32)
         message(STATUS "Detected target platform: [Windows]")
         set(KS_PLATFORM "windows")
     endif()
@@ -69,12 +79,6 @@ endif()
 
 message(STATUS "KS_PLATFORM: ${KS_PLATFORM}")
 message(STATUS "KS_PLATFORM_DESKTOP: ${KS_PLATFORM_DESKTOP}")
-
-# ---------------------------------------------------------------------------
-#   Options
-# ---------------------------------------------------------------------------
-option(BUILD_DEVICE_ENABLE "Enable building of Device app" ON)
-option(BUILD_APP_ENABLE "Enable building of Application" ON)
 
 
 # ---------------------------------------------------------------------------
@@ -93,9 +97,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/common)
 # ---------------------------------------------------------------------------
 #	Device Applications
 # ---------------------------------------------------------------------------
-if (BUILD_DEVICE_ENABLE)
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/device-app)
-endif()
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/device-app)
 
 # ---------------------------------------------------------------------------
 #	Cross-platform control applications

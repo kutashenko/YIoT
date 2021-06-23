@@ -31,7 +31,7 @@ Page {
     }
 
     header: Header {
-        title: qsTr("Select WiFi or share current")
+        title: qsTr("Select WiFi network")
         backAction: function() { showMenuSettings() }
     }
 
@@ -43,12 +43,12 @@ Page {
             Layout.fillHeight: true
         }
 
-        FormPrimaryButton {
-            Layout.bottomMargin: 10
-            text: qsTr("Share current WiFi network")
-            onClicked: {
-                showDevicesSetup()
-            }
-        }
+        //FormPrimaryButton {
+        //    Layout.bottomMargin: 10
+        //    text: qsTr("Share current WiFi network")
+        //    onClicked: {
+        //        showDevicesSetup()
+        //    }
+        //}
     }
 }

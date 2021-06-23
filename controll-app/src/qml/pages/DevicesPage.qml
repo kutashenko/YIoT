@@ -27,6 +27,8 @@ import "../components/devices"
 
 Page {
 
+    property var lastActiveDevice: null
+
     background: Rectangle {
         color: "transparent"
     }
@@ -47,6 +49,7 @@ Page {
         model: deviceControllers
     }
 
+    // Fill data and show device info.
     function showDeviceInfo(model) {
         deviceInfo.mName = model.name
         deviceInfo.mAddr = model.macAddr
@@ -61,48 +64,9 @@ Page {
         deviceInfo.open()
     }
 
-    function deviceCategoryActions(deviceType) {
-        if (deviceType === "lamps") {
-            return "qrc:/qml/components/devices/GeneralCategoryControls.qml"
-        }  else if (deviceType === "pc") {
-            return "qrc:/qml/components/devices/GeneralCategoryControls.qml"
-        }
-
-        console.error("Unknown Device Type")
-        return ""
-    }
-
-    function deviceActions(deviceType) {
-        if (deviceType === "lampMono") {
-            return "qrc:/qml/components/devices/lamp/LampControls.qml"
-        } else if (deviceType === "pc") {
-            return "qrc:/qml/components/devices/GeneralDeviceControls.qml"
-        }
-
-        console.error("Unknown Device Type")
-        return ""
-    }
-
-    function activateDeviceView(deviceType, deviceName, deviceController) {
-        if (deviceType === "lampMono") {
-            lampMonoPage.deviceName = deviceName
-            lampMonoPage.controller = deviceController
-            showLampMono()
-        } else if (deviceType === "pc") {
-            showPC()
-        }
-
-        console.error("Unknown Device Type")
-    }
-
-    function deviceStateImage(model) {
-        if (model.deviceType === "lampMono") {
-            return "devices/lamp/mono/%1".arg(model.state)
-        } else if (model.deviceType === "pc") {
-            return "devices/pc/rpi"
-        }
-
-        console.error("Unknown Device Type")
-        return ""
+    // Show Big Controls view for device, by its type.
+    function activateDeviceView(deviceController) {
+        lastActiveDevice = deviceController
+        showDeviceControl(deviceController)
     }
 }

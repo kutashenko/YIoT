@@ -23,10 +23,10 @@ import QtQuick.Layouts 1.12
 
 import "../../theme"
 import "../../components/devices"
-import "../../components/devices/lamp"
 
 Rectangle {
     property bool topLevel: true
+    property bool submodulePresent: true
     property bool showControlsPermanent: false
     property string controlElementUrl: ""
 
@@ -34,6 +34,8 @@ Rectangle {
     color: "transparent"
     height: topLevel ? 50 : 40
     width: commonWidth
+    //visible: secure
+    visible: true
 
     RowLayout {
         id: itemText
@@ -48,8 +50,8 @@ Rectangle {
         Image {
             id: icon
             visible: true
-            enabled: visible
-            source: "qrc:/qml/resources/icons/dark/%1.png".arg(topLevel ? image : deviceStateImage(model))
+            enabled: !topLevel || (image !== "")
+            source: topLevel ? image.arg(Theme.state) : model.js.stateImage(model).arg(Theme.state)
             Layout.maximumHeight: itemText.height * 0.7
             Layout.maximumWidth: Layout.maximumHeight
             Layout.leftMargin: 5
@@ -59,8 +61,9 @@ Rectangle {
             Connections {
                 enabled: !topLevel
                 target: topLevel ? null : deviceController
+                ignoreUnknownSignals: true
                 function onFireStateChanged() {
-                    icon.source = "qrc:/qml/resources/icons/dark/%1.png".arg(deviceStateImage(model))
+                    icon.source = model.js.stateImage(model).arg(Theme.state)
                 }
             }
         }
@@ -71,7 +74,7 @@ Rectangle {
             text: name
             color: Theme.primaryTextColor
             verticalAlignment: Qt.AlignVCenter
-            font.pointSize: UiHelper.fixFontSz(14)
+            font.pointSize: 14
 
             Layout.alignment: Qt.AlignLeft
             Layout.fillHeight: true
@@ -84,7 +87,7 @@ Rectangle {
     Loader {
         id: loader
         property variant modelData: model
-        property bool collapsed: topLevel ? subModel.collapsed : false
+        property bool collapsed: (topLevel && submodulePresent) ? subModel.collapsed : false
         source: controlElementUrl
         onLoaded: {
             z = 1
@@ -98,12 +101,14 @@ Rectangle {
             })
         }
         onCollapsedChanged: {
-            subModel.collapsed = collapsed
+            if (submodulePresent) {
+                subModel.collapsed = collapsed
+            }
         }
 
         Connections {
             enabled: topLevel
-            target: topLevel ? subModel : null
+            target: (topLevel && submodulePresent) ? subModel : null
             function onCollapsedChanged() {
                 loader.collapsed = subModel.collapsed
             }
@@ -118,10 +123,13 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
+            if (!submodulePresent) {
+                return
+            }
             if (topLevel) {
                 subModel.collapsed = !subModel.collapsed
             } else {
-                activateDeviceView(deviceType, name, deviceController)
+                activateDeviceView(deviceController)
             }
         }
 

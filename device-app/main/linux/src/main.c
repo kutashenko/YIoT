@@ -17,29 +17,45 @@
 //    Lead Maintainer: Roman Kutashenko <kutashenko@gmail.com>
 //  ────────────────────────────────────────────────────────────
 
-#include <virgil/iot/logger/logger.h>
-#include <virgil/iot/macros/macros.h>
-#include <virgil/iot/protocols/snap.h>
-#include <virgil/iot/protocols/snap/info/info-server.h>
-#include <virgil/iot/protocols/snap/cfg/cfg-server.h>
+// IoTKit modules
+#include <virgil/iot/logger/logger.h> // Logger
+#include <virgil/iot/macros/macros.h> // Helper macroses
+#include <virgil/iot/secbox/secbox.h> // SecBox - secure storage
 
-#include "helpers/app-helpers.h"
+// Communication protocol
+#include <virgil/iot/protocols/snap.h>                  // Common functionality of protocol
+#include <virgil/iot/protocols/snap/info/info-server.h> // Device information server
+#include <virgil/iot/protocols/snap/cfg/cfg-server.h>   // Device configuration server
+#include <common/protocols/snap/user/user-server.h>         // Specific command for RPi
 
+// Queue for packets to be processed
 #include "sdk-impl/netif/packets-queue.h"
 
-#include "iotkit-impl/init.h"
-#include "iotkit-impl/netif/netif-ble-linux.h"
-
-#include "commands/device-info.h"
-#include "commands/wifi-cred.h"
-
-#if SECURE_PROVISION
-#include <virgil/iot/vs-soft-secmodule/vs-soft-secmodule.h>
+// Platform-specific configurations
 #include <trust_list-config.h>
 #include <update-config.h>
-#include "helpers/app-storage.h"
-#include "helpers/file-cache.h"
-#endif
+
+// Implementation Network interfaces
+#include "common/iotkit-impl/netif/netif-ble-linux.h"   // Bluetooth Low Energy
+#include "common/iotkit-impl/netif/netif-udp.h"         // UDP networking
+#include "common/iotkit-impl/netif/netif-websock.h"     // WebSocket networking
+
+// Software implementation of Security API
+#include <virgil/iot/vs-soft-secmodule/vs-soft-secmodule.h>
+
+// Command processing modules
+#include "commands/device-info.h"
+#include "commands/wifi-cred.h"
+#include "commands/pc.h"
+
+// Platform-specific helpers
+#include "helpers/app-helpers.h" // Different helpers
+#include "common/helpers/utils.h"
+#include "helpers/app-storage.h" // Data Storage helpers
+#include "helpers/file-cache.h"  // File cache to speed-up file operations
+
+// High-level wrapper to simplify initialization/deinitialization
+#include "init.h"
 
 static void
 _print_title(void);
@@ -49,25 +65,35 @@ int
 main(int argc, char *argv[]) {
     int res = -1;
 
-    // Implementation variables
-    vs_netif_t *netifs_impl[2] = {NULL, NULL};
-    vs_snap_cfg_server_service_t cfg_server_cb = {ks_snap_cfg_wifi_cb, NULL, NULL, NULL};
+    // Holder of Network interfaces list
+    vs_netif_t *netifs_impl[4] = {0};
 
-#if SECURE_PROVISION
+    // Configuration server callbacks
+    vs_snap_cfg_server_service_t cfg_server_cb = {ks_snap_cfg_wifi_cb, // Processing of received WiFi credentials
+                                                  NULL,
+                                                  NULL,
+                                                  NULL};
+
+    // RPi-specific callbacks
+    vs_snap_user_server_service_t user_server_cb = {ks_snap_pc_get_info_cb, // Get RPi information
+                                                ks_snap_pc_command_cb}; // Process RPi command
+
+    // Security API implementation
     vs_secmodule_impl_t *secmodule_impl = NULL;
-    vs_storage_op_ctx_t tl_storage_impl;
-    vs_storage_op_ctx_t slots_storage_impl;
-    vs_storage_op_ctx_t fw_storage_impl;
-#endif
+
+    // Different storages context
+    vs_storage_op_ctx_t tl_storage_impl;     // TrustList storage
+    vs_storage_op_ctx_t slots_storage_impl;  // Emulation of HSM's data slots
+    vs_storage_op_ctx_t secbox_storage_impl; // SecBox storage
 
     // Device parameters
     vs_device_manufacture_id_t manufacture_id;
     vs_device_type_t device_type;
     vs_device_serial_t serial;
 
-    ks_devinfo_manufacturer(manufacture_id);
-    ks_devinfo_device_type(device_type);
-    ks_devinfo_device_serial(serial);
+    ks_devinfo_manufacturer(manufacture_id); // Get device manufacturer
+    ks_devinfo_device_type(device_type);     // Get device type
+    ks_devinfo_device_serial(serial);        // Get device serial
 
     // Initialize Logger module
     vs_logger_init(VS_LOGLEV_DEBUG);
@@ -75,15 +101,24 @@ main(int argc, char *argv[]) {
     // Print title
     _print_title();
 
+    // Prepare local storage
+    vs_mac_addr_t tmp;
+    memset(&tmp, 0, sizeof(tmp));
+    STATUS_CHECK(vs_app_prepare_storage("/var/yiot/pc", tmp), "Cannot prepare storage");
+    vs_file_cache_enable(true); // Enable cached file IO
+
+
     //
     // ---------- Create implementations ----------
     //
 
     // Network interface
-    vs_packets_queue_init(vs_snap_default_processor);
-    netifs_impl[0] = ks_netif_ble();
+    bool wifi_ready = is_wifi_connected();
+    vs_packets_queue_init(vs_snap_default_processor);  // Initialize Queue for incoming packets
+    netifs_impl[0] = vs_hal_netif_udp();               // Initialize UDP-based transport
+    netifs_impl[2] = ks_netif_ble();                   // Initialize BLE-based transport
 
-#if SECURE_PROVISION
+
     // TrustList storage
     STATUS_CHECK(vs_app_storage_init_impl(&tl_storage_impl, vs_app_trustlist_dir(), VS_TL_STORAGE_MAX_PART_SIZE),
                  "Cannot create TrustList storage");
@@ -92,43 +127,49 @@ main(int argc, char *argv[]) {
     STATUS_CHECK(vs_app_storage_init_impl(&slots_storage_impl, vs_app_slots_dir(), VS_SLOTS_STORAGE_MAX_SIZE),
                  "Cannot create TrustList storage");
 
+    // Secbox storage
+    STATUS_CHECK(vs_app_storage_init_impl(&secbox_storage_impl, vs_app_secbox_dir(), VS_MAX_FIRMWARE_UPDATE_SIZE),
+                 "Cannot create Secbox storage");
+
     // Soft Security Module
     secmodule_impl = vs_soft_secmodule_impl(&slots_storage_impl);
-#endif // SECURE_PROVISION
+
+    // Secbox module
+    STATUS_CHECK(vs_secbox_init(&secbox_storage_impl, secmodule_impl), "Unable to initialize Secbox module");
+
+    // Network interface
+    netifs_impl[1] = vs_hal_netif_websock(secmodule_impl,
+                                          tmp,
+                                          NULL);        // Initialize WebSocket-based transport
 
     //
     // ---------- Initialize IoTKit internals ----------
     //
 
     // Initialize IoTKit
-    STATUS_CHECK(ks_iotkit_init(manufacture_id,
+    STATUS_CHECK(ks_iotkit_init(manufacture_id, // Set device information
                                 device_type,
                                 serial,
                                 VS_SNAP_DEV_THING,
-                                netifs_impl,
-                                cfg_server_cb,
-                                vs_packets_queue_add
-#if SECURE_PROVISION
-                                ,
-                                secmodule_impl,
-                                &tl_storage_impl
-#endif
-                                ),
+                                netifs_impl,   // Set Network interfaces
+                                cfg_server_cb, // Set protocol callbacks
+                                user_server_cb,
+                                vs_packets_queue_add, // Setup packets processing using queue
+                                secmodule_impl,       // Security API implementation
+                                &tl_storage_impl),    // TrustList storage
                  "Cannot initialize IoTKit");
 
     //
     // ---------- Application work ----------
     //
 
-    // Send broadcast notification about self start
-    vs_snap_info_start_notification(vs_snap_default_netif());
+    // Inform about need of WiFi credentials
+    vs_snap_info_set_need_cred(!wifi_ready);
 
-    //-----------------------
-    vs_cfg_wifi_configuration_t c;
-    strcpy(c.ssid, "SSID");
-    strcpy(c.pass, "PASSWORD");
-    ks_snap_cfg_wifi_cb(&c);
-    //-----------------------
+    // Send broadcast notification about self start
+    const vs_netif_t *n = vs_snap_default_netif();
+    vs_snap_user_start_notification(n);
+    vs_snap_info_start_notification(n);
 
     // Sleep until CTRL_C
     vs_app_sleep_until_stop();
@@ -147,10 +188,8 @@ terminate:
     // De-initialize IoTKit internals
     ks_iotkit_deinit();
 
-#if SECURE_PROVISION
     // Deinit Soft Security Module
     vs_soft_secmodule_deinit();
-#endif
 
     // De-initialize SNAP packets queue
     vs_packets_queue_deinit();
@@ -174,18 +213,29 @@ _print_title(void) {
     ks_devinfo_device_serial(serial);
     vs_app_data_to_hex(serial, VS_DEVICE_SERIAL_SIZE, (uint8_t *)str_dev_serial, &in_out_len);
 
-    VS_LOG_INFO("\n\n");
-    VS_LOG_INFO("------------- KEEP IT SIMPLE ---------------");
-#if SECURE_PROVISION
-    VS_LOG_INFO("      Secure WiFi provision service.");
-#else
-    VS_LOG_INFO("          WiFi provision service.");
-#endif
-
-    VS_LOG_INFO("Manufacture ID = \"%s\"", str_manufacturer);
-    VS_LOG_INFO("Device type    = \"%s\"", str_dev_type);
-    VS_LOG_INFO("Device serial  = \"%s\"", str_dev_type);
-    VS_LOG_INFO("--------------------------------------------\n");
+    printf("\n\n");
+    printf(" ──────────────────────────────────────────────────────────\n");
+    printf("                   ╔╗  ╔╗ ╔══╗      ╔════╗                 \n");
+    printf("                   ║╚╗╔╝║ ╚╣╠╝      ║╔╗╔╗║                 \n");
+    printf("                   ╚╗╚╝╔╝  ║║  ╔══╗ ╚╝║║╚╝                 \n");
+    printf("                    ╚╗╔╝   ║║  ║╔╗║   ║║                   \n");
+    printf("                     ║║   ╔╣╠╗ ║╚╝║   ║║                   \n");
+    printf("                     ╚╝   ╚══╝ ╚══╝   ╚╝                   \n");
+    printf("  ╔╗╔═╗                    ╔╗                     ╔╗       \n");
+    printf("  ║║║╔╝                   ╔╝╚╗                    ║║       \n");
+    printf("  ║╚╝╝  ╔══╗ ╔══╗ ╔══╗  ╔╗╚╗╔╝  ╔══╗ ╔╗ ╔╗╔╗ ╔══╗ ║║  ╔══╗ \n");
+    printf("  ║╔╗║  ║║═╣ ║║═╣ ║╔╗║  ╠╣ ║║   ║ ═╣ ╠╣ ║╚╝║ ║╔╗║ ║║  ║║═╣ \n");
+    printf("  ║║║╚╗ ║║═╣ ║║═╣ ║╚╝║  ║║ ║╚╗  ╠═ ║ ║║ ║║║║ ║╚╝║ ║╚╗ ║║═╣ \n");
+    printf("  ╚╝╚═╝ ╚══╝ ╚══╝ ║╔═╝  ╚╝ ╚═╝  ╚══╝ ╚╝ ╚╩╩╝ ║╔═╝ ╚═╝ ╚══╝ \n");
+    printf("                  ║║                         ║║            \n");
+    printf("                  ╚╝                         ╚╝            \n");
+    printf("                                                           \n");
+    printf("               Open-source Secure IoT platform             \n");
+    printf(" ──────────────────────────────────────────────────────────\n");
+    printf("  Manufacture ID = \"%s\"\n", str_manufacturer);
+    printf("  Device type    = \"%s\"\n", str_dev_type);
+    printf("  Device serial  = \"%s\"\n", str_dev_type);
+    printf(" ──────────────────────────────────────────────────────────\n\n");
 }
 
 //-----------------------------------------------------------------------------
